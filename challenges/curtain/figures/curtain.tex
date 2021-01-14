@@ -1,7 +1,7 @@
-\documentclass[tikz,border=5]{standalone}
+\documentclass[tikz,border=2]{standalone}
 
-%\def\hh{0000}
-\def\hh{.00009}
+\def\hh{0000}
+%\def\hh{.00009}
 \pgfmathsetmacro{\hhh}{0.8*\hh}
 \pgfmathsetmacro{\hout}{min(0.3, \hh)}
 
@@ -21,10 +21,10 @@
 
 
 \begin{document}
-  \begin{tikzpicture}[scale=4]
+  \begin{tikzpicture}[scale=8]
     %\fill[black] (0, 0)  rectangle (\bb, \aa);
     \clip (0,0) rectangle (\bb+\framewidth, \aa+\rollerboxheight);
-    \node[] at (0.5*\bb,0.5*\aa)  {\includegraphics[width=6.3 cm]{manufacture.jpg}};
+    \node[] at (0.52*\bb,0.5*\aa)  {\includegraphics[width=11 cm]{manufacture.jpg}};
     %\shade[ball color=black!10] (0,0) -- (\framewidth,0) -- (\framewidth, \aa)
     %-- (0, \aa) -- cycle;
     %The frame
@@ -52,7 +52,7 @@
       \shade[bottom color=black!60, top color=black!10] (\framewidth,\weights) -- (\bb+\framewidth,\weights)
       -- (\bb+\framewidth, \weights+\weights)-- (\framewidth, 2*\weights) -- cycle;
       % The window
-      \fill[ball color=black!10, opacity=0.4] (\framewidth,\windowstart) -- (\bb+\framewidth,\windowstart)
+      \fill[color=white, opacity=0.4] (\framewidth,\windowstart) -- (\bb+\framewidth,\windowstart)
       -- (\bb+\framewidth, \windowend)-- (\framewidth, \windowend) -- cycle;
       
     \end{scope}    
