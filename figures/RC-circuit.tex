@@ -1,0 +1,17 @@
+\documentclass[]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+\begin{document}
+
+\pgfmathsetmacro\circuitheight{6}
+\pgfmathsetmacro\circuitwidth{5}
+
+\begin{circuitikz}[scale=1]
+  \draw (0,0) to (\circuitwidth, 0) to[C=$C$] (\circuitwidth, \circuitheight);
+  \draw (0, \circuitheight) to[battery={5V}] (0,0); 
+  \draw (0, \circuitheight) to[cute open switch=S] ++(2cm, 0)  to[R=$R$] (\circuitwidth, \circuitheight);
+  \draw (0,0) to (0,-0.2) node[ground] {};
+\end{circuitikz}
+\end{document}
