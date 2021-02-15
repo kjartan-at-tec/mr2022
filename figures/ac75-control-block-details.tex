@@ -1,0 +1,35 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+    
+\begin{document}
+  \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum height=14mm, inner sep=2pt}, sumnode/.style={circle, draw, inner sep=4pt}]
+
+    \node[block] (plant) {\includegraphics[height=26mm]{AC75-sketch.png}};
+    \node[block, left of=plant, node distance=60mm] (actuator) {\includegraphics[height=40mm]{hydraulics.png}};
+    \node[block, left of=actuator, node distance=46mm, align=center] (controller) {\includegraphics[width=16mm]{plc.png}\\Controlador};
+    \node[coordinate, left of=controller, node distance=30mm] (input) {};
+    \node[left of=input, node distance=10mm]  {\includegraphics[width=14mm]{knob.png}};
+    \node[coordinate, right of=plant, node distance=40mm] (output) {};
+    \node[coordinate, above of=plant, node distance=20mm] (disturbance) {};
+    \node[block, below of=plant, node distance=40mm] (sensor) {Sensor};
+
+    \draw[->] (input) -- node[above, pos=0.3, align=left] {posición\\deseada} (controller);
+    \draw[->] ($ (controller.east) + (0, 6mm) $) -- node[above, align=left] {mueve\\ valvula} ($ (actuator.west) + (0, 6mm) $);
+    \draw[->] ($ (controller.east) + (0, -6mm) $) -- node[above, align=left] {corre\\ bomba} ($ (actuator.west) + (0, -6mm) $);
+    \draw[->] (actuator) -- node[above] {fuerza} (plant);
+    \draw[->] (plant) -- node[coordinate] (meas) {}  node[above, near end] {posición} (output);
+    \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+    \draw[->] (meas) |- (sensor) -| node[right, pos=0.9] {} ($ (controller.south west) + (4mm,0) $);
+
+    \draw[->] ($ (actuator.south) + (0mm, 0) $) -- ++(0, -10mm) -| node[pos=0.4, below] {presión hydraulica}
+    ($ (controller.south east) + (-4mm, 0) $);
+  \end{tikzpicture}
+
+
+\end{document}

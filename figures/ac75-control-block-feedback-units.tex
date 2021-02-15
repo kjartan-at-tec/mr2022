@@ -1,0 +1,30 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+    
+\begin{document}
+  \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum height=14mm, inner sep=2pt}, sumnode/.style={circle, draw, inner sep=4pt}]
+
+    \node[block] (plant) {\includegraphics[height=26mm]{AC75-sketch.png}};
+    \node[block, left of=plant, node distance=60mm] (actuator) {\includegraphics[height=40mm]{hydraulics.png}};
+    \node[block, left of=actuator, node distance=46mm, align=center] (controller) {\includegraphics[width=16mm]{plc.png}\\Controlador};
+    \node[coordinate, left of=controller, node distance=30mm] (input) {};
+    \node[coordinate, right of=plant, node distance=40mm] (output) {};
+    \node[coordinate, above of=plant, node distance=20mm] (disturbance) {};
+    \node[block, below of=plant, node distance=40mm] (sensor) {Sensor};
+
+    \draw[->] (input) -- node[above, pos=0.3, align=left] {posición\\deseada\\(V o mA)} (controller);
+    \draw[->] (controller) -- node[above, align=left] {mueve\\ valvula\\(V o mA)} (actuator);
+    \draw[->] (actuator) -- node[above, align=left] {fuerza\\(N)} (plant);
+    \draw[->] (plant) -- node[coordinate] (meas) {}  node[above, near end, align=left] {posición\\(grados o radianes\\o metros)} (output);
+    \draw[->] (disturbance) -- node[right, pos=0.1, align=left] {perturbación\\(N o Nm)} (plant);
+    \draw[->] (meas) |- (sensor) -| node[right, pos=0.9] {(V o mA)} (controller);
+  \end{tikzpicture}
+
+
+\end{document}

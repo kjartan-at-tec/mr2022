@@ -1,0 +1,33 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+    
+\begin{document}
+  \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=2pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+
+    \node[block] (plant) {\includegraphics[height=26mm]{AC75-sketch.png}};
+    \node[block, left of=plant, node distance=60mm] (actuator) {\includegraphics[height=40mm]{hydraulics.png}};
+    \node[coordinate, left of=actuator, node distance=46mm, align=center, white] (controller) {\includegraphics[width=16mm]{plc.png}\\Controlador};
+    %\node[coordinate, left of=controller, node distance=30mm] (input) {};
+    \node[coordinate, right of=plant, node distance=40mm] (output) {};
+    \node[coordinate, above of=plant, node distance=20mm] (disturbance) {};
+
+    %\draw[->] (input) -- node[above, pos=0.3] {arriba/abajo} (controller);
+    \draw[->] (controller) -- node[above, align=left] {mueve\\ valvula} (actuator);
+    \draw[->] (actuator) -- node[above] {fuerza} (plant);
+    \draw[->] (plant) -- node[above, near end] {posición} (output);
+    %\draw[->] (sumdist) -- node[coordinate] (meas) {} node[above, near end] {$y(t)$} (output);
+    \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+    %\draw[->] (disturbance) ++(0,-4mm) -| (ff);
+    %\draw[->] (ff) -- (sumff);
+    %\draw[->] (H) -- node[right, pos=0.2] {} (sumdist);
+    %\draw[->] (meas) -- ++ (0,-14mm) -| node[right, pos=0.9] {-} (sumerr);
+  \end{tikzpicture}
+
+
+\end{document}

@@ -1,0 +1,258 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+
+#+title: Diagrama de bloques
+#+author: Kjartan Halvorsen
+#+date: 2021-02-11
+
+* What do I want the students to understand?			   :noexport:
+  - Basic block diagram
+  - Open-loop and closed-loop control
+    
+* Which activities will the students do?			   :noexport:
+
+
+* Recap
+** Sistemas mecatrónicos
+   
+   \begin{center}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75.jpeg}\\
+   {\footnotesize  From SailingWorld}
+   \end{center}
+
+   [[https://www.sailingscuttlebutt.com/wp-content/uploads/2018/03/AC75_Class_Rule.pdf][AC75 Class rule]]
+
+*** Notes                                                          :noexport:
+
+    En la sesión pasada platicamos sobre estos yates increibles que usaran en La Americás cup este año. Un evento importante en el mundo de navigación que se llevará a cabo en Nueva Zeeland en marzo.
+
+    Voy otra vez a usar el sistema mecatronico de las hidroalas para ejemplifiar que es control en lazo abierto y control en lazo cerrado, y que son bloques de diagrama.
+
+    
+** sistema de hidroalas
+
+    #+begin_export latex
+    \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/ac75-lines.png}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75-class-foil.png}\\
+   {\footnotesize  by françois chevalier \hfill from the ac75 class rule}
+   \end{center}
+   #+end_export
+
+*** Notes                                                          :noexport:
+    Se acuerdan que el sistema consiste de un par de alas con brazos, juntado con el casco por medio deun eje que permite movimiento arriba y abajo de cada brazo. Se usa el ala del lado hacia el viento para contrapeso, y el ala del otro lado para suportar todo el peso del barco más la fuerza del viento en la vela.
+
+    Cada ala tiene alerones en su parte trasera para controlar el lift. Tambien el timón tiene alerones para controlar la posición horizontal en la dirección longitudinal. En total el sistema de hidroalas tiene 4 grados de libertad.
+
+    Se usa actuadores hidraulicos para mover los brazos, y son muy fuertes dado las fuerzas grandes que hay en el ala a grandes velocidades.
+
+    También hay sensores importantes, para medir la posición de los brazos alas y alerones, la presión hidraulica y estado de cargo de la bateria.
+    
+* Control lazo abierto, lazo cerrado
+  
+** Qué es *control en lazo abierto* y *en lazo cerrado*?
+
+
+   
+*** Lazo abierto: *No* existe retroalimentación de señales medidas
+
+         #+begin_export latex
+    \begin{center}
+    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+
+      \node[coordinate] (input) {};
+      \node[block, right of=input, node distance=30mm] (fb)  {Controlador};
+      \node[block, right of=fb, node distance=40mm] (plant)  {Proceso};
+
+      \node[coordinate, above of=plant, node distance=14mm] (disturbance) {};
+      \node[coordinate, right of=plant, node distance=40mm] (output) {};
+
+      \draw[->] (input) -- node[above, pos=0.3] {señal de entrada} (fb);
+      \draw[->] (fb) -- node[above, align=left,] {acción \\de control} (plant);
+      \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {salida del proceso} (output);
+      \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+    \end{tikzpicture}
+    \end{center}
+
+    #+end_export
+    
+
+
+*** Notes                                                          :noexport:
+    Lo que ven aquí es un diagrama de bloque muy general. Vamos a regresear pronto al ejemplo del sistema de hidroalas.
+
+    Vemos primero el proceso como un bloque. Hay flechas que van hacia el bloque, y que representan señales (cosas) que afectan el proceso. También hay flechas del bloque hacia afuera. Estos representan como el proceso puede afectar su alrededor. En el caso de un proceso físico, las señales de entrada suelen ser señales fisicas como fuerza, torque, flujo, corriente electrico, etc, o señales de información sobre posición, velocidad, nivel, presión. El proceso normalmente es dínamico, es decir que su estado depende de señales historiales.
+
+    El actuador se puede ver como parte del proceso, o como un bloque separado.
+
+    Hay dos señales de entrada al proceso. Una es llamada acción de control. Son las señales sobre cuales tenemos el control. Son parte del sistema para controlar el proceso, y tiene origen en el controlador.
+    La otra señal es llamada perturbación, y representa todo que puede afectar el proceso, pero que no esta bajo nuestro control.
+
+    El controlador tiene como señal de entrada un comando del usario del sistema, que puede ser un operador humano, o otro parte de un sistema más grande en cual ese sistema forma un parte.
+
+    Algo importante de entender con el diagrama es que la acción de control NO depende de la respuesta del proceso. Es decir no depende de la señal de salida del proceso.
+
+    Con control en lazo abierto NO hay manera de corrigir/compensar/eliminar el efecto de las perturbaciones en el proceso.
+    
+** Qué es *control en lazo abierto* y *en lazo cerrado*?
+
+
+   
+*** Lazo abierto: *No* existe retroalimentación de señales medidas
+
+         #+begin_export latex
+    \begin{center}
+    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+
+      \node[coordinate] (input) {};
+      \node[block, right of=input, node distance=30mm] (fb)  {Controlador};
+      \node[block, right of=fb, node distance=40mm] (plant)  {Proceso};
+
+      \node[coordinate, above of=plant, node distance=14mm] (disturbance) {};
+      \node[coordinate, right of=plant, node distance=40mm] (output) {};
+
+      \draw[->] (input) -- node[above, pos=0.3] {señal de entrada} (fb);
+      \draw[->] (fb) -- node[above, align=left,] {acción \\de control} (plant);
+      \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {salida del proceso} (output);
+      \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+    \end{tikzpicture}
+    \end{center}
+
+    #+end_export
+    
+
+*** Lazo cerrado: Elimina o compensa efecto de perturbaciones
+    #+begin_export latex
+    \begin{center}
+    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+
+      \node[coordinate] (input) {};
+      \node[sumnode, right of=input, node distance=20mm] (sumerr) {\tiny $\Sigma$};
+      \node[block, right of=sumerr, node distance=30mm] (fb)  {Controlador};
+      \node[block, right of=fb, node distance=40mm] (plant)  {Proceso};
+      \node[block, below of=plant, node distance=16mm] (sensor)  {Sensor};
+
+      \node[coordinate, above of=plant, node distance=14mm] (disturbance) {};
+      \node[coordinate, right of=plant, node distance=40mm] (output) {};
+
+      \draw[->] (input) -- node[above, pos=0.3] {referencia} (sumerr);
+      \draw[->] (sumerr) -- node[above] {error} (fb);
+      \draw[->] (fb) -- node[above, align=left,] {acción \\de control} (plant);
+      \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {salida del proceso} (output);
+      \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+      \draw[->] (meas) |- (sensor) -| node[right, pos=0.9] {-} (sumerr);
+    \end{tikzpicture}
+    \end{center}
+
+    #+end_export
+    
+
+
+*** Notes                                                          :noexport:
+    En lazo cerrado vemos que la señal de salida del proceso se mide con un sensor, y esta información se usa en el controlador para determinar/calcular la acción de control. 
+
+    Así se puede compensar el efecto de la perturbación hasta  en ciertas occasiones eliminarlo
+    
+** Control en lazo abierto
+
+
+   
+   #+begin_center
+   \includegraphics[width=0.7\textwidth]{../../figures/ac75-control-no-actuator}
+   #+end_center
+   
+*** Notes                                                          :noexport:
+    Regresando al ejemplo
+
+    El proceso es el mecanismo de subir y bajar las alas. Las señales de entrada al proceso son la fuerza para mover el brazo, y perturbaciones. Las perturbaciones son aqui otras fuerzas que afectan el brazo/ala. La mas importante es la fuerza del agua, que depende de la velocidad del barco. La fuerza de la gravidad no es una perturbacion, porque es bien conocido, no cambia con el tiempo, y lo podemos tomar en cuenta con certidud en aplicar la fuerza adecuada para mover el brazo.
+
+    Pero no es posible para los marineros generar directamente con sus musculos esa fuerza grande que se necesita.
+    
+** Control en lazo abierto
+
+   #+begin_center
+   \includegraphics[width=0.99\textwidth]{../../figures/ac75-control-no-control}
+   #+end_center
+   
+   
+*** Notes                                                          :noexport:
+    Se necesita un actuador. En este ejemplo se usa unos pistones hidraulicos. Actuadores hidraulicos son ideales para generar fuerzas grandes con movimiento relativamente lento y con rango limitado.
+
+    El pistón hidraulica se controla con una valvula. Esa valvula deja que fluye aceite o en un lado o en el otro lado de la cabeza del pistón para que se extende o se retrae.
+
+    Tambien hay un posición de la valvula donde el flujo esta cerrado en los dos lados. Y el pistón se queda fijo.
+
+    Pero no es conveniento tener un marinero ahí en el interior del barco cambiando la posición de la valvula a mano.
+
+** Control en lazo abierto
+
+   #+begin_center
+   \includegraphics[width=1.0\textwidth]{../../figures/ac75-control-block}
+   #+end_center
+   
+*** Notes                                                          :noexport:
+
+    Se usa en vez un controlador. Ese controlado puede tomar señales de comando de su operador, como presion de botón o posicion de una palanca, y genera un señal electrica que mueve la valvula hidraulica por medio de un solenoide.
+
+    Esto sería control de la inclinación de la ala en lazo abierto. Y así la hacían al principio. El operador abrió la valvula por cierta tiempo para causar un cambio de la inclinación de la ala (posición del brazo).
+
+    El problema era que ese tiempo necesario para obtener un displacimiento deseado depende de la velocidad del barco, porque con velocidad variable hay fuerza variable y eso es la perturbacion dominante en ese sistema.
+    
+** Control en lazo cerrado
+
+   #+begin_center
+   \includegraphics[width=1.0\textwidth]{../../figures/ac75-control-block-feedback}
+   #+end_center
+   
+*** Notes                                                          :noexport:
+    Entonces, cambiaron a control en lazo cerrado para la posición del brazo / inclinación / canting angle.
+
+    Un sensor mide la posición y manda esta señal al controlador, donde la señal a la valvula hidraulica cambia hasta la posición medida es igual a la posición deseada.
+
+    Entonces el operador usa su palanca no para abrir la valvula (más o menos) directo, pero para mandar al controlador la posición deseada. El controlador se encarga de que se genera la suficiente fuerza, por medio del actuador hidraulico, para realizar esta posición deseada.
+
+
+    
+** Control en lazo cerrado
+
+   #+begin_center
+   \includegraphics[width=1.02\textwidth]{../../figures/ac75-control-block-outer-feedback}
+   #+end_center
+
+   Retroalimentación del /yacht state/ *no* permisible.
+   
+*** Notes                                                          :noexport:
+    Pero se queda la responsibilidad del capitan o otra de la tripulación determinar cual es la posición adecuada en cada momento.
+
+    Las reglas de la competencia NO permite un lazo cerrado usando medidas del estado del yate. Es decir medidas del velocidad, orientacion, viento en un lazo cerrado.
+    
+    
+* Block diagram
+
+** El diagrama de bloque describe *flujo de señales*
+
+   #+begin_center
+   \includegraphics[width=1.0\textwidth]{../../figures/ac75-control-block-feedback-units}
+   #+end_center
+
+  
+** El diagrama de bloque describe *flujo de señales*
+
+   #+begin_center
+   \includegraphics[width=.8\textwidth]{../../figures/ac75-control-block-feedback-units}
+   #+end_center
+
+
+   - El *actuador* convierte una señal de información a fuerza/torque/flujo/energía
+   - El *sensor* convierte un variable físico a una señal de información
+

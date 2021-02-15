@@ -1,0 +1,37 @@
+\documentclass[varwidth]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{tikzmark,arrows,shapes,calc,positioning}
+
+\NewDocumentCommand\MyArrow{O{0pt}mmmO{out=150,in=210}}
+{%
+\begin{tikzpicture}[overlay, remember picture]
+  \draw [-,thick,line width=2pt, red]
+    ( $ ({pic cs:#2}) $ ) to 
+    ( $ (pic cs:#3) + (0,0) $ );
+\end{tikzpicture}%
+}
+    
+\begin{document}
+
+
+  \MyArrow{ll}{ur}{red}
+\MyArrow{lr}{ul}{red}
+
+\begin{tikzpicture}[overlay, remember picture]
+  \node[red, align=left] at ( $ ({pic: ur}) + (5.56,-2) $) {Parámetros,\\ no variables};
+\end{tikzpicture}%
+
+\begin{itemize}
+\item \tikzmark{ul} displacamiento (masa total) - 7.6 t \tikzmark{ur}
+\item masa de cada ala - 1.2 t
+\item altura del mástil - 28m
+\item área de vela - 235 sqm
+\item \tikzmark{ll} profundidad máxima con alas - 5m \tikzmark{lr}
+\end{itemize}
+
+
+\end{document}

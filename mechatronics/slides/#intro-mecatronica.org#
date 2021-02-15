@@ -1,0 +1,431 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+
+#+title: Análisis de elementos de la mecatrónica
+#+author: Kjartan Halvorsen
+#+date: 2021-02-08
+
+* What do I want the students to understand?			   :noexport:
+  - The course structure
+  - The system for evaluation and grading
+  - Identifying key components of a mechantronics system
+    
+* Which activities will the students do?			   :noexport:
+
+
+* Presentación
+** ¿Quién soy yo
+
+\begin{center}
+\includegraphics[height=0.6\textheight]{../../figures/red-heat-2.jpeg}
+\includegraphics[height=0.6\textheight]{../../figures/mtb.jpeg}
+\end{center}
+
+*** Skip							   :noexport:
+# Soy Noruego. Quizás reconocen la bandera Noruega en la foto. En este foto tengo
+# más o menos la misma edad que ustedes, quizás era un par años más joven. 
+# Llevo 5 años viviendo en Mx
+# Previamente a esto vivá en estocolmo y trabaje en la universidad de Uppsala
+# Colaboración con Suecia
+# He tenido una carrera muy breve como actor
+# Tengo 4 niños 8-16. Mi hijo mayor, Emilio va en prepatec CEM.
+# Me gusta mucho actividades a aire libre. Antes navegar. Ahore más que otra el ciclismo.
+
+
+
+
+** ¿Quién eres tú?							   
+*** Notes							   :noexport:
+- Como quieres que le llaman.
+- Que te gusta hacer en tu tiempo libre
+- Algún comentario sobre super bowl?
+- Tú preferencia enseñanza en line o presencial?
+- Conocimento de
+  - Matlab
+  - Simulink
+
+
+* Intro
+** Objetivos, contenido, evaluación
+
+
+* Mecanica y electronica                                           :noexport:
+
+** Intuición para sistemas mecanicas
+
+   #+begin_export latex
+
+\begin{center}
+\begin{tikzpicture}
+  \begin{scope}[scale=0.3, xscale=-1, xshift=-10cm]
+    \shade[top color=red, bottom color=white, shading angle={135}]
+    [draw=black,fill=red!20,rounded corners=1.2ex,very thick] (1.5,.5) -- ++(0,1) -- ++(1,0.3) --  ++(3,0) -- ++(1,0) -- ++(0,-1.3) -- (1.5,.5) -- cycle;
+    \draw[very thick, rounded corners=0.5ex,fill=black!20!blue!20!white,thick]  (2.5,1.8) -- ++(1,0.7) -- ++(1.6,0) -- ++(0.6,-0.7) -- (2.5,1.8);
+    \draw[thick]  (4.2,1.8) -- (4.2,2.5);
+    \draw[draw=black,fill=gray!50,thick] (2.75,.5) circle (.5);
+    \draw[draw=black,fill=gray!50,thick] (5.5,.5) circle (.5);
+    \draw[draw=black,fill=gray!80,semithick] (2.75,.5) circle (.4);
+    \draw[draw=black,fill=gray!80,semithick] (5.5,.5) circle (.4);
+    \draw[thin, ] (7,1) -- (8,1);
+    \draw[thin, ] (6.8,1.5) -- (7.8,1.5);
+    \draw[thin, ] (6,2) -- (7,2);
+\end{scope}
+
+  
+  \draw[->,semithick] (-.5,0) -- (8,0);
+  \draw (8.5,0) node {$x(t)$};
+\end{tikzpicture}
+\end{center}
+
+Un coche va a velocidad constante en una autopista horizontal. En la instante $t=t_1$, el conductor empuje el clutch, desconectando el motor y las ruedas. Cuál de las siguientes graficas describe mejor la velocidad $v(t)=\dot{x}(t)$ del coche?
+
+\begin{center}
+   \begin{tikzpicture}
+   \small
+
+   \begin{axis}[
+   width=7cm,
+   height=2.5cm,
+   xlabel={$t$},
+   ylabel={$v(t)$},
+   xmin=-3.5,
+   xmax=10.5,
+   ytick = {0},
+   xtick = {0},
+   xticklabels = {$t_1$},
+   ]
+   \addplot+[black, no marks, domain=-4:10, samples=400,variable=k] { (k < 0) + (k>0)*(1+exp(-4))/(1+exp(4*(0.5*k-1)))};
+
+   \node[black!40!red] at (axis cs: 5, 0.5) {\huge 1};
+   \end{axis}
+
+   \begin{axis}[
+   xshift=7cm,
+   width=7cm,
+   height=2.5cm,
+   xlabel={$t$},
+   ylabel={$v(t)$},
+   xmin=-3.5,
+   xmax=10.5,
+   ytick = {0},
+   xtick = {0},
+   xticklabels = {$t_1$},
+   ]
+   \addplot+[black, no marks, domain=-4:10, samples=400,variable=k] { (k<0) + ((k>=0) - (k>4))*(1/4*(4-k)) };
+   \node[black!40!red] at (axis cs: 5, 0.5) {\huge 2};
+   \end{axis}
+
+   \begin{axis}[
+   xshift=0cm,
+   yshift=-2.5cm,
+   width=7cm,
+   height=2.5cm,
+   xlabel={$t$},
+   ylabel={$v(t)$},
+   xmin=-3.5,
+   xmax=10.5,
+   ytick = {0},
+   xtick = {0},
+   xticklabels = {$t_1$},
+   ]
+   \addplot+[black, no marks, domain=-4:10, samples=400,variable=k] { (k<0) + (k>0)*exp(-0.9*k)};
+   \node[black!40!red] at (axis cs: 5, 0.5) {\huge 3};
+   \end{axis}
+
+   \begin{axis}[
+   xshift=7cm,
+   yshift=-2.5cm,
+   width=7cm,
+   height=2.5cm,
+   xlabel={$t$},
+   ylabel={$v(t)$},
+   xmin=-3.5,
+   xmax=10.5,
+   ytick = {0},
+   xtick = {0},
+   xticklabels = {$t_1$},
+   ]
+   \addplot+[black, no marks, domain=-4:10, samples=400,variable=k] { (k<0) + ((k>=0) - (k>4))*(1-1/16*pow(-k,2)) };
+   \node[black!40!red] at (axis cs: 5, 0.5) {\huge 4};
+   \end{axis}
+
+
+   \end{tikzpicture}
+
+\end{center}
+
+   #+end_export
+** Intuicón para sistemas mecanicas - Simulación
+
+   #+begin_export latex
+
+\begin{center}
+\begin{tikzpicture}
+\tikzstyle{damper}=[thick,decoration={markings,  
+  mark connection node=dmp,
+  mark=at position 0.5 with 
+  {
+    \node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+    \draw [thick] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+    \draw [thick] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+  }
+}, decorate]
+\tikzstyle{ground}=[fill,pattern=north east lines,draw=none,minimum width=0.75cm,minimum height=0.3cm]
+
+  \begin{scope}[scale=0.3, xscale=-1, xshift=-10cm]
+    \shade[top color=red, bottom color=white, shading angle={135}]
+    [draw=black,fill=red!20,rounded corners=1.2ex,very thick] (1.5,.5) -- ++(0,1) -- ++(1,0.3) --  ++(3,0) -- ++(1,0) -- ++(0,-1.3) -- (1.5,.5) -- cycle;
+    \draw[very thick, rounded corners=0.5ex,fill=black!20!blue!20!white,thick]  (2.5,1.8) -- ++(1,0.7) -- ++(1.6,0) -- ++(0.6,-0.7) -- (2.5,1.8);
+    \draw[thick]  (4.2,1.8) -- (4.2,2.5);
+    \draw[draw=black,fill=gray!50,thick] (2.75,.5) circle (.5);
+    \draw[draw=black,fill=gray!50,thick] (5.5,.5) circle (.5);
+    \draw[draw=black,fill=gray!80,semithick] (2.75,.5) circle (.4);
+    \draw[draw=black,fill=gray!80,semithick] (5.5,.5) circle (.4);
+    \draw[thin, ] (7,1) -- (8,1);
+    \draw[thin, ] (6.8,1.5) -- (7.8,1.5);
+    \draw[thin, ] (6,2) -- (7,2);
+    \node[coordinate] (fender) at (6.5, 1.5) {};
+\end{scope}
+
+  \draw[semithick] (-0.5,0) -- (-0.5, 1);
+  \draw[damper] (-0.5, 0.5 |- fender) -- (fender);
+  \node[ground, rotate=90, anchor=south] at (-0.5, 0.5) {};
+  \draw[->,semithick] (-.5,0) -- (8,0);
+  \draw (8.5,0) node {$x(t)$};
+\end{tikzpicture}
+\end{center}
+
+   #+end_export
+   
+   mass \(m = \unit{1000}{\kilo\gram}\), friction coefficient \(f=\unit{20}{\newton\per(\meter\per\second)}\)
+
+
+** Intuición para sistemas electricas
+
+*** Graphics
+    :PROPERTIES:
+    :BEAMER_col: 0.3
+    :END:
+   #+begin_center
+   \includegraphics[width=\textwidth]{../../figures/RC-circuit}
+   #+end_center
+
+*** Text
+    :PROPERTIES:
+    :BEAMER_col: 0.7
+    :END:
+
+   \begin{center}
+   \begin{tikzpicture}
+   \begin{axis}[
+   xshift=0cm,
+   yshift=-2.5cm,
+   width=8cm,
+   height=5cm,
+   xlabel={$t$},
+   ylabel={$v_C(t)$},
+   xmin=-.5,
+   xmax=10.5,
+   ytick = {0},
+   xtick = {0, 4},
+   xticklabels = {0, $\tau$},
+   ]
+   \addplot[white, smooth, no marks, domain=0:10,] {5*(1-exp(-x/4))}; 
+   \end{axis}
+   \end{tikzpicture}
+   \end{center}
+   
+
+    *Actividad individual* Al principio ($t=0$) el circuito está abierto y no hay carga en el capacidor. En el instante $t=0$ el interruptor S cierre y mantiene cerrado el circuito. Grafica el voltage sobre el capacidor como función de tiempo. El constante de tiempo del sistem es $\tau=RC$. Indica en tú gráfica como se puede identificar $\tau$. 
+
+    Tomo fotó y mandamelo por *Remind*.
+
+
+** Intuition for electrical circuits - Solución
+
+
+* Sistemas mecatrónicos
+
+** Sistemas mecatrónicos
+
+** Eso *no* es un yate *ni* un sistema mecatrónico
+
+   \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/red-heat-1.jpeg}
+   \includegraphics[height=0.6\textheight]{../../figures/red-heat-2.jpeg}
+   \end{center}
+   
+*** Notes                                                          :noexport:
+    - Es un pequeño velero de 22 pies. Aunque nos llevó sobre mar abierta de Noruega a Suecia y Dinamarrca.
+       
+** Eso *sí* es un yate *y* un sistema mecatrónico
+   
+   \begin{center}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75.jpeg}\\
+   {\footnotesize  From SailingWorld}
+   \end{center}
+
+   [[https://www.sailingscuttlebutt.com/wp-content/uploads/2018/03/AC75_Class_Rule.pdf][AC75 Class rule]]
+
+*** Notes                                                          :noexport:
+    Son los yates que usan en La Americás cup este año. Se realiza en Nueva Zeeland en marzo.
+    Son  basicamentes aviones. Tecnologicamente muy avanzados. Cada equipo cuenta con uno o dos ingenieros de mecatronica que tienen la responsibilidad de la funcionamiento de los sistemas mecatrónicos.
+
+** Videos
+
+   https://youtu.be/VQUl_hf6yo8
+
+   https://youtu.be/pDn3JVnw_EI
+
+   https://www.youtube.com/watch?v=_B37zmJpBv4
+
+** análisis del sistema
+
+*** requisitos o criterios de diseño
+
+*** identificar y describir elementos del sistem
+
+    - mecanismo
+    - actuadores
+    - sensores
+    - sistema de control
+
+*** notes                                                          :noexport:
+    en la actividad que he planeado para hoy les pido analizar un sistema mecatronico. quiero que buscan requisitos (que tambien se puede llamar criterios de diseño). y que indifican y describen los elemtos importantes del sistema. 
+    
+** requisitos o criterios de diseño
+
+    #+begin_export latex
+    \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/design-process-fig1.png}\\
+   {\footnotesize  s.f. love (1969) modern design methods for electronics ieee tr systems science and cybernetics}
+   \end{center}
+   #+end_export
+   
+*** notes                                                          :noexport:
+    algo sobre los requisitos. como ingenieros nos gustan los problemos interesantes. y los problemas interesantes son los que tienen un multitud de soluciones posibles. donde tenemos que buscar la mejor solución, la solución optima. pero como definimos "que es mejor" o que es "optimal"? para eso necesitamos requesitos o criterios de diseño.
+
+    esta gráfica es de una publicación algo viejo, aunque tiene el título modern design methods. es circular para enseñar que el proceso de diseño es iterativo. empieca con un análisis de las necesidades que resulta en un formulación del problema (función, rendimiento, delimitaciones, etc). basade en eso se define los criterios de diseño, que van a ser indispensables más allá en el proceso. ya viene la parte dónde buscamos diferentes soluciones alternativas. no solo una. se filtra las alternativas primero por factibilidad, usando los criterios. con las alternativas que se quedan, se busca optimar cada una (para que cumple lo mejor posible con los criterios), antes de seleccionar una solucion para implementar.
+    muchas veces se necesia rediseño, y el circulo sique.
+
+    esto para que entienden la importancia de tener un conjunto de requistos formulados en el trabajo de diseño. 
+    
+** sistema de hidroalas
+
+    #+begin_export latex
+    \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/ac75-lines.png}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75-class-foil.png}\\
+   {\footnotesize  by françois chevalier \hfill from the ac75 class rule}
+   \end{center}
+   #+end_export
+
+
+** sistema de hidroalas
+
+*** graphics
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[height=0.8\textheight]{../../figures/ac75-class-foil.png}
+   \end{center}
+
+   #+begin_export latex
+   {\footnotesize from the ac75 class rule}
+   #+end_export
+*** text
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   - displacamiento (masa total) - 7.6 t
+   - masa de cada ala - 1.2 t
+   - altura del mástil - 28m
+   - área de vela - 235 sqm
+   - profundidad máxima con alas - 5m
+     
+** sistema de hidroalas - requisitos
+
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[height=0.2\textheight]{../../figures/ac75-sketch.png}
+   {\footnotesize  by françois chevalier}
+   \end{center}
+   #+end_export
+
+   el sistema debe
+   - por medio del flujo de agua sobre al ala producir suficente fuerza para levantar el yate.
+   - sústener fuerzas hasta 1000 kn en el ala en posición fija.
+   - poder cambiar la dirección de la dicha fuerza.
+   - poder cambiar la posición del ala para funcionar como ala o como contrapeso.
+   - poder mover la posición de la ala en un rango de 50 grados en menos de 3 segundos.
+   - poder modificar el "lift" de las alas y del timón (con alerones)
+
+
+** sistema de hidroalas - mecanismo
+
+*** graphics
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[height=0.8\textheight]{../../figures/ac75-class-foil.png}
+   \end{center}
+
+   #+begin_export latex
+   {\footnotesize from the ac75 class rule}
+   #+end_export
+*** text
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   - tres grados de libertad
+     1. àngulo de inclinación
+     2. àngulo del aleron del ala
+     3. àngula del aleron del timón
+     
+** sistema de hidroalas - actuadores
+
+   #+begin_export latex
+   
+   \begin{center}
+   \includegraphics[height=0.4\textheight]{../../figures/ac75-actuators.png}
+   \end{center}
+
+   #+end_export
+
+   actuadores hidraulicos con bomba electrica. cada piston capable de producir una fuerza de 40t.
+
+** sistema de hidroalas - señales a medir y sensores
+
+   - presión hydraulica
+   - /state of charge/ de las pilas
+   - posición continua de los pistones (implicando posición del ala) 
+   - posición continua de los alereones
+   - /yacht state/?
+     
+   
+
+** Sistema de hidroalas - Control
+
+   - Control en *lasso cerrado*:
+     -  presión hydraulica
+     -  posición de los pistones
+     -  posición de los alereones
+   - Control en *lasso abierto* Regla 20.1 /No part of a control system may be capable of using feedback from the yacht state to control a control surface/
+
+     

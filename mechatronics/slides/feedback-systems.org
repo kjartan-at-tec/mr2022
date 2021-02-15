@@ -1,0 +1,274 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+
+#+title: Actividad 1 - Retroalimentación ... y algo más
+#+author: Kjartan Halvorsen
+#+date: 2021-02-15
+
+* What do I want the students to understand?			   :noexport:
+  - Variables, parameters
+  - State
+  - Basic block diagram
+  - 
+    
+* Which activities will the students do?			   :noexport:
+
+* Resumen
+
+** Las instrucciones
+
+   3. [@3]   Identificar los *componentes clave* del proceso
+   4. Identificar que *variables físicas* se requiere conocer y/o monitorear para poder controlar el proceso.
+   5. Deducir componentes o *acciones de control* requeridas
+   6. Elaborar el *diagrama de bloques* de acuerdo a las funciones identificadas
+
+*** Notes                                                          :noexport:
+
+    Como seguramente ya saben: En toda la vida Retroalimentación es de tremenda importancia. Tambien en el contexto de aprendizaje.
+
+    En el contexto de control en lazo cerrado tambien vemos la importancia de retroalimentación. Como vimos la sesión pasada. Con retroalimentación de la señal de la salida del proceso a controlar, se puede compensar perturbaciones en el sistema. 
+
+    He leído sus reportes, y he dado varios comentarios escritos en su documento en Canvas. Por favor, revisan estos comentarios. Hoy más tarde voy a dar les las calificaciones de ese trabajo.
+
+    En general quiero decir que a leer los reportes me quedaron con la impresión de que pueden hacer mejor trabajo.
+
+    Siguierion las instrucciones y respondieron a estas cuatro preguntas. Pero faltaba explicar en más detalle como pensaron. Más que otra en el inciso 5 'acciones de control'. Un ejemplo: "Tiempo en la que se enrolla la cortina". Mejor: El tiempo que se tarda para la cortina de subir o bajar a una posición deseada es un parametro importante para su funcionamiento. El usario puede eligir ese parametro dentro de cierto rango (3-5 segundos), usando el interfaz humano-maquina. El valor de ese tiempo tiene importancia para el controlador de lazo cerrado que manda señales de accion al actuador. Si requeremos un movimiento rápido entonces el control tiene que ser más agresivo, mandando señales más grandes al actuador.
+
+    En general para pregunta 6, todo presentaron un diagrama sin una explicación o pie de figura. Por favor explica sus figuras y graficas. A cierto nivel de detalle adecuado.
+
+    Mi retroalimentación general más importante y es para todas y todos: Dos cosas
+    1. Explica como estas pensando
+       Cuando tú explicas tu pensamiento bien en un entregable, sea un reporte o examen o video como piensas, entonces tu maestro puede dar mucho mejor retroalimentación.
+    2. Trata de ser lo más especifico que puedes. Por ejemplo En vez de "Ese bloque manda un señal al siguiente bloque": "El bloque de control manda un señal que representa el voltage sobre la armadura del motor electrica (el actuador del sistema). Esta señal varia entre -24 y +24.  
+
+
+    
+    Bueno. Tambien como retroalimentación voy a seguir las instrucciones en la actividad y aplicarlas para nuestro ejemplo del sistema de hidroalas del veledor AC75. En este proceso voy a darles más detalles importantes de un sistema mecatrónico. Y vamos a llegar a una introducción a sistema de control que nos va a servir para la actividad de la sesión de hoy.
+    
+    
+    
+* Ejemplo
+** Sistema mecatrónico
+   
+   \begin{center}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75.jpeg}\\
+   {\footnotesize  From SailingWorld}
+   \end{center}
+
+   [[https://www.sailingscuttlebutt.com/wp-content/uploads/2018/03/AC75_Class_Rule.pdf][AC75 Class rule]]
+
+*** Notes                                                          :noexport:
+
+    En la sesión pasada platicamos sobre estos yates increibles que usaran en La Americás cup este año. Un evento importante en el mundo de navigación que se llevará a cabo en Nueva Zeeland en marzo.
+
+    Voy otra vez a usar el sistema mecatronico de las hidroalas para ejemplifiar que es control en lazo abierto y control en lazo cerrado, y que son bloques de diagrama.
+
+    
+** sistema de hidroalas
+
+    #+begin_export latex
+    \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/ac75-lines.png}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75-class-foil.png}\\
+   {\footnotesize  by françois chevalier \hfill from the ac75 class rule}
+   \end{center}
+   #+end_export
+
+*** Notes                                                          :noexport:
+    Se acuerdan que el sistema consiste de un par de alas con brazos, juntado con el casco por medio deun eje que permite movimiento arriba y abajo de cada brazo. Se usa el ala del lado hacia el viento para contrapeso, y el ala del otro lado para suportar todo el peso del barco más la fuerza del viento en la vela.
+
+    Cada ala tiene alerones en su parte trasera para controlar el lift. Tambien el timón tiene alerones para controlar la posición horizontal en la dirección longitudinal. En total el sistema de hidroalas tiene 4 grados de libertad.
+
+    Se usa actuadores hidraulicos para mover los brazos, y son muy fuertes dado las fuerzas grandes que hay en el ala a grandes velocidades.
+
+    También hay sensores importantes, para medir la posición de los brazos alas y alerones, la presión hidraulica y estado de cargo de la bateria.
+    
+* Análisis
+
+** 3. Componentes claves
+
+   #+begin_center
+   \includegraphics[width=.8\textwidth]{../../figures/ac75-control-block-feedback-units}
+   #+end_center
+
+   - *Proceso* Aquí es un *sistema mecanico* o *mecanismo*
+   - *Actuador* Conversión de una señal de información a fuerza/torque/flujo/energía
+   - *Sensores*  Conversión de una variable física a una señal de información
+   - *Controlador* Computadora o microcontrolador o PLC, recibe señales, ejecuta el algoritmo de control, manda acción de control (señales) a los actuadores.
+
+     
+** 4. Variables físicas
+
+*** graphics
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[height=0.8\textheight]{../../figures/ac75-class-foil.png}
+   \end{center}
+
+   #+begin_export latex
+   {\footnotesize from the ac75 class rule}
+   #+end_export
+*** text
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[width=0.8\textwidth]{../../figures/parameters-not-variables}
+   \end{center}
+     
+** 4. Variables físicas
+*** graphics
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[height=0.8\textheight]{../../figures/ac75-class-foil.png}
+   \end{center}
+
+   #+begin_export latex
+   {\footnotesize from the ac75 class rule}
+   #+end_export
+*** text
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   - Posición continua de los pistones (implicando posición del ala)
+   - Presión hydraulica
+   - Estado de cargo de las pilas
+
+
+** 4. Variables físicas
+
+***  Pressure
+    :properties:
+    :beamer_col: 0.3
+    :end:
+    #+begin_export latex
+    \textbf{Presión}
+    \begin{center}
+    \includegraphics[width=0.67\linewidth]{../../figures/pressure-sensor.png}\\
+    {\footnotesize Fuente: Hydraulics \& Pneumatics}
+    \end{center}
+    #+end_export
+
+***  Posición de los pistones
+    :properties:
+    :beamer_col: 0.7
+    :end:
+    #+begin_export latex
+    \textbf{Posición}
+    \begin{center}
+    \includegraphics[width=0.7\linewidth]{../../figures/PosSensor.png}\\
+    {\footnotesize Fuente: Fischer Christian SIKO GmbH}
+    \end{center}
+    #+end_export
+** 5. Acciones de control
+
+   La señal de entrada principal al sistema es la posición deseada del brazo/ala. La questión es *¿como mover y mantener el brazo a la posición deseado?*
+
+** 5. Acciones de control - actuador
+
+***  Pressure
+    :properties:
+    :beamer_col: 0.5
+    :end:
+   #+begin_center
+   \includegraphics[width=0.9\textwidth]{../../figures/ac75-control-actuator-only}\\
+   \includegraphics[width=0.8\textwidth]{../../figures/43-valve-proportional.jpg}
+   #+end_center
+
+   #+begin_export latex
+   {\footnotesize Fuente: Festo}
+   #+end_export   
+   
+***  Pressure
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   #+begin_center
+   \includegraphics[width=0.6\textwidth]{../../figures/43-valve-real.png}\\
+   \includegraphics[width=0.99\textwidth]{../../figures/43-valve-current.png}\\
+   #+end_center
+   #+begin_export latex
+   {\footnotesize Fuente: Bosch Rexroth}
+   #+end_export   
+
+*** Notes                                                          :noexport:
+    La semana pasada platicamos algo sobre como funciona el cilindro o  piston hydraulica. Aceite hydraulica fluye a un lado de la cabeza del piston y aumenta la presión a este lado. Se mueve el pistón. Por el otro lado del cilindro el aceite fluye hacia el tanque donde la presión es baja. 
+
+    La presión se genera con una bomba. En nuestro ejemplo la bomba no tiene suficiente potencia para mover el aceite suficiente rápido a suficiente presión. Pero como solo usan el cilindro intermitentemente, accumulan aceite bajo presión en un tanque (accumulador) para usarlo cuando se necesita.
+
+La dirección de flujo se controla con una valvula de dirección. Así se ven en vida real. Esto es el symbolo eschematico usado en diagramas. La valvula tiene tres posiciones. En la posición del medio esta completamente cerrado. El aceite no puede fluir a ningun lado, y como es un medio incompresible, el pistón no se mueve. La posición de la valvula, o mejor el huso o eje adentro, se controle con dos solenoides. Un solenoide es simplemente una bobina electrica que cuando fluye corriente en la bobina funciona como un imán para mover el eje. Los resortes están para asegurar que si no hay corriente en ninguna de los solenoides, se queda en la posicion cerrada. 
+
+Estas solenoides pueden tener una corriente variable. Es una valvula direccional proporcional, porque se puede controlar la apertura de la valvula con la magnitud de la corriente en el solenoide. 
+
+Lo que no es dado explicitamente en esta diapositiva es que el actuador tiene cierta dinamica. Es decir la fuerza que produce no es una función directa / statica de la apertura del valvula. Depende tambien del flujo es decir del movimiento del pistón.  
+
+* Block diagram
+
+  
+** 6. Diagrama de bloque - básico
+
+   #+begin_center
+   \includegraphics[width=1.0\textwidth]{../../figures/ac75-control-block-feedback-units}
+   #+end_center
+
+  
+** ... y más elaborada
+
+   #+begin_center
+   \includegraphics[width=.99\textwidth]{../../figures/ac75-control-block-details}
+   #+end_center
+
+* Control
+
+** Sistema de control
+   
+   #+begin_center
+   \includegraphics[width=.56\textwidth]{../../figures/ac75-control-block-details}
+   #+end_center
+
+   #+begin_center
+   \includegraphics[width=.7\textwidth]{../../figures/ac75_control}
+   #+end_center
+
+*** Notes                                                          :noexport:
+
+    Como se podría implementar el lógico del control? 
+
+    Esto es un diagrama de bloques hecho en Simulink. Describe un flujo de señales que implementa un posible lógico para el control del sistema de hydroalas.
+
+    Como vemos hay tres entradas, correspondiente al señal de comando (posición deseada o posición de referencia), ademas dos señales medidas, que vienen de dos diferentes sensores (sensor de posición del piston y sensor de presión hidraulica).
+
+    Tambien hay tres salidas. Las dos primeras son para mandar la señal a la valvula hidraulica. Dicen To solenoid A y To solenoid B. Mandando un señal positiva (voltage) a solenoide A causa un corriente en ese solenoide, que meuve el huso o el eje, para que aceite fluye al lado trasero del pistón y se extende. Un señal (es decir voltage) a solenoide B causa una corriente en ese solenoide. Otra vez el huso se mueve para que fluye aceite al lado delantero del piston y se retire.
+
+    La última señal de salida es un señal al motor. Este puede ser simplemente un voltage deseada sobre los polos de la armadura, pero tambien un corriente deseada en la armadura. Digo 'deseada' porque el PLC trabaja con voltages y corrientes relativamente bajas (suficiente para mover el huso del valvula, pero no para hacer trabajo duro). Entonces el motor electrico tiene un 'drive', es decir un sistema electronico de potencia que toma energía de la pila y convierte en voltage y corriente adecuadas para el motor. La señal del PLC es una señal de comando al drive electrico.
+
+    *Como funciona la lógica?*
+
+    Comparamos la posición actual medida con la posición deseada. Si hay un discrepancia o error, por ejemplo positivo (posición actual es menor de la deseada) esa señal entra en un bloque PID que implementa un algoritmo de control clasico y muy utilizado en la industria. La señal de salida de ese bloque consiste en un suma de tres partes, uno que es proporional al error. Es decir si el error es positivo, esa parte tambien es positivo. Otra parte es la parte integral y es proporcional al error accumulada. Si el error es positivo por mucho tiempo, entonces esa parta puede crecer a valorers muy grandes. Por último la parte derivativa es proporcional al cambio en el error. Si el error cambia rápida, esa parte sería grande.
+
+    La señal de salida del bloque PID no estamos mandando directamente al actuador. Sino para empezar no queremos abrir la valvula hidraulica si no hay suficiente presión. Por eso introducimos un switch que deja pasar la señal de control solamente si la presión actual (medida) es arriba de una presión mínima. Si no. mandamos la señal '0' al actuador. Es decir que la valvula se queda en su posición cerrada.
+
+    Al final del procesamiento de la señal al actuador hidraulica tenemos una parte lógica donde checamos si la señal es positivo o negativo. Si es negativo mandamos el voltage 0 a solenoide A, y un voltage positivo a solenoide B.
+
+    El sistema de control también incluye una lógico para mantener presión en el sistema hidraulico.  
+    
+    
