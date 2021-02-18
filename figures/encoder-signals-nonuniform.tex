@@ -1,0 +1,96 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+\usepackage{tikzsymbols}
+\usepackage{gensymb}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+
+\pgfplotstableread[col sep=comma]{./chirpdata.dat}\timeseriesdata
+
+\definecolor{mblue}{rgb}{0, 0, 0.7}
+\definecolor{mred}{rgb}{0.7, 0, 0}
+\definecolor{mgreen}{rgb}{0, 0.7, 0}
+\definecolor{morange}{rgb}{0.8, 0.3, 0}
+
+\begin{document}
+\begin{tikzpicture}[yscale=1,]
+  \begin{groupplot}[group style={
+      group size=1 by 3,
+      xlabels at=edge bottom,
+      xticklabels at=edge bottom,
+    vertical sep=4mm,},
+    height=22mm, width=12cm,
+    clip=false,
+    xmin=0, xmax=20,
+    ]
+    \nextgroupplot [hide axis]
+    \addplot[mblue, no marks, const plot,] table[x=0, y=1] from \timeseriesdata;
+    \node at (axis cs: -0.0, 0.5) {\textcolor{mblue}{A}};
+    \nextgroupplot [hide axis,]
+    \addplot[mred, no marks, const plot,] table[x=0, y=2] from \timeseriesdata;
+    \node at (axis cs: -0.0, 0.5) {\textcolor{mred}{B}};
+   
+    \nextgroupplot[height=10cm, ylabel={Counts}, every major grid/.style={gray, opacity=0.5},
+    grid=both,
+    x label style={at={(axis description cs: 0.8, -0.03)},anchor=north},
+    xlabel={time [ms]},
+    ]
+    \addplot[morange, no marks, const plot, y filter/.code={\pgfmathparse{#1+1}\pgfmathresult}] table[x=0, y=3] from \timeseriesdata;
+    \draw[mgreen, dashed, thick] (axis cs: 6, 6) -- (axis cs: 6, -10);
+    \draw[mgreen, dashed, thick] (axis cs: 6.5, 6) -- (axis cs: 6.5, -10);
+    \draw[mgreen, dashed, thick] (axis cs: 1.5, 1) -- (axis cs: 1.5, -10);
+    \draw[->] (axis cs: 5.5, -7) -- (axis cs: 6, -7);
+    \draw[<-] (axis cs: 6.5, -7) -- (axis cs: 7, -7) node[right] {0.5 ms};
+    \draw[<->] (axis cs: 1.5, -9) -- node[below]{5 ms} (axis cs: 6.5, -9) ;
+
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}
+
+\begin{
+  \begin{scope}
+    \def\clr{blue!70!black}
+    \node[\clr] at (0, 0.5) {A};
+    \node[\clr] at (0.8, 0) {0};
+    \foreach \x in {1, 2, 3,...,6} {
+      \pgfmathsetmacro{\mid}{\x + 0.5}
+      \pgfmathsetmacro{\endd}{\x + 1}
+      \draw[\clr] (\x, 0) -- (\mid, 0) -- (\mid, 1) -- (\endd, 1) -- (\endd, 0);
+      }
+  \end{scope}
+\begin{scope}[yshift=-15mm,]
+    \def\clr{red!70!black}
+    \node[\clr] at (0, 0.5) {B};
+    \node[\clr] at (0.8, 0) {0};
+    \foreach \x in {1.25, 2.25, 3.25,...,6.25} {
+      \pgfmathsetmacro{\mid}{\x + 0.5}
+      \pgfmathsetmacro{\endd}{\x + 1}
+      \draw[\clr] (\x, 0) -- (\mid, 0) -- (\mid, 1) -- (\endd, 1) -- (\endd, 0);
+      }
+  \end{scope}
+  
+  \begin{scope}[yshift=-30mm,]
+    \def\clr{green!60!black}
+    \node[\clr] at (0, 0.5) {Z};
+    \node[\clr] at (0.8, 0) {0};
+    \draw[\clr] (1, 0) -- (1.5, 0) -- (1.5, 1) -- (2, 1) -- (2, 0)
+    -- (5.5, 0) -- (5.5, 1) -- (6, 1) -- (6, 0) -- (7.25, 0);
+  \end{scope}
+
+
+  \draw[dashed, blue!70!black] (1.5, 0) -- (1.5, -3.8);
+  \draw[dashed, red!70!black] (1.75, -1.5) -- (1.75, -3.8);
+
+  \draw[->] (1.2, -3.5) -- (1.5, -3.5);
+  \draw[<-] (1.75, -3.5) -- (2.05, -3.5) node[right] {90\degree phase shift};
+
+
+  \draw[dashed, green!60!black] (5.5, 0) -- (5.5, -3.8);
+
+\end{tikzpicture}
+\end{document}
