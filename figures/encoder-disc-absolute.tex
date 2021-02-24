@@ -1,0 +1,66 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+\usepackage{tikzsymbols}
+\usepackage{gensymb}
+
+
+\begin{document}
+\def\radius{5}
+\def\pprA{8}
+\def\pprB{4}
+\def\pprC{2}
+\def\pprD{1}
+
+
+\pgfmathsetmacro{\rA}{0.8*\radius}
+\pgfmathsetmacro{\rB}{0.6*\radius}
+\pgfmathsetmacro{\rC}{0.4*\radius}
+\pgfmathsetmacro{\rD}{0.2*\radius}
+\pgfmathsetmacro{\rw}{1.1*\radius}
+\pgfmathsetmacro{\seclength}{0.16*\radius}
+\pgfmathsetmacro{\midseclength}{0.5*\seclength}
+\pgfmathsetmacro{\Bphaseshift}{0.5*\apwidth}
+
+\begin{tikzpicture}
+  \draw[black!40, fill] (\radius, 0) arc[start angle=0, end angle=360, radius=\radius]; 
+  \draw[black!80, fill] (0.3, 0) arc[start angle=0, end angle=360, radius=0.3]; 
+
+  \begin{scope}[rotate=10]
+  \foreach \rs/\pshift/\ppr in {\rA/0/\pprA, \rB/\Bphaseshift/\pprB, \rC/0/\pprC, \rD/0/\pprD} {
+    \pgfmathsetmacro{\secwidth}{360/\ppr}
+    \pgfmathsetmacro{\apwidth}{0.5*\secwidth}
+    \foreach \ap in {1,...,\ppr} {
+      \pgfmathsetmacro{\rotangle}{(\ap-1)*\secwidth + \pshift}
+      \pgfmathsetmacro{\outerrad}{\rs + \seclength}
+      \pgfmathsetmacro{\innerx}{\rs*cos(\apwidth)}
+      \pgfmathsetmacro{\innery}{\rs*sin(\apwidth)}
+      
+      \begin{scope}[rotate=\rotangle]
+        \draw[fill, white] (\rs, 0) -- ++(\seclength cm, 0) arc[start angle=0, end angle=\apwidth, radius=\outerrad] -- (\innerx, \innery) arc[start angle=\apwidth, end angle=0, radius=\rs];
+      
+      \end{scope}
+    }
+}
+    \end{scope}
+
+\draw[thick, rounded corners] (-1, 1) rectangle (1, \radius);
+\draw[green!60!black, fill] (0, \rD+\midseclength) circle[radius=0.2]
+node at(0.5, \rD+\midseclength) {B0};
+\draw[green!60!black, fill] (0, \rC+\midseclength) circle[radius=0.2]
+node at(0.5, \rC+\midseclength) {B1};
+\draw[green!60!black, fill] (0, \rB+\midseclength) circle[radius=0.2]
+node at(0.5, \rB+\midseclength) {B2};
+\draw[green!60!black, fill] (0, \rA+\midseclength) circle[radius=0.2]
+node at(0.5, \rA+\midseclength) {B3};
+
+
+%\begin{scope}[rotate=-30]
+%  \draw[thick, ->] (\rw, 0) arc[start angle=0, end angle=80, radius=\rw] node[pos=0.7, right] {\Huge $\omega$};
+%\end{scope}
+\end{tikzpicture}
+\end{document}

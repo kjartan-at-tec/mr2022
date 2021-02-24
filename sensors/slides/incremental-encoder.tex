@@ -1,4 +1,4 @@
-% Created 2021-02-18 jue 10:18
+% Created 2021-02-24 mié 12:40
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -35,8 +35,8 @@
 \maketitle
 
 \section{Sensores en general}
-\label{sec:orga55b09e}
-\begin{frame}[label={sec:org090471e}]{Sensores}
+\label{sec:orgf890ffa}
+\begin{frame}[label={sec:org04797ee}]{Sensores}
 \begin{center}
 \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
 
@@ -62,7 +62,7 @@
 Es \alert{inevitable} que el uso de sensores introduzca \alert{ruido} en el sistema.
 \end{frame}
 
-\begin{frame}[label={sec:orgbf697ad}]{Sensores}
+\begin{frame}[label={sec:orgcb27a5e}]{Sensores}
 \begin{center}
 \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
 
@@ -113,10 +113,10 @@ Es \alert{importante} conocer las caracteristicas (estadisticas) del error de me
 \end{frame}
 
 
-\begin{frame}[label={sec:org45cc6c7}]{Sensores - características}
+\begin{frame}[label={sec:org2b97254}]{Sensores - características}
 \begin{itemize}
 \item \alert{Exactitud} Que tán correcto es en promedio.  \alert{Precisón} Desviación del error.
-\item \alert{Sensibildad} El cambio más pequeño en la señal que se puede detectar.
+\item \alert{Sensibildad o resolución} El cambio más pequeño en la señal que se puede detectar.
 \item \alert{Retraso} \(y_m(t) = y(t-\tau) + n(t)\)
 \item \alert{Muestreo y digitalización}
 \begin{center}
@@ -126,15 +126,15 @@ Es \alert{importante} conocer las caracteristicas (estadisticas) del error de me
 \end{frame}
 
 \section{Encoder}
-\label{sec:orgdc47c58}
-\begin{frame}[label={sec:org72216b3}]{Encoder incremental}
+\label{sec:org6940255}
+\begin{frame}[label={sec:org00a43d0}]{Encoder incremental}
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../figures/encoder-im.jpg}
 {\footnotesize Fuente: \url{https://www.sciencedirect.com/topics/engineering/incremental-encoder}}
 \end{center}
 \end{frame}
 
-\begin{frame}[label={sec:orgaedb1d5}]{Encoder incremental}
+\begin{frame}[label={sec:org7cff6cb}]{Encoder incremental}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
 \includegraphics[width=0.5\textwidth]{../../figures/encoder-signals}
@@ -143,7 +143,7 @@ Es \alert{importante} conocer las caracteristicas (estadisticas) del error de me
 \emph{Pulses Per Revolution (PPR)} es igual a 4 en el ejemplo. Cada apertura tiene un sector de \(\frac{360\degrees}{2 \times PPR} = 45\degree\).
 \end{frame}
 
-\begin{frame}[label={sec:orgb4ba6bb}]{Encoder incremental}
+\begin{frame}[label={sec:org13f283c}]{Encoder incremental}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
 \includegraphics[width=0.5\textwidth]{../../figures/encoder-signals}
@@ -153,7 +153,7 @@ Es \alert{importante} conocer las caracteristicas (estadisticas) del error de me
 \end{frame}
 
 
-\begin{frame}[label={sec:org5d46de0}]{Encoder incremental}
+\begin{frame}[label={sec:orgabca622}]{Encoder incremental}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
 \includegraphics[width=0.5\textwidth]{../../figures/encoder-signals}
@@ -163,7 +163,7 @@ Es \alert{importante} conocer las caracteristicas (estadisticas) del error de me
 \end{frame}
 
 
-\begin{frame}[label={sec:org74ebfeb}]{Encoder incremental}
+\begin{frame}[label={sec:org329bda1}]{Encoder incremental - Velocidad}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -174,6 +174,65 @@ Es \alert{importante} conocer las caracteristicas (estadisticas) del error de me
 Se requiere la velocidad angular del eje en el instante \(t=\unit{6.5}{\milli\second}\). El número de pulsos por revolución es PPR=8, y contamos cada flanco (ascendente y descendente) de cada señal A y B, que resulte en 32 conteos por revolución.
 
 \alert{Actividad individual} Computa la velocidad angular en rad/s en los casos \alert{(a)} usando un tiempo de rastreo de \(\Delta t=\unit{0.5}{\milli\second}\), \alert{(b)} usando un tiempo de rastreo \(\Delta t=\unit{5}{\milli\second}\).
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[label={sec:org5e6269f}]{Encoder incremental - Velocidad por frequencia}
+\begin{columns}
+\begin{column}{0.5\columnwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../../figures/encoder-signals-freqs}
+\end{center}
+\end{column}
+\begin{column}{0.5\columnwidth}
+La velocidad tambien se puede medir usando el tiempo entre pulsos. En el ejemplo hubo un intervalo de \unit{1}{\milli\second} entre los dos pulsos. Este da la velocidad
+\begin{align*}
+ v &= 1 \, \text{pulsos/ms} = \frac{1/32 \, \text{revoluciones}}{\unit{10^{-3}}{\second}}\\
+ &= \unit{\frac{2\pi}{32}\times 1000}{\rad\per\second} = \unit{196.3}{\rad\per\second}
+ \end{align*}
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[label={sec:org36b2be8}]{Encoder incremental - Velocidad por frequencia}
+\begin{columns}
+\begin{column}{0.5\columnwidth}
+\begin{center}
+\includegraphics[width=\textwidth]{../../figures/encoder-signals-nonuniform}
+\end{center}
+\end{column}
+\begin{column}{0.5\columnwidth}
+\alert{Actividad individual} Calcula la velocidad!
+\end{column}
+\end{columns}
+\end{frame}
+
+
+
+
+
+
+\begin{frame}[label={sec:org7d9020f}]{Encoder incremental - Velocidad por frequencia}
+\begin{columns}
+\begin{column}{0.7\columnwidth}
+\begin{center}
+\includegraphics[width=0.8\textwidth]{../../figures/encoder-signal-freqs2}
+\end{center}
+\end{column}
+
+\begin{column}{0.3\columnwidth}
+La velocidad solo se calcula cuando viene un pulso.
 \end{column}
 \end{columns}
 \end{frame}

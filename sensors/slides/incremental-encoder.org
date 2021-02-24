@@ -155,7 +155,7 @@
    *Actividad individual* En el ejemplo arriba, el encoder gira en sentido del reloj (CW) o en sentido contrario al reloj (CCW)?
 
 
-** Encoder incremental
+** Encoder incremental - Velocidad
 *** Graphics
     :PROPERTIES:
     :BEAMER_col: 0.5
@@ -186,10 +186,102 @@
 #+END_SRC
 
 #+RESULTS:
-: ('Sequence', array([ 2.5      ,  4.8660254,  6.8660254,  8.3660254,  9.3660254,
-:        10.       , 10.5      , 11.1339746, 12.1339746, 13.6339746,
-:        15.6339746, 18.       ]))
+: Vel = 196.3 rad/s
 
 
    
    
+
+
+** Encoder incremental - Velocidad por frequencia
+*** Graphics
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+
+    #+begin_center
+    \includegraphics[width=\textwidth]{../../figures/encoder-signals-freqs}
+    #+end_center
+*** Text
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+
+    La velocidad tambien se puede medir usando el tiempo entre pulsos. En el ejemplo hubo un intervalo de \unit{1}{\milli\second} entre los dos pulsos. Este da la velocidad
+    \begin{align*}
+     v &= 1 \, \text{pulsos/ms} = \frac{1/32 \, \text{revoluciones}}{\unit{10^{-3}}{\second}}\\
+     &= \unit{\frac{2\pi}{32}\times 1000}{\rad\per\second} = \unit{196.3}{\rad\per\second}
+     \end{align*}
+    
+*** Calculations                                                   :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  import numpy as np
+  CPR = 32.0
+  dc = 5
+  dt = 5e-3
+  v = dc/dt/CPR*2*np.pi
+  print("Vel = %0.1f rad/s" %v)
+
+#+END_SRC
+
+#+RESULTS:
+: Vel = 196.3 rad/s
+
+
+   
+   
+
+
+** Encoder incremental - Velocidad por frequencia
+*** Graphics
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+
+    #+begin_center
+    \includegraphics[width=\textwidth]{../../figures/encoder-signals-nonuniform}
+    #+end_center
+*** Text
+    :PROPERTIES:
+    :BEAMER_col: 0.5
+    :END:
+
+    *Actividad individual* Calcula la velocidad!
+    
+*** Calculations                                                   :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  import numpy as np
+  CPR = 32.0
+  dc = 1
+  dt = 0.65e-3
+  v = dc/dt/CPR*2*np.pi
+  print("Vel = %0.1f rad/s" %v)
+
+#+END_SRC
+
+#+RESULTS:
+: Vel = 302.1 rad/s
+
+
+   
+   
+
+
+** Encoder incremental - Velocidad por frequencia
+*** Graphics
+    :PROPERTIES:
+    :BEAMER_col: 0.7
+    :END:
+
+    #+begin_center
+    \includegraphics[width=0.8\textwidth]{../../figures/encoder-signal-freqs2}
+    #+end_center
+
+*** Text
+    :PROPERTIES:
+    :BEAMER_col: 0.3
+    :END:
+
+    La velocidad solo se calcula cuando viene un pulso.

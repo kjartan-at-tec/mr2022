@@ -77,7 +77,13 @@ iABAv = interp1(iAv(:,1), iAv(:,2), iAB, 'previous');
 iABBv = interp1(iBv(:,1), iBv(:,2), iAB, 'previous');
 
 counts = 0:(length(iAB)-1);
-data = cat(2, tt(iAB)', iABAv, iABBv, counts');
+
+evtimes = tt(iAB)';
+diffs = evtimes(2:end) - evtimes(1:end-1);
+diffs = cat(1, diffs(1), diffs); % Repeat first element
+freqs = 1./diffs;
+data = cat(2, evtimes, iABAv, iABBv, counts', freqs);
+
 dlmwrite('../../figures/chirpdata.dat', data, ',');
 
 
@@ -90,19 +96,18 @@ figure(4)
 figure(5)
 plot(tt(iAB), counts+ 1)
 
+filenames = {'../../figures/chirpdata_dt1.dat', '../../figures/chirpdata_dt2.dat'};
 for i = 1:2
     dt = dts(i);
     ti = 0:dt:tend;
-    ci = interp1(tt(iAB), counts, ti, 'nearest');
+    ci = interp1(tt(iAB), counts, ti, 'previous');
     veli = gradient(ci)/dt * (2*pi/32)*1000;
     figure(4)
     subplot(2,1,i)
     plot(ti, veli)
+    dlmwrite(filenames{i}, cat(2, ti(:), veli(:)), ',');
 end
 
-figure(6)
-plot(ci)
 
- 
     
 

@@ -16,6 +16,7 @@
 \definecolor{mred}{rgb}{0.7, 0, 0}
 \definecolor{mgreen}{rgb}{0, 0.7, 0}
 \definecolor{morange}{rgb}{0.8, 0.3, 0}
+\definecolor{mmagenta}{rgb}{0.6, 0.0, 0.6}
 
 \begin{document}
 \begin{tikzpicture}[yscale=1,]
@@ -48,49 +49,13 @@
     \draw[<-] (axis cs: 6.5, -7) -- (axis cs: 7, -7) node[right] {0.5 ms};
     \draw[<->] (axis cs: 1.5, -9) -- node[below]{5 ms} (axis cs: 6.5, -9) ;
 
+
+    \draw[mmagenta, dashed, thick] (axis cs: 10.545, 33) -- (axis cs: 10.545, 0);
+    \draw[mmagenta, dashed, thick] (axis cs: 11.196, 37) -- (axis cs: 11.196, 0);
+    \draw[->] (axis cs: 9.5, 5) -- (axis cs: 10.545, 5);
+    \draw[<-] (axis cs: 11.196, 5) -- (axis cs: 12.2, 5) node[right] {0.65 ms};
+
   \end{groupplot}
 \end{tikzpicture}
 \end{document}
 
-\begin{
-  \begin{scope}
-    \def\clr{blue!70!black}
-    \node[\clr] at (0, 0.5) {A};
-    \node[\clr] at (0.8, 0) {0};
-    \foreach \x in {1, 2, 3,...,6} {
-      \pgfmathsetmacro{\mid}{\x + 0.5}
-      \pgfmathsetmacro{\endd}{\x + 1}
-      \draw[\clr] (\x, 0) -- (\mid, 0) -- (\mid, 1) -- (\endd, 1) -- (\endd, 0);
-      }
-  \end{scope}
-\begin{scope}[yshift=-15mm,]
-    \def\clr{red!70!black}
-    \node[\clr] at (0, 0.5) {B};
-    \node[\clr] at (0.8, 0) {0};
-    \foreach \x in {1.25, 2.25, 3.25,...,6.25} {
-      \pgfmathsetmacro{\mid}{\x + 0.5}
-      \pgfmathsetmacro{\endd}{\x + 1}
-      \draw[\clr] (\x, 0) -- (\mid, 0) -- (\mid, 1) -- (\endd, 1) -- (\endd, 0);
-      }
-  \end{scope}
-  
-  \begin{scope}[yshift=-30mm,]
-    \def\clr{green!60!black}
-    \node[\clr] at (0, 0.5) {Z};
-    \node[\clr] at (0.8, 0) {0};
-    \draw[\clr] (1, 0) -- (1.5, 0) -- (1.5, 1) -- (2, 1) -- (2, 0)
-    -- (5.5, 0) -- (5.5, 1) -- (6, 1) -- (6, 0) -- (7.25, 0);
-  \end{scope}
-
-
-  \draw[dashed, blue!70!black] (1.5, 0) -- (1.5, -3.8);
-  \draw[dashed, red!70!black] (1.75, -1.5) -- (1.75, -3.8);
-
-  \draw[->] (1.2, -3.5) -- (1.5, -3.5);
-  \draw[<-] (1.75, -3.5) -- (2.05, -3.5) node[right] {90\degree phase shift};
-
-
-  \draw[dashed, green!60!black] (5.5, 0) -- (5.5, -3.8);
-
-\end{tikzpicture}
-\end{document}

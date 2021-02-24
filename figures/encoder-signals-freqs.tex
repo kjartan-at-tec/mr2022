@@ -1,0 +1,57 @@
+\documentclass{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[american,siunitx]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+\usepackage{tikzsymbols}
+\usepackage{gensymb}
+\usepackage{pgfplots}
+\usepgfplotslibrary{groupplots}
+
+\pgfplotstableread[col sep=comma]{./chirpdata.dat}\timeseriesdata
+
+\definecolor{mblue}{rgb}{0, 0, 0.7}
+\definecolor{mred}{rgb}{0.7, 0, 0}
+\definecolor{mgreen}{rgb}{0, 0.7, 0}
+\definecolor{morange}{rgb}{0.8, 0.3, 0}
+\definecolor{mmagenta}{rgb}{0.6, 0.0, 0.6}
+
+\begin{document}
+\begin{tikzpicture}[yscale=1,]
+  \begin{groupplot}[group style={
+      group size=1 by 4,
+      xlabels at=edge bottom,
+      xticklabels at=edge bottom,
+    vertical sep=4mm,},
+    height=22mm, width=12cm,
+    clip=false,
+    xmin=0, xmax=20,
+    ]
+    \nextgroupplot [hide axis]
+    \addplot[mblue, no marks, const plot,] table[x=0, y=1] from \timeseriesdata;
+    \node at (axis cs: -0.0, 0.5) {\textcolor{mblue}{A}};
+    \nextgroupplot [hide axis,]
+    \addplot[mred, no marks, const plot,] table[x=0, y=2] from \timeseriesdata;
+    \node at (axis cs: -0.0, 0.5) {\textcolor{mred}{B}};
+   
+    \nextgroupplot[height=3cm, ylabel={Counts}, every major grid/.style={gray, opacity=0.5},
+    grid=both,
+    x label style={at={(axis description cs: 0.8, -0.03)},anchor=north},
+    ]
+    \addplot[morange, no marks, const plot, y filter/.code={\pgfmathparse{#1+1}\pgfmathresult}] table[x=0, y=3] from \timeseriesdata;
+    \draw[mmagenta, dashed, ] (axis cs: 3.07, 1) -- (axis cs: 3.07, 70);
+    \draw[mmagenta, dashed, ] (axis cs: 4.05, 2) -- (axis cs: 4.05, 50);
+    \draw[->] (axis cs: 2, 15) -- (axis cs: 3.07, 15);
+    \draw[<-] (axis cs: 4.05, 15) -- (axis cs: 5, 15) node[right] {1 ms};
+
+    \nextgroupplot[height=6cm, ylabel={Vel [rad/s]}, every major grid/.style={gray, opacity=0.5},
+    grid=both,
+    x label style={at={(axis description cs: 0.8, -0.03)},anchor=north},
+    ]
+    \addplot[morange, no marks, const plot, y filter/.code={\pgfmathparse{#1/32*2*3.1415*1000}\pgfmathresult}] table[x=0, y=4] from \timeseriesdata;
+  \end{groupplot}
+\end{tikzpicture}
+\end{document}
+
