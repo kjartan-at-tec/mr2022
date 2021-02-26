@@ -1,0 +1,591 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+#+LaTex_HEADER: \DeclareMathSymbol{\Omega}{\mathalpha}{letters}{"0A}% italics
+#+LaTex_HEADER: \DeclareMathSymbol{\varOmega}{\mathalpha}{operators}{"0A}% upright
+#+LaTex_HEADER: \providecommand*{\upOmega}{\varOmega}% for siunitx
+#+LaTex_HEADER: \usepackage[binary-units=true]{siunitx}
+#+LaTex_HEADER: \usepackage{circuitikz}
+
+#+title: Actuadores
+#+author: Kjartan Halvorsen
+#+date: 2021-03-01
+
+* What do I want the students to understand?			   :noexport:
+  - How to find power and torque requirements
+  - Basic working of an electric motor
+  - Equivalent circuit
+    
+* Which activities will the students do?			   :noexport:
+
+* Requerimientos mecanicos
+
+** Requerimientos mecanicos
+** Energía mecanica
+   From Encyclopaedia Britannica
+   #+begin_quote
+*Mechanical energy*, sum of the kinetic energy, or energy of motion, and the potential energy, or energy stored in a system by reason of the position of its parts. 
+   #+end_quote
+
+   \[ E_M = \underbrace{K}_{\text{Kinetic energy}} + \underbrace{U}_{\text{Potential energy}}\]
+
+   For a point mass $m$ with velocity $v$ at a height $h$ above reference level, the mechanical energy is \(E_M = \frac{1}{2}mv^2 + mgh\).
+
+   \begin{center}
+   \includegraphics[height=0.3\textheight]{../../figures/pendulum.png}
+   {\footnotesize CC-BY-SA Hubert Christiaen, wikipedia}
+   \end{center}
+   
+
+   #+end_center
+** Trabajo
+   From Encyclopaedia Britannica
+   #+begin_quote
+*Work*, in physics, measure of *energy transfer* that occurs when an object is *moved over a distance* by an *external force* at least part of which is applied in the direction of the displacement.
+   #+end_quote 
+
+** Trabajo
+   \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/pulley-block-50kg.png}
+   \end{center}
+
+   *Actividad individual 1* Se levanta un cuerpo de \unit{50}{\kilogram} una distancia de \unit{10}{\meter}. Calcula el trabajo realizado. Manda tu respuesta en el chat.
+   
+*** Result                                                         :noexport:
+#+BEGIN_SRC python :session :results output 
+  M = 50
+  h = 10
+  print("Work required to lift mass m = %0.1fkg to a height of h = %0.1fm is W = mgh = %0.1f Joule" %(M, h, M*9.8*h))
+#+END_SRC
+
+#+RESULTS:
+: Work required to lift mass m = 50.0kg to a height of h = 10.0m is W = mgh = 4900.0 Joule
+
+
+
+** Potencia
+   *Definition* The rate of work done, or the time-derivative of the work.
+
+** Potencia
+   \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/pulley-block-50kg.png}
+   \end{center}
+
+   *Individual exercise 2* A mass of \unit{50}{\kilogram} is lifted \unit{10}{\meter} with constant velocity \unit{2}{\meter\per\second}. Calculate the power required if all frictional forces can be ignored. Answer in chat directly to host.
+   
+*** Result                                                         :noexport:
+#+BEGIN_SRC python :session :results output 
+  M = 50
+  h = 10
+  v = 2
+  print("Power required to lift mass m = %0.1fkg at constant vel v = %0.1fm/s is P = mgv = %0.1f W" %(M, v, M*9.8*v))
+#+END_SRC
+
+#+RESULTS:
+: Power required to lift mass m = 50.0kg at constant vel v = 2.0m/s is P = mgv = 980.0 W
+
+** Potencia y fuerza para accelerar
+
+   #+begin_export latex
+   \begin{center}
+\begin{tikzpicture}
+
+  \begin{scope}[scale=0.3, xshift=4cm]
+  \node[anchor=south,] {\includegraphics[width=3cm]{../../figures/hummer-ev.png}};
+    \draw[thin, ] (-8,2) -- (-6,2);
+    \draw[thin, ] (-9,3) -- (-6.5,3);
+  \end{scope}
+
+  \draw[->,semithick] (-.5,0.16) -- (8,0.16);
+\end{tikzpicture}
+\end{center}
+
+   #+end_export
+
+   
+   *Individual exercise* El nuevo Hummer EV tiene una masa de $m=\unit{5000}{\kilogram}$, y puede accelerarar de \unit{0 - 100}{\kilo\meter\per\hour} en tres segundos. Cual es la potencia mediana necesario para rograr esto (ignorando la resistencia del aire y ra resistencia a la rodura)?
+
+   
+*** Result                                                         :noexport:
+#+BEGIN_SRC python :session :results output 
+  M = 5000
+  v = 100*1000.0/3600
+  t = 3
+  P= 0.5*M*v**2/t
+  print("Power needed to accelerate m = %0.1fkg to vel v = %0.1fm/s in %0.1s is P = 0.5*m*v^2/t = %0.1f W = %0.2f kW" %(M, v, t, P, P/1000.0 ))
+#+END_SRC
+
+#+RESULTS:
+: Power needed to accelerate m = 5000.0kg to vel v = 27.8m/s in 3 is P = 0.5*m*v^2/t = 643004.1 W = 643.00 kW
+
+** Potencia en rotación
+
+   *Torque* times *angular velocity*
+
+   #+begin_export latex
+   \begin{center}
+     \begin{tikzpicture}
+
+     \begin{scope}[scale=1, xshift=2cm, yshift=2cm]
+       \node[] {\includegraphics[width=2cm]{../../figures/mech-rotor}};
+       \node[green!80!black] at (2.6,0) {Driving forward};
+       \end{scope}
+
+     \begin{scope}[scale=1, xshift=-2cm, yshift=2cm]
+       \node[] {\includegraphics[width=2cm]{../../figures/mech-motor-back-break}};
+       \node[red!80!black, anchor=east] at (-2,0) {Braking};
+     \end{scope}
+
+     \begin{scope}[scale=1, xshift=-2cm, yshift=-2cm]
+       \node[] {\includegraphics[width=2cm]{../../figures/mech-motor-back}};
+       \node[green!80!black, anchor=east] at (-2,0) {Driving backward};
+     \end{scope}
+
+     \begin{scope}[scale=1, xshift=2cm, yshift=-2cm]
+       \node[] {\includegraphics[width=2cm]{../../figures/mech-rotor-break}};
+       \node[red!80!black] at (2.6,0) {Braking};
+     \end{scope}
+
+     \draw[->,semithick] (-3, 0) -- (3, 0) node[right] {$\omega$};
+     \draw[->,semithick] (0, -3) -- (0, 3) node[above] {$T$};
+   \end{tikzpicture}
+   \end{center}
+
+   #+end_export
+   
+   
+
+** Inercia
+
+   The tendency of a body to resist angular acceleration.
+   \[ J \dot{\omega} = \sum T_i \]
+
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/moment-of-inertia-cylinder.png}
+   {\footnotesize Georgia State University, CC-By-SA}
+   \end{center}
+   #+end_export
+
+** Inercia - usando la energía cinética
+
+   For point masses we have kinetic energy \[K = \frac{1}{2}\textcolor{red!80!black}{m}v^2\]
+    and for rotating bodies we have kinetic energy
+   \[ K = \frac{1}{2}\textcolor{red!80!black}{J}\omega^2.\]
+
+   In both cases we can identify the inertia (mass or moment of inertia) directly from the expression
+   for the kinetic energy.
+
+   
+** Inercia
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[width=0.6\textwidth]{../../figures/mech-mass-on-band}
+   \end{center}
+   #+end_export
+
+   Assume pulleys have moment of inertia $J_p$, mass $m$ includes the mass of the band and the box, the rotor  has moment of inertia $J_m$. The belt velocity and the angular velocities are related as \(\omega_mr = \omega_pR = v\).  
+
+   The total kinetic energy is the sum of the kinetic energy in the different moving bodies
+   \begin{align*}
+   K &= \frac{1}{2}(2J_p)\omega_p^2 + \frac{1}{2}J_m\omega_m^2 + \frac{1}{2}m v^2
+    = J_p\big(\frac{r}{R}\omega_m\big)^2 + \frac{1}{2}J_m\omega_m^2 + \frac{1}{2}m(r\omega_m)^2\\
+    &= \frac{1}{2}(\underbrace{\textcolor{red!80!black}{J_m + 2(\frac{r}{R})^2J_p + mr^2}}_{\text{Inertia experienced by motor}}) \omega_m^2.
+   \end{align*}
+
+** Requerimientos de potencia y torque de un elevador
+
+*** Graphics
+    :PROPERTIES:
+    :BEAMER_col: 0.38
+    :END:
+   #+begin_center
+   \includegraphics[height=0.8\textheight]{../../figures/mech-elevator}
+   #+end_center
+
+*** Text
+    :PROPERTIES:
+    :BEAMER_col: 0.72
+    :END:
+
+    *Group exercise 1* Assume that the mass of the elevator with people is \(M=\unit{1000}{\kilogram}\) and that the counterweight has mass \(m=\unit{800}{\kilogram}\). The drive pulley has a radius of \(r=\unit{0.4}{\meter}\) and a moment of inertia of \(J_p = \unit{10}{\kilogram\meter\squared}\). The drive pulley is connected to an electric motor with a gear ratio of 1:12 (the motor rotates 12 times for every rotation of the pulley) The rotor of the motor has a moment of inertia of \(J_m = \unit{0.3}{\kilogram\meter\squared}\).
+
+    Determine: *(a)* The inertia of the system as seen by the motor. *(b)* The power required to move the elevator upwards at a constant speed of \unit{4}{\meter\per\second}. *(c)* The average power required to accelerate the elevator from 0 to \unit{4}{\meter\per\second} in \unit{2}{\second} (hint: in this time the elevator has moved upwards \unit{4}{\meter}).
+
+*** Solution                                                       :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  M = 1000
+  m = 800
+  r = 0.4
+  gr = 1.0/12
+  Jm = 0.3
+  Jp = 10
+
+  Jpa = Jp*gr**2
+  Jea = (m+M)*(r*gr)**2
+  Jtot = Jm + Jp*gr**2 + (m+M)*(r*gr)**2
+
+  print("(a) Moment of inertia, Jtot = Jm + Jpa + Jea = %f + %f + %f = %f" %(Jm, Jpa, Jea, Jtot))
+
+  v = 4
+  Pconst = (M-m)*9.8*v
+  print("(b) Power required to lift at constant speed, Pconst = %f" %Pconst)
+
+  U = (M-m)*9.8*4 # Potential energy gained
+  w = v/r/gr # Angular vel of motor
+  K = 0.5*Jtot*w**2
+  Etot = U + K
+  t = 2
+  Pacc = Etot/t
+  print("(c) Energy at end of acceleration, E = U + K = %f + %f = %f" %(U, K, Etot))
+  print("    Power required P = E/t = %f W = %0.1f kW" %(Pacc, Pacc/1000.0))
+#+END_SRC
+
+#+RESULTS:
+: (a) Moment of inertia, Jtot = Jm + Jpa + Jea = 0.300000 + 0.069444 + 2.000000 = 2.369444
+: (b) Power required to lift at constant speed, Pconst = 7840.000000
+: (c) Energy at end of acceleration, E = U + K = 7840.000000 + 17060.000000 = 24900.000000
+:     Power required P = E/t = 12450.000000 W = 12.4 kW
+
+
+* El Motor electrico de corriente continua
+** El Motor eléctrico de corriente continua
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/wiki-small-dc-motor.jpg}
+   \includegraphics[width=0.6\textheight]{../../figures/Siemens-DC-prop.png}\\
+   {\footnotesize Fuente: Wikipedia \hspace*{3cm} Fuente: Siemens AG}
+   \end{center}
+   #+end_export
+
+   
+** Fuerza en un conductor eléctrico en un campo magnético
+   #+begin_center
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
+   #+end_center
+
+   
+*** Fuente
+   #+begin_center
+   \includegraphics[width=0.2\linewidth]{../../figures/textbook.png}
+   #+end_center
+    
+   
+** Fuerza en un conductor eléctrico en un campo magnético
+   #+begin_center
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
+   #+end_center
+
+   La fuerza electromagnetética en el conductor es proportional a la corriente: \(F=k_mI=(Bl_m)I\), donde $B$ es la densidad del flujo magnético en el entrehierro, $I$ es la corriente, y $l_m$ es la longitud del cable. En vez de construir un motor muy larga, se agreaga varias cables juntos para aumentar la fuerza.
+
+   *Actividad individual* En un motor grande de \unit{4}{\mega\watt} con longitud axial de \(l_m=\unit{2}{\meter}\), la densidad del flujo es \(B=\unit{0.8}{\tesla}\) y la corriente nominal en uso continuo es \(I=\unit{3}{\kilo\ampere}\). ¿Cuantas cables en paralelo se necesita para alcanzar una fuerza de \(F=\unit{259.2}{\kilo\newton}\)?
+
+*** Solution                                                       :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  B = 0.8
+  l = 2
+  I = 3e3
+  Torq = 190e3
+  r = 750e-3
+  F = Torq/r
+
+  # F = NBIl =>
+  N = F/(B*I*l)
+  print("Number of cables in parallel N = %0.2f" %(N))
+
+  N = 54
+  F = N*B*I*l
+  print("Force with 54 cables in parallel F = %0.2f kN" %(F/1000.0))
+  #+END_SRC
+
+#+RESULTS:
+: Number of cables in parallel N = 52.78
+: Force with 54 cables in parallel F = 259.20 kN
+   
+** Las dos ecuaciónes del motor eléctrica CC
+
+*** Fuerza generado por la corriente en el campo magnético
+   \[ F(t) = k_m i(t) \quad\Leftrightarrow\quad T(t) = k_m r i(t),\]
+   dónde $r$ es el radie del motor.
+
+*** Voltaje generado por el movimiento del conductor en el campo magnético
+   \[ e(t) = k_v v(t) \quad\Leftrightarrow\quad e(t) = k_v r \omega(t)\]
+   \(e(t)\) se llama /Fuerza contraelectromotriz/ o /Back electro-motive force (Back e.m.f.)/ en inglés.
+** Potencia eléctrica y mecánica
+   #+begin_center
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
+   #+end_center
+
+   Con velocidad $v$ constante y ignorando fricción y resistencia eléctrica: 
+
+   \[ \text{Fuerza electromagnética} = \text{Fuerza mecánica} \quad\Leftrightarrow\quad F=k_mI =Bl_mI = mg\]
+   \[ \text{Potencia electromag} = \text{Potencia mecánica} \quad \Leftrightarrow\quad \underbrace{V_1I}_{P_e} = \underbrace{Fv = Bl_mI v}_{P_m} \] 
+   Se necesita aplicar un voltaje $V_1$ sobre la cable para mantener la corriente $I$. *Ese voltaje es igual al back e.m.f.* 
+   \[ V_1I = Bl_mIv \quad \Rightarrow \quad V_1 = (Bl_m)v = k_v v = \tikz[baseline = 0.1ex]{\node[red, circle, draw, inner sep=3pt, pin={[red]0:{Back e.m.f.}}] at (0, 0.1 cm) {\textcolor{black}{E}}}\]
+
+   *Actividad individual* ¿Cuál es la relación entre los dos konstantes, $k_m$ y $k_v$?
+
+** Potencia eléctrica y mecánica
+
+   En realidad se pierde parte de la energía en el circuito eléctrico.
+   \begin{align*}
+   \text{Potencia eléctrica aplicada} &= \text{Producción de calor} + \text{Potencia mecánica}\\
+   V_2 I &= RI^2 + EI
+   \end{align*}
+   Dónde \(V_2 > V_1 = (Bl_m)v = E\).
+
+   La eficiencia del motor
+
+   \[ \text{eficiencia} = \frac{\text{Potencia mecánica}}{\text{Potencia eléctrica aplicada}} = \frac{EI}{V_2I} = \frac{E}{RI + E}\]
+   
+   *Ejercicio* Un motor eléctrico tiene el constante \(k=\unit{0.05}{\kilo\newton\per\ampere}\) y una resistencia de \(R=\SI{2}{\milli\ohm}\). Está produciendo una potencia mecánica de \unit{4}{\mega\watt} a una velocidad de \(v=\unit{10}{\meter\per\second}\) Calcula el 'back e.m.f' \(E\), la corriente \(I\), el voltaje \(V_2\) y la eficiencia.
+
+*** Solution                                                       :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  import numpy as np
+  P = 4e6
+  k = 0.05e3
+  v = 10
+  r = 750e-3
+  Inom = 3.5e3
+  copper_loss = 28e3
+  R = copper_loss/Inom**2
+
+  print("Armature resistance R = %0.2f mOhm " %(R*1000))
+  print("Velocity = %0.2f m/s => Ang vel = %0.2f rpm " %(v, v/r/2/np.pi*60))
+
+  R = 2e-3
+  E = k*v
+  I = P/E
+  V2 = R*I + E
+  print("Back emf E = %0.2f V" %(E))
+  print("Current I = %0.2f kA" %(I/1000))
+  print("Voltage drop in windings IR = %0.2f V" %(I*R))
+  print("Voltage supplied V2 = %0.2f V" %(V2))
+  print("Energy drop in windings I^2R = %0.2f kW" %(I**2*R/1000))
+  print("Efficiency  = %0.2f = %0.2f" %(P/(V2*I), E/(E+R*I)))
+
+  #+END_SRC
+
+#+RESULTS:
+: Armature resistance R = 2.29 mOhm 
+: Velocity = 10.00 m/s => Ang vel = 127.32 rpm 
+: Back emf E = 500.00 V
+: Current I = 8.00 kA
+: Voltage drop in windings IR = 16.00 V
+: Voltage supplied V2 = 516.00 V
+: Energy drop in windings I^2R = 128.00 kW
+: Efficiency  = 0.97 = 0.97
+   
+** Potencia eléctrica y mecánica
+*** Equilibrio de energía   
+   \begin{align*}
+   \text{Potencia eléctrica aplicada} &= \text{Producción de calor} + \text{Potencia mecánica}\\
+   V_2 I &= RI^2 + EI
+   \end{align*}
+*** Eficiencia
+   \[ \text{eficiencia} = \frac{\text{Potencia mecánica}}{\text{Potencia eléctrica aplicada}} = \frac{V_2}{RI + E}\]
+   
+   *Actividad individual* En el ejemplo anterior el motor tenía un constante de \(k=\unit{0.05}{\kilo\newton\per\ampere}\). Supone que otro motor con la misma resistancia \(R=\SI{2}{\milli\ohm}\) está haciendo el mismo trabajo (\unit{4}{\mega\watt} a \unit{10}{\meter\per\second}), pero tiene el konstante $k=\unit{0.1}{\kilo\newton\per\ampere}$. ¿Cuál es su eficiencia?
+
+*** Solution                                                       :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  import numpy as np
+  P = 4e6
+  v = 10
+  k = 0.1e3
+  R = 2e-3
+
+  E = k*v
+  I = P/E
+  V2 = R*I + E
+  print("Current I = %0.2f kA" %(I/1000))
+  print("Back emf E = %0.2f V" %(E))
+  print("Current I = %0.2f kA" %(I/1000))
+  print("Voltage drop in windings IR = %0.2f V" %(I*R))
+  print("Voltage supplied V2 = %0.2f V" %(V2))
+  print("Energy drop in windings I^2R = %0.2f kW" %(I**2*R/1000))
+  print("Efficiency  = %0.2f = %0.2f" %(P/(V2*I), E/(E+R*I)))
+
+  #+END_SRC
+
+#+RESULTS:
+: Current I = 4.00 kA
+: Back emf E = 1000.00 V
+: Current I = 4.00 kA
+: Voltage drop in windings IR = 8.00 V
+: Voltage supplied V2 = 1008.00 V
+: Energy drop in windings I^2R = 32.00 kW
+: Efficiency  = 0.99 = 0.99
+   
+
+** Potencia eléctrica y mecánica
+*** Equilibrio de energía   
+   \begin{align*}
+   \text{Potencia eléctrica aplicada} &= \text{Producción de calor} + \text{Potencia mecánica}\\
+   V_2 I &= RI^2 + EI
+   \end{align*}
+*** Eficiencia
+   \[ \text{eficiencia} = \frac{\text{Potencia mecánica}}{\text{Potencia eléctrica aplicada}} = \frac{V_2}{RI + E}\]
+   
+   *Actividad individual* Supone que el motor con constante de \(k=\unit{0.05}{\kilo\newton\per\ampere}\) está produciendo la mismo potencia que antes (\unit{4}{\mega\watt}) pero por medio de una transmissión lo haga a la velocidad \unit{20}{\meter\per\second}). ¿Cuál es su eficiencia?
+
+*** Solution                                                       :noexport:
+
+#+BEGIN_SRC python :session :results output 
+  import numpy as np
+  P = 4e6
+  v = 20
+  k = 0.05e3
+  R = 2e-3
+
+  E = k*v
+  I = P/E
+  V2 = R*I + E
+  print("Current I = %0.2f kA" %(I/1000))
+  print("Back emf E = %0.2f V" %(E))
+  print("Current I = %0.2f kA" %(I/1000))
+  print("Voltage drop in windings IR = %0.2f V" %(I*R))
+  print("Voltage supplied V2 = %0.2f V" %(V2))
+  print("Energy drop in windings I^2R = %0.2f kW" %(I**2*R/1000))
+  print("Efficiency  = %0.2f = %0.2f" %(P/(V2*I), E/(E+R*I)))
+
+  #+END_SRC
+
+#+RESULTS:
+: Current I = 4.00 kA
+: Back emf E = 1000.00 V
+: Current I = 4.00 kA
+: Voltage drop in windings IR = 8.00 V
+: Voltage supplied V2 = 1008.00 V
+: Energy drop in windings I^2R = 32.00 kW
+: Efficiency  = 0.99 = 0.99
+   
+
+** Rotación
+   #+begin_center
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig3_1.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig3_2.png}
+   #+end_center
+   
+** Circuito equivalente
+
+   #+begin_export latex
+      \begin{center}
+	\begin{circuitikz}
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[L=$L$] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+
+	  \node[] at (2, -0.8 cm) {\(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
+
+	  \begin{scope}[xshift=8cm]
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[short] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+	  \node[] at (2, -0.8 cm) {\(Ri(t) + k\omega(t) = V\)};
+	  \end{scope}
+	\end{circuitikz}
+      \end{center}
+   #+end_export
+
+   
+   Newton: \( J\frac{d}{dt}\omega(t) &= ki(t) - T_l(t)\)
+
+** Velocidad con carga constanta
+   En steady-state: \(i(t) = I\), \(\omega(t) = \omega\).
+
+   \begin{align*}
+   RI + k\omega &= V\\
+   0 &= kI - T_l
+   \end{align*}
+
+   *Actividad individual* Escribe la velocidad angular como función de la carga $T_l$ y el voltaje $V$.
+
+** Velocidad con carga constanta
+
+   \[ RI + k\omega = V, \qquad\qquad  0 = kI - T_l\]
+   Un motor especifico tiene el constante \(k=\unit{4}{\newton\meter\per\ampere}\) y resistencia \(R=\SI{1}{\ohm}\). Se aplica un voltaje de \(V=\unit{100}{\volt}\) sobre su armadura.
+
+
+   *Actividad* Dibuje como la velocidad en estado estable depende de la carga $T_l$. ¿Cuál es el par de parada?
+
+       #+begin_export latex
+	\begin{center}
+	  \begin{tikzpicture}[xscale=0.8]
+	    \draw[->] (0, 0) -- (9, 0) node[right] {$T_l$ [\unit{}{\newton\meter}]};
+	    \draw[->] (0, 0) -- (0, 3) node[left] {$\omega$};
+	    \foreach \t in { 1, 2, ..., 8} {
+	    \draw (\t, 0) -- (\t, -0.1) node[below] {\t{}00};
+	    }
+	    \end{tikzpicture}
+
+	\end{center}
+    #+end_export
+
+
+   
+*** Result                                                         :noexport:
+  #+BEGIN_SRC python :session  :results output 
+    import numpy as np
+    V = 100
+    R = 1
+    Vnom = 500
+    Inom = 20
+    Pnom = Vnom*Inom
+    E = Vnom - Inom*R
+    rpm_500 = 1040
+    w_500 = rpm_500/60*2*np.pi
+    I_500 = 0.8
+    E_500 = 500 - R*I_500
+    k = E_500/w_500
+
+    # R*Tl/k + k*w = V
+    Tl = np.array([0, 100, 400, 800])
+    w = V/k - R*Tl/k**2
+    Tstall = V*k/R
+    print(np.vstack((Tl, w)))
+    print("Stall torque = %0.2f kNm" %(Tstall/1000))
+  #+END_SRC
+
+  #+RESULTS:
+  : [[  0.         100.         400.         800.        ]
+  :  [ 21.81661565  17.05696847   2.77802691 -16.26056182]]
+  : Stall torque = 0.46 kNm
+   
+** Arranque
+
+   Para un motor parada, la fuerza contraelectromotriz es cero, y solo la resistencia de la armadura limite la corriente.
+
+      #+begin_export latex
+	  \begin{scope}[]
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[short] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+	  \node[] at (2, -0.8 cm) {\(Ri(t) + k\omega(t) = V\)};
+	  \end{scope}
+	\end{circuitikz}
+      \end{center}
+   #+end_export
+
+
+      Hay que tener cuidado en el arranque para que la corriente no sube a niveles excedentes.
