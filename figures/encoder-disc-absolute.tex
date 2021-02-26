@@ -24,14 +24,13 @@
 \pgfmathsetmacro{\rw}{1.1*\radius}
 \pgfmathsetmacro{\seclength}{0.16*\radius}
 \pgfmathsetmacro{\midseclength}{0.5*\seclength}
-\pgfmathsetmacro{\Bphaseshift}{0.5*\apwidth}
 
 \begin{tikzpicture}
   \draw[black!40, fill] (\radius, 0) arc[start angle=0, end angle=360, radius=\radius]; 
   \draw[black!80, fill] (0.3, 0) arc[start angle=0, end angle=360, radius=0.3]; 
 
   \begin{scope}[rotate=10]
-  \foreach \rs/\pshift/\ppr in {\rA/0/\pprA, \rB/\Bphaseshift/\pprB, \rC/0/\pprC, \rD/0/\pprD} {
+  \foreach \rs/\pshift/\ppr in {\rA/0/\pprA, \rB/0/\pprB, \rC/0/\pprC, \rD/0/\pprD} {
     \pgfmathsetmacro{\secwidth}{360/\ppr}
     \pgfmathsetmacro{\apwidth}{0.5*\secwidth}
     \foreach \ap in {1,...,\ppr} {
@@ -50,13 +49,13 @@
 
 \draw[thick, rounded corners] (-1, 1) rectangle (1, \radius);
 \draw[green!60!black, fill] (0, \rD+\midseclength) circle[radius=0.2]
-node at(0.5, \rD+\midseclength) {B0};
+node at(0.5, \rD+\midseclength) {B3};
 \draw[green!60!black, fill] (0, \rC+\midseclength) circle[radius=0.2]
-node at(0.5, \rC+\midseclength) {B1};
+node at(0.5, \rC+\midseclength) {B2};
 \draw[green!60!black, fill] (0, \rB+\midseclength) circle[radius=0.2]
-node at(0.5, \rB+\midseclength) {B2};
+node at(0.5, \rB+\midseclength) {B1};
 \draw[green!60!black, fill] (0, \rA+\midseclength) circle[radius=0.2]
-node at(0.5, \rA+\midseclength) {B3};
+node at(0.5, \rA+\midseclength) {B0};
 
 
 %\begin{scope}[rotate=-30]

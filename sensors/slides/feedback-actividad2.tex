@@ -1,4 +1,4 @@
-% Created 2021-02-24 mié 13:04
+% Created 2021-02-25 jue 09:37
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -34,9 +34,11 @@
 \maketitle
 
 \section{Sistemas mecatrónicos}
-\label{sec:orgf9bc056}
+\label{sec:org988df47}
 
-\begin{frame}[label={sec:org1c8b699}]{Actividad 2}
+\begin{frame}[label={sec:org0458505}]{Actividad 2}
+Elaboración de especificaciones funcionales del \alert{sistema sensorial} y selección de equipos
+
 \begin{block}{Propósito}
 \begin{enumerate}
 \item Identificar cuales serían \alert{las variables físicas más relevantes para un mejor control} del proceso y en base a esto \alert{definir las métricas funcionales} que debe cumplir el sistema sensorial.
@@ -46,7 +48,7 @@
 \end{block}
 \end{frame}
 
-\begin{frame}[label={sec:orgc50fc9f}]{Análisis de un sistema mecatrónico}
+\begin{frame}[label={sec:org11f527e}]{Análisis de un sistema mecatrónico}
 \begin{block}{Requisitos / criterios de diseño}
 \end{block}
 
@@ -60,7 +62,8 @@
 \end{block}
 \end{frame}
 
-\begin{frame}[label={sec:orgd970100}]{Requisitos / criterios de diseño}
+
+\begin{frame}[label={sec:org2b562a9}]{Requisitos / criterios de diseño}
  \begin{center}
 \includegraphics[height=0.6\textheight]{../../figures/design-process-fig1.png}\\
 {\footnotesize  S.F. Love (1969) Modern design methods for electronics,  IEEE tr systems science and cybernetics}
@@ -68,7 +71,7 @@
 \end{frame}
 
 
-\begin{frame}[label={sec:orge425b73}]{Estudiantes contra expertos}
+\begin{frame}[label={sec:org808dc76}]{Estudiantes contra expertos}
 \begin{center}
 \includegraphics[width=0.5\linewidth]{../../figures/playground-design-student-experts.png}
 \includegraphics[width=0.3\linewidth]{../../figures/design-process-fig1.png}
@@ -76,8 +79,7 @@
 \footnotesize Fig 3 de Atman et al. Engineering design processes: A comparison of students and expert practitioners. Journal of engineering education, 2007.
 \end{frame}
 
-
-\begin{frame}[label={sec:org89022f8}]{Sistema mecatrónico del AC75}
+\begin{frame}[label={sec:orgdbcb4c5}]{Sistema mecatrónico del AC75}
 \begin{center}
 \includegraphics[width=.76\textwidth]{../../figures/ac75-control-block-details}
 \end{center}
@@ -90,8 +92,7 @@
 \end{itemize}
 \end{frame}
 
-
-\begin{frame}[label={sec:org55fb2de}]{Variables físicas}
+\begin{frame}[label={sec:orgf87f0d8}]{Variables físicas}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -108,7 +109,7 @@
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:orgb9d857c}]{Variables físicas}
+\begin{frame}[label={sec:orge0b0ac7}]{Variables físicas}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -119,7 +120,7 @@
 \end{column}
 \begin{column}{0.5\columnwidth}
 \begin{itemize}
-\item Posición angular continua del brazo/ala
+\item \alert{Posición angular continua del brazo/ala}
 \item Presión hydraulica
 \item Estado de cargo de las pilas
 \end{itemize}
@@ -127,8 +128,7 @@
 \end{columns}
 \end{frame}
 
-
-\begin{frame}[label={sec:org9174ccf}]{Posición del ala - Requisitos}
+\begin{frame}[label={sec:org4c92ef2}]{Posición del ala - Requisitos}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -139,7 +139,7 @@
 
 \begin{column}{0.5\columnwidth}
 \begin{block}{Rango}
-Gira de \(0^\circ\) (posición más abajo) hasta \(110^\circ\) (ala más arriba).
+Gira de \(0^\circ\) (posición más abajo) hasta \(119^\circ\) (ala más arriba).
 \end{block}
 
 \begin{block}{Resolución}
@@ -150,15 +150,16 @@ Asumiendo resolución deseada de \(\epsilon_a = \unit{5}{\milli\meter}\) en la p
 \end{block}
 \begin{block}{En posición lineal del pistón hidraulico}
 \[ \epsilon_p = \unit{?}{\milli\meter}\]
+\alert{Actividad individual}
 \end{block}
 \end{block}
 \end{column}
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:org43f076f}]{Posición del ala - Alternativ comercial 1}
+\begin{frame}[label={sec:orgf840a0a}]{Posición del ala - Alternativ comercial 1}
 \begin{center}
-\includegraphics[width=0.3\linewidth]{../../figures/PosSensor.png}\\
+\includegraphics[width=0.4\linewidth]{../../figures/PosSensor.png}\\
 {\footnotesize Fuente: SIKO GmbH}
 \end{center}
 
@@ -174,7 +175,21 @@ SGH10-1000 & 1000 & 12 bit & 0.24\\
 
 
 
-\begin{frame}[label={sec:orgf8dd10b}]{Posición del ala - Alternativ comercial 2}
+\begin{frame}[label={sec:org2bdf013}]{Posición del ala - Alternativ comercial 2}
+\begin{block}{Encoder absoluto}
+\begin{center}
+\includegraphics[width=0.35\textwidth]{../../figures/encoder-disc-absolute}\\
+Encoder de cuatro bits.
+\end{center}
+
+
+\alert{Actividad individual} Cual es la resolución (en grados) de un encoder absoluto de cuatro bits? Y de ocho bits?
+\end{block}
+\end{frame}
+
+
+
+\begin{frame}[label={sec:org0803bf4}]{Posición del ala - Alternativ comercial 2}
 \begin{block}{Encoder absoluto}
 \begin{center}
 \includegraphics[width=0.35\textwidth]{../../figures/encoder-disc-absolute}\\
@@ -184,14 +199,19 @@ Encoder de cuatro bits.
 Resolución requerida para el angula del brazo: \(\epsilon_b = 0.08^\circ\)
 
 
-\alert{Actividad individual} Cual sería el número de bits necesario para un encoder absoluto montado directamente en el eje del brazo?
+\alert{Actividad en pares} Cual sería el número de bits necesario para un encoder absoluto montado directamente en el eje del brazo?
 \end{block}
 \end{frame}
 
-\begin{frame}[label={sec:org648aafe}]{Posición del ala - Alternativ comercial 2}
+\begin{frame}[label={sec:orgee1c643}]{Posición del ala - Alternativ comercial 2}
 \begin{center}
 \includegraphics[width=0.99\linewidth]{../../figures/dynapar-absolute-encoder.png}\\
 {\footnotesize Fuente: Dynapar.com}
 \end{center}
+\end{frame}
+
+
+\begin{frame}[label={sec:orgbeae2fb}]{Cual eligir?}
+Las dos alternativas cumplen con los requesitos\ldots{}
 \end{frame}
 \end{document}

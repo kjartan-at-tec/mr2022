@@ -21,11 +21,25 @@
 
 ** Actividad 2
 
+   Elaboración de especificaciones funcionales del *sistema sensorial* y selección de equipos
+   
 *** Propósito
     1. Identificar cuales serían *las variables físicas más relevantes para un mejor control* del proceso y en base a esto *definir las métricas funcionales* que debe cumplir el sistema sensorial.
 
     2. Seleccionar un conjunto de *equipos que cumpla con los requerimientos establecidos*, además de observar los aspectos económicos y de seguridad.
 
+*** Notes                                                          :noexport:
+    Esto era el propósito de la actividad 2. Dos partes. Primero: identificar que hay que medir, y que tan buenos tienen que ser nuestros sensores. Segundo: Buscar alternativas y evaluarlas. Selecciona los sensores.
+
+    Solo un grupo entendió bien lo que se pidió.
+
+    Retroalimentación general:
+    1) Tratan de enfocar más. No tratan de incluir lo más cosas diferentes posible en su investigación y reporte. Mejor al reves: Tratan de quitar lo más cosas posible, para que lo que se queda es lo que de verdad es importante.
+    2) Para un diseño o analisis sistematico: Hay que definir los requesitos (o criterios de diseño), y definirlos lo más especifico posible. Para el sistem sensorial: Cual variables tenemos que medir, y que tan exacto tenemos que saberlos.
+
+
+   En calificar los reportes he tratado de ser bastante generoso. Porque la actividad pide algo avanzado, un trabajo para un ingeniero con experiencia. Tambien siento que no tomé tiempo de presentar bien la actividad, y claramente las instrucciones no eran suficiente detalladas, precisas ni claras.
+   
 ** Análisis de un sistema mecatrónico
 
 *** Requisitos / criterios de diseño
@@ -38,7 +52,8 @@
     - sistema de control
 
 *** notes                                                          :noexport:
-    en la actividad que he planeado para hoy les pido analizar un sistema mecatronico. quiero que buscan requisitos (que tambien se puede llamar criterios de diseño). y que indifican y describen los elemtos importantes del sistema. 
+   En nuestra primera sesión platicamos sobre un Análisis de in sistema. 
+
     
 ** Requisitos / criterios de diseño
 
@@ -51,6 +66,8 @@
    
 *** notes                                                          :noexport:
     algo sobre los requisitos. como ingenieros nos gustan los problemos interesantes. y los problemas interesantes son los que tienen un multitud de soluciones posibles. donde tenemos que buscar la mejor solución, la solución optima. pero como definimos "que es mejor" o que es "optimal"? para eso necesitamos requesitos o criterios de diseño.
+
+    Casi todos los grupos presentaron unos sensores comerciales en su reporte. Pero les faltaban el instrumento para evaluarlos. 
 
     esta gráfica es de una publicación algo viejo, aunque tiene el título modern design methods. es circular para enseñar que el proceso de diseño es iterativo. empieca con un análisis de las necesidades que resulta en un formulación del problema (función, rendimiento, delimitaciones, etc). basade en eso se define los criterios de diseño, que van a ser indispensables más allá en el proceso. ya viene la parte dónde buscamos diferentes soluciones alternativas. no solo una. se filtra las alternativas primero por factibilidad, usando los criterios. con las alternativas que se quedan, se busca optimar cada una (para que cumple lo mejor posible con los criterios), antes de seleccionar una solucion para implementar.
     muchas veces se necesia rediseño, y el circulo sique.
@@ -67,7 +84,11 @@
    \footnotesize Fig 3 de Atman et al. Engineering design processes: A comparison of students and expert practitioners. Journal of engineering education, 2007.
    #+end_export
 
+*** notes                                                          :noexport:
+    Y para dar aun más peso a la importancia de los criterios del diseño, les quiero comentar sobre este investigación de una publicación en la revista J Eng Ed. Es un experimento donde pidieron a un grupo de ingenieros con mucha experiencia y dos grupos de estudiantes resolver el misma problema. Y graban que tanto tiempo pusieron en diferentes parte del trabajo.
 
+    Lo más interesante que vieron era que el grupo de ingenieros con experiencia asignaron bastante más tiempo en definier el problema (problem scoping). Que incluye definir los requisitos especificos que una solución buena tiene que satisfacer. Lo que tambien se llama criterios del diseño.
+    
 ** Sistema mecatrónico del AC75
 
    #+begin_center
@@ -79,7 +100,10 @@
    - *Sensores*  Conversión de una variable física a una señal de información
    - *Controlador* Computadora o microcontrolador o PLC, recibe señales, ejecuta el algoritmo de control, manda acción de control (señales) a los actuadores.
 
-     
+
+*** notes                                                          :noexport:
+    Voy a tratar de hacer más concreto lo que se pidió en la actividad, usando  nuestro ejemplo favorito. Y recordamos que en un sistema mecatrónico como esto se puede identificar estos subsistemas claves.
+    
 ** Variables físicas
 
 *** graphics
@@ -103,6 +127,9 @@
    \includegraphics[width=0.8\textwidth]{../../figures/parameters-not-variables}
    \end{center}
      
+*** notes                                                          :noexport:
+    Como mencioné en mi retroalimentación de la actividad 1: Hay un montón de números en la definición completa del sistema, pero muchos de estos números son parámetros, que no cambian. En la cortina, su ancho por ejemplo puede ser diferente entre cortinas diferentes. Pero no va a cambiar en una cortina, y en instalación en particular no lo necesitamos medir.
+    
 ** Variables físicas
 *** graphics
     :properties:
@@ -121,11 +148,13 @@
     :beamer_col: 0.5
     :end:
 
-   - Posición angular continua del brazo/ala
+   - *Posición angular continua del brazo/ala*
    - Presión hydraulica
    - Estado de cargo de las pilas
 
-
+*** notes                                                          :noexport:
+    Identificamos algunas variables importantes en el sistema. Vamos a seguir con el análisis de la medición de posición.
+    
 ** Posición del ala - Requisitos
 *** graphics
     :properties:
@@ -143,7 +172,7 @@
     :end:
 
 **** Rango
-    Gira de $0^\circ$ (posición más abajo) hasta $110^\circ$ (ala más arriba).
+    Gira de $0^\circ$ (posición más abajo) hasta $119^\circ$ (ala más arriba).
 
 **** Resolución
     Asumiendo resolución deseada de $\epsilon_a = \unit{5}{\milli\meter}$ en la posición de la ala.
@@ -152,9 +181,14 @@
     \( \epsilon_b = \frac{\epsilon_a}{r} = \unit{\frac{5}{3500}}{\rad} = \unit{0.08}{\degree}\)
 ***** En posición lineal del pistón hidraulico
     \[ \epsilon_p = \unit{?}{\milli\meter}\]
-    
+    *Actividad individual*
 *** Notes                                                          :noexport:
+    Las instrucciones de la actividad solomente piden que buscan el rango y resolución adecuada para las varibles. Aqui es dado del 'Class Rule' que el movimiento del brazo tiene un rango de 119 grados. Fácil. Para la resolución tenemos que pensar un poquito mas. Con 'resolución' se entiende el cambio mínimo de la variable que se puede detectar. No encontré información sobre esto, entonces tuve que hacer una suposición.  Pensé que un movimiento de medio centimetro en la posición del ala sí tiene consequencia cuando está bajo del agua en movimiento. Para saber que significa esto en resolución del ángulo del brazo tenemos que usar la relación entre cambio en ángulo y cambio en un punto a cierta radie. Este nos da eps_b = eps_a/r. Como saben, el brazo se mueve con un cilindro hidraulico. Entonces es importante saber que resolución necesitamos en la posición del brazo. Nota el radie sería este : rh = sqrt(da^2 + db^2).
+    Por favor piensan bien y responden en el chat: que sería la resolución requerida en la posición del pistón?
 
+    La verdad es que depende de la posición del brazo. 
+    
+    
 #+BEGIN_SRC python :session  :results output 
   import numpy as np  
   eps_a = 5e-3
@@ -165,7 +199,7 @@
   eps_b = eps_a/r
   eps_p = eps_b*rp
 
-  rang = 110*np.pi/180
+  rang = 119*np.pi/180
   strokelength = 2*rp*np.cos(np.pi/2 - rang/2)
 
   print("Radius rp = %0.2f mm" %(rp*1000))
@@ -180,12 +214,12 @@
 : Radius rp = 450.16 mm
 : Resolucion eps_b = 0.00 rad = 0.08 grados
 : Resolucion eps_p = 0.64 mm
-: Strokelength = 737.50 mm
+: Strokelength = 775.74 mm
 
 ** Posición del ala - Alternativ comercial 1
     #+begin_export latex
     \begin{center}
-    \includegraphics[width=0.3\linewidth]{../../figures/PosSensor.png}\\
+    \includegraphics[width=0.4\linewidth]{../../figures/PosSensor.png}\\
     {\footnotesize Fuente: SIKO GmbH}
     \end{center}
     #+end_export
@@ -222,10 +256,25 @@
    \end{center}
    #+end_export
 
+   
+   *Actividad individual* Cual es la resolución (en grados) de un encoder absoluto de cuatro bits? Y de ocho bits?
+
+
+
+** Posición del ala - Alternativ comercial 2
+
+*** Encoder absoluto
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[width=0.35\textwidth]{../../figures/encoder-disc-absolute}\\
+   Encoder de cuatro bits.
+   \end{center}
+   #+end_export
+
    Resolución requerida para el angula del brazo: \(\epsilon_b = 0.08^\circ\)
 
    
-   *Actividad individual* Cual sería el número de bits necesario para un encoder absoluto montado directamente en el eje del brazo?
+   *Actividad en pares* Cual sería el número de bits necesario para un encoder absoluto montado directamente en el eje del brazo?
 
 
 *** Notes                                                          :noexport:
@@ -253,5 +302,20 @@
     \end{center}
     #+end_export
 
+
+** Cual eligir?
+
+   Las dos alternativas cumplen con los requesitos...
+
+   
+* Hidraulica                                                       :noexport:
+** Sobre el actuador hidraulico
+
+   Acumulador de alta presión cilindo, 1.5m altura, 0.1m radius
+   250 bar.
+   
+   Asumiendo que la 
+   
+** Sobre el actuador hidraulico
 
 
