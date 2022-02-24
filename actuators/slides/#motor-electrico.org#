@@ -1,0 +1,315 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+#+LaTex_HEADER: \DeclareMathSymbol{\Omega}{\mathalpha}{letters}{"0A}% italics
+#+LaTex_HEADER: \DeclareMathSymbol{\varOmega}{\mathalpha}{operators}{"0A}% upright
+#+LaTex_HEADER: \providecommand*{\upOmega}{\varOmega}% for siunitx
+#+LaTex_HEADER: \usepackage[binary-units=true]{siunitx}
+#+LaTex_HEADER: \usepackage{circuitikz}
+
+#+title: El motor electrico de corriente continua
+#+author: Kjartan Halvorsen
+#+date: 2021-03-04
+
+* What do I want the students to understand?			   :noexport:
+  - Equivalent circuit and model in simulink
+    
+* Which activities will the students do?			   :noexport:
+
+* El motor electrico de corriente continua
+** Fuerza en un conductor eléctrico en un campo magnético
+   #+begin_center
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
+   #+end_center
+
+   La fuerza electromagnética en el conductor es *proporcional a la corriente*:
+   \[F=k_mI=(Bl_m)I,\] donde $B$ es la densidad del flujo magnético en el entrehierro, $I$ es la corriente, y $l_m$ es la longitud del cable. Se junta varias cables en una bobina para aumentar la fuerza.
+
+*** Solution                                                       :noexport:
+    Lunes vimos este motor lineal que es un modelo simplificado de un motor eléctrico. Consiste en dos imanes que forman un campo magnetico. Hay un conductor, un cable, en cual corre una corriente eléctrica. La corriente por pasar en una campo magnético va a generar una fuerza en el conductor. La fuerza es perpendicular a la corriente y al campo magnético en el entrehierro, y su magnitúd es proporcional a la corriente, a la densidad del campo magnético, o más especifico la densidad del flujo magnetico. Ye más largo es el conductor, ye más grande es la fuerza. Por eso siempre tenemos bobinas de conductores en un motor, para que la longitud total sea grande. Los conductores eléctricos que generan la fuerza electromagnetico lo llamamos /la armadura/.
+    
+    
+#+BEGIN_SRC python :session :results output 
+  B = 0.8
+  l = 2
+  I = 3e3
+  Torq = 190e3
+  r = 750e-3
+  F = Torq/r
+
+  # F = NBIl =>
+  N = F/(B*I*l)
+  print("Number of cables in parallel N = %0.2f" %(N))
+
+  N = 54
+  F = N*B*I*l
+  print("Force with 54 cables in parallel F = %0.2f kN" %(F/1000.0))
+  #+END_SRC
+
+#+RESULTS:
+: Number of cables in parallel N = 52.78
+: Force with 54 cables in parallel F = 259.20 kN
+   
+** Rotación
+   #+begin_export latex
+   \begin{center}
+   \includegraphics[width=0.4\linewidth]{../../figures/HD-fig3_1.png}
+   \includegraphics[width=0.53\linewidth]{../../figures/HD-fig3_2.png}
+   {\footnotesize Fuente: Hughes and Drury}
+   \end{center}
+   #+end_export
+   
+*** Notes                                                          :noexport:
+
+    La gran mayoría de los motores eléctricos son motores que giran. El parte que gira la llamamos el rotór, y la parte que no gira el estatór.
+
+    El campo magnético se puede generar con imanes permanentes, o el estator puede ser /bobinado/. con bobinas eléctricas. Esas bobinas se llaman bobinas del campo.
+
+    Un motor puede tener dos o más (pares) de polos magnéticos. Ese ejemplo tiene cuatro polos.
+
+    Cuando platicamos del flujo magnético, en verdad no hay nada que fisicamente fluye. Pero el campo alrededor de un imán tiene cierta dirección, y cuando visualisamos la dirección del cambo con flechas parece un campo de flujo. Y sí tiene sentido de pensar en un flujo. Porque una caracteristica muy importante es que el flujo magnético trata de hacer circuitos completos, y trata de tomar el camino de menor resistencia magnetica. La resistencia magnetica la llamamos /reluctancia/. Hierro y otros metales tiene muy baja reluctancia relativa al aire.
+
+    Hay motores que usan el principio de que el rotór trata de orientarse para que sea minima la reluctancia. En el estatór se genera un campo magnetico que gira, y el rotor sigue el campo. 
+    
+** Las dos ecuaciónes del motor eléctrica CC
+
+*** Fuerza generada en el conductor por la corriente en el campo magnético
+   \[ F(t) = k_m i(t) \quad\Leftrightarrow\quad T(t) = k_m r i(t),\]
+   dónde $r$ es el radie del motor.
+
+*** Voltaje generado por el movimiento del conductor en el campo magnético
+   \[ e(t) = k_v v(t) \quad\Leftrightarrow\quad e(t) = k_v r \omega(t)\]
+   \(e(t)\) se llama /Fuerza contraelectromotriz/ o /Back electro-motive force (Back e.m.f.)/ en inglés.
+** Circuito equivalente
+
+   Motor CC con excitación separada
+   #+begin_export latex
+      \begin{center}
+	\begin{circuitikz}
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[L=$L$] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+
+	  \node[] at (2, -0.8 cm) {\(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
+
+	  \node[] at (2, 4.5 cm) {Armadura};
+
+	  \begin{scope}[xshift=8cm]
+	  \draw (0,1) to (4,1) to[R=$R_f$] (4,3) to[L=$L_f$] (0,3)
+	  to[american voltage source, label=$V_f$] (0,1);
+	  \node[] at (2, 4.5 cm) {Campo};
+	  \end{scope}
+	\end{circuitikz}
+      \end{center}
+   #+end_export
+
+   #+begin_center
+   Newton: \( J\frac{d}{dt}\omega(t) = ki(t) - T_l(t)\)
+   #+end_center
+
+
+** Velocidad con carga constante
+
+   \begin{align}
+   L\frac{d}{dt}i(t) + Ri(t) + k\omega(t) &= V(t)\\
+   J\frac{d}{dt}\omega(t) &= ki(t) - T_l(t)
+   \end{align}
+
+   En estado estable: \(i(t) = I\), \(\omega(t) = \omega\).
+
+   \begin{align}
+   0 + RI + k\omega &= V\\
+   0 &= kI - T_l
+   \end{align}
+
+   \[\omega = f(V, T_l) = \frac{V}{k} - \frac{RI}{k} = \frac{V}{k} - \frac{RT_l}{k^2}\]
+
+** Velocidad con carga constante
+
+   \[\omega = f(V, T_l) = \frac{V}{k} - \frac{RT_l}{k^2}\]
+   Un motor especifico tiene el constante \(k=\unit{4}{\newton\meter\per\ampere}\) y resistencia \(R=\SI{0.2}{\ohm}\). Se aplica un voltaje de \(V=\unit{100}{\volt}\) sobre su armadura.
+
+
+   *Actividad individual* Dibuje como la velocidad en estado estable depende de la carga $T_l$. ¿Cuál es el par de parada?
+
+       #+begin_export latex
+	\begin{center}
+	  \begin{tikzpicture}[xscale=0.8]
+	    \draw[->] (0, 0) -- (9, 0) node[right] {$T_l$ [\unit{}{\newton\meter}]};
+	    \draw[->] (0, 0) -- (0, 3) node[left] {$\omega$};
+	    \foreach \t in { 1, 2, ..., 8} {
+	    \draw (\t, 0) -- (\t, -0.1) node[below] {\t{}00};
+	    }
+	    \end{tikzpicture}
+
+	\end{center}
+    #+end_export
+
+
+   
+*** Result                                                         :noexport:
+  #+BEGIN_SRC python :session  :results output 
+    import numpy as np
+    V = 100
+    R = 2e-1
+    Vnom = 500
+    Inom = 20
+    Pnom = Vnom*Inom
+    E = Vnom - Inom*R
+    rpm_500 = 1040
+    w_500 = rpm_500/60*2*np.pi
+    I_500 = 0.8
+    E_500 = 500 - R*I_500
+    k = E_500/w_500
+    k = 4
+
+    # R*Tl/k + k*w = V
+    Tl = np.array([0, 100, 400, 800])
+    w = V/k - R*Tl/k**2
+    Tstall = V*k/R
+    print("k = %0.2f " %(k))
+    print(np.vstack((Tl, w)))
+    print("Stall torque = %0.2f kNm" %(Tstall/1000))
+  #+END_SRC
+
+  #+RESULTS:
+  : k = 4.00 
+  : [[  0.   100.   400.   800.  ]
+  :  [ 25.    23.75  20.    15.  ]]
+  : Stall torque = 2.00 kNm
+   
+** Velocidad con carga constante
+
+   \[\omega = f(V, T_l) = \frac{V}{k} - \frac{RT_l}{k^2}\]
+
+   #+begin_export latex
+   \begin{center}
+      \includegraphics[width=0.6\linewidth]{../../figures/infineon-motor-handbook-fig33.png}\\
+      {\footnotesize Fuente: Infineon: Motor handbook}
+      \end{center}
+   #+end_export
+
+** Arranque
+
+   Para un motor parada, la fuerza contraelectromotriz es cero, y solo la resistencia y la inductancia de la armadura limiten la corriente.
+
+      #+begin_export latex
+      \begin{center}
+	\begin{circuitikz}
+	  \draw (4,1) node[elmech](motor){M};
+	  \draw (motor.north) to[R=$R$] (4,4) to[L=$L$] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+
+	  \node[] at (2, -0.8 cm) {\(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
+	\end{circuitikz}
+      \end{center}
+   #+end_export
+
+
+      Hay que tener cuidado en el arranque para que la corriente no sube a niveles excedentes. *Solución* control de la corriente por retroalimentación.
+
+* Modeling
+** Modelo de bloques del circuito equivalente
+
+      #+begin_export latex
+      \begin{center}
+	\begin{circuitikz}[yscale = 0.5]
+	  \draw (4,2) node[elmech](motor){M};
+	  \draw (motor.north) to[short] (4,4) to[R=$R$] (2,4) to[L=$L$] (0,4)
+	  to[american voltage source, label=$V$] (0,0) -| (motor.south);
+	  \draw[thick,->>](motor.right)--++(1,0)node[midway,above]{$\omega$};
+
+	  \node[] at (9, 4 cm) {\(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
+	  \node[] at (9, 2 cm) {\(\frac{d}{dt}i(t) = \frac{1}{L} \Big(-Ri(t) - k\omega(t) + V\Big)\)};
+	  \end{circuitikz}
+	  \end{center}
+	  \begin{center}
+	  \begin{circuitikz}[yscale = 1]
+	\begin{scope}[xshift=8cm, yshift=-1cm,
+	block/.style={rectangle, draw, minimum width=12mm, minimum height=10mm},
+	amp/.style = {regular polygon, regular polygon sides=3,
+              draw, fill=white, text width=1em,
+              inner sep=1pt, outer sep=0mm,
+              shape border rotate=-90},
+	      summ/.style = {circle, draw, inner sep = 1pt},]
+	 \node[block,] (int) at (0,0) {$\int$};
+	 \node[amp, left of=int, node distance=30mm] (oneoverL) {$\frac{1}{L}$}; 
+	 \draw[->] (oneoverL) -- node[above] {$\frac{d}{dt}i(t)$} (int);
+	 \node[summ, left of=oneoverL, node distance=20mm] (sum) {\small $\Sigma$};
+	 \node[coordinate, left of=sum, node distance=35mm] (Vin) {};
+	 \draw[->] (Vin) -- node[above, very near start] {$V$} node[coordinate, pos=0.6] (mp) {} (sum);
+	 \node[amp, above of=mp, node distance=15mm] (mkonst) {$-k$};
+	 \draw[->] (int) -- node[above, near end] {$i(t)$} ++(25mm, 0);
+	 \draw[->] (mkonst) ++(-2cm, 0) -- node[above, near start] {$\omega(t)$} (mkonst);
+	 \draw[->] (mkonst) -| (sum);
+	 \draw[->] (sum) -- (oneoverL);
+	 \node[amp, below of =int, node distance=16mm, rotate=180, white] (fb) {\rotatebox{-180}{$-R$}};
+	 
+	 \end{scope}
+	\end{circuitikz}
+	\end{center}
+   #+end_export
+
+   *Actividad en pares* Completa el diagrama.
+
+   
+
+      
+
+
+** Transmisión
+
+** Transmisión
+      #+begin_export latex
+	  \begin{center}
+	  \begin{circuitikz}[xscale = 0.8]
+	\begin{scope}[xshift=8cm, yshift=-1cm,
+	block/.style={rectangle, draw, minimum width=12mm, minimum height=10mm},
+	amp/.style = {regular polygon, regular polygon sides=3,
+              draw, fill=white, text width=1em,
+              inner sep=1pt, outer sep=0mm,
+              shape border rotate=-90},
+	      summ/.style = {circle, draw, inner sep = 1pt},]
+	 \node[block,] (int) at (0,0) {$\int$};
+	 \node[amp, left of=int, node distance=25mm] (oneoverL) {$\frac{1}{L}$}; 
+	 \draw[->] (oneoverL) -- node[above] {$\frac{d}{dt}i$} (int);
+	 \node[summ, left of=oneoverL, node distance=15mm] (sum) {\small $\Sigma$};
+	 \node[coordinate, left of=sum, node distance=45mm] (Vin) {};
+	 \draw[->] (Vin) -- node[above, very near start] {$V$} node[coordinate, pos=0.8] (mp) {} (sum);
+	 \node[amp, above of=mp, node distance=15mm] (mkonst) {$-k$};
+	 \node[amp, left of=mkonst, node distance=20mm] (gr) {$g_r$};
+	 \node[amp, right of=int, node distance=25mm] (mk2) {$k$};
+	 \node[amp, right of=mk2, node distance=20mm] (gr2) {$g_r$};
+	 \draw[->] (int) -- node[coordinate, pos=0.5] (meas) {} node[above] {$i$} (mk2);
+	 \draw[->] (mk2) -- node[above] {$T_m$} (gr2);
+	 \draw[->] (gr2) -- node[above] {$T_e$} ++(15mm, 0);
+	 \draw[->] (gr) ++(-2cm, 0) -- node[above, near start] {$\omega_e$} (gr);
+	 \draw[->] (gr) -- node[above, ] {$\omega_m$} (mkonst);
+	 \draw[->] (mkonst) -| (sum);
+	 \draw[->] (sum) -- (oneoverL);
+	 \node[amp, below of =int, node distance=16mm, rotate=180] (fb) {\rotatebox{-180}{$-R$}};
+	 \draw[->] (meas) |- (fb);
+	 \draw[->] (fb) -| (sum);
+	 \end{scope}
+	\end{circuitikz}
+	\end{center}
+   #+end_export
+
+   Para transmisión (\(\omega_m = g_r\omega_e\)) perfecta:
+   \[\underbrace{T_m\omega_m}_{\text{potencia que entra}} = \underbrace{T_e\omega_e}_{\text{potencia que sale}}\]
+   # *Actividad individual* Determine \(T_o(t) = f\big(T_i(t)\big).
+   
+
+      

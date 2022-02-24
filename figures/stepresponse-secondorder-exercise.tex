@@ -1,0 +1,123 @@
+\documentclass[tikz]{standalone}
+
+
+\usepackage{ifthen}
+\usepackage{pgf, pgfplots}
+\usepgfplotslibrary{groupplots}
+
+%\usepackage{xparse}
+%\ExplSyntaxOn
+% %\NewDocumentCommand { \xifnum } { }
+%     {
+%         \fp_compare:nTF
+%     }
+% \ExplSyntaxOff
+    
+\pgfmathdeclarefunction{underdampedresponse}{3}{%
+  \pgfmathparse{(1-exp(-#1*#2*#3)/sqrt(1-pow(#1,2))*sin(deg(#2*sqrt(1-pow(#1,2))*#3)+acos(#1)))}%
+}
+\pgfmathdeclarefunction{overdampedresponse}{3}{%
+  \pgfmathparse{1+#1/(#2-#1)*exp(-#3/#1)-#2/(#2-#1)*exp(-#3/#2)}%
+}
+
+
+
+\begin{document}
+
+\begin{tikzpicture}
+\pgfmathsetmacro{\Kone}{2}
+\pgfmathsetmacro{\Ktwo}{4.01}
+\pgfmathsetmacro{\Kthree}{0.5}
+\pgfmathsetmacro{\Kfour}{1}
+
+  \pgfmathsetmacro{\wn}{sqrt(\Kone)}
+  \pgfmathsetmacro{\zz}{sqrt(\Kone)/2}
+
+\begin{axis} [
+  yshift=3cm,
+  xshift = 3.5cm,
+  width= 7cm,
+  height = 4cm,
+  axis lines=middle,
+  axis line style={->},
+  xtick=\empty,
+  % ytick={0, 1},
+  ytick=\empty,
+  % yticklabels={0, $r_f$},
+  y axis line style={draw opacity=0},
+  xmin=-1,
+  xmax=12,
+  ymin=0,
+  ymax=1.2,
+  xlabel=$t$,
+  ]
+
+  \addplot[solid,  blue!70!black, const plot] coordinates { (-0.5, 0) (0,1) (12,1) };
+  \addplot[solid,thick, orange!70!black, domain=-1:12, samples=200] {(x>0)*(underdampedresponse(\zz,\wn,x))};
+  \node at (axis cs: 8, 0.5) {\large \textcolor{red}{Respuesta deseada}};
+
+\end{axis}  
+
+\begin{groupplot}[
+  group style={group size=2 by 2},
+  clip=false,
+width=7cm,
+height=4cm,
+axis lines=middle,
+axis line style={->},
+%xtick={0,2},
+%xticklabels={0,1},
+xtick = \empty,
+%ytick={0, 1},
+ytick=\empty,
+%yticklabels={0, $r_f$},
+y axis line style={draw opacity=0},
+xmin=-1,
+xmax=12,
+ymin=0,
+ymax=1.2,
+xlabel=$t$,
+%ylabel=$y(t)$,
+%grid=both,
+%minor x tick num=10,
+%minor y tick num=10,
+%every major grid/.style={red, opacity=0.5},
+]
+  \pgfmathsetmacro{\wn}{sqrt(\Kone)}
+  \pgfmathsetmacro{\zz}{sqrt(\Kone)/2}
+
+
+  \nextgroupplot
+  \addplot[solid,  blue!70!black, const plot] coordinates { (-0.5, 0) (0,1) (12,1) };
+  \addplot[solid,thick, orange!70!black, domain=-1:12, samples=200] {(x>0)*(0.8*underdampedresponse(\zz,\wn,x))};
+  \node at (axis cs: 4, 0.5) {\Large \textcolor{red}{A}};
+
+  
+  \nextgroupplot
+  \pgfmathsetmacro{\Tone}{3*2/(\Ktwo + sqrt(pow(\Ktwo,2)-4*\Ktwo))}
+  \pgfmathsetmacro{\Two}{3*2/(\Ktwo - sqrt(pow(\Ktwo,2)-4*\Ktwo))}
+
+  \addplot[solid,  blue!70!black, const plot] coordinates { (-0.5, 0) (0,1) (12,1) };
+  \addplot[solid,thick, orange!70!black, domain=-1:12, samples=200] {(x>0)*(overdampedresponse(\Tone,\Two,x))};
+
+  \node at (axis cs: 4, 0.5) {\Large \textcolor{red}{B}};
+
+
+  \nextgroupplot
+  \pgfmathsetmacro{\wn}{sqrt(\Kthree)}
+  \pgfmathsetmacro{\zz}{sqrt(\Kthree)/2}
+
+  \addplot[solid,  blue!70!black, const plot] coordinates { (-0.5, 0) (0,1) (12,1) };
+  \addplot[solid,thick, orange!70!black, domain=-1:12, samples=200] {(x>0)*(underdampedresponse(\zz,\wn,x))};
+  \node at (axis cs: 4, 0.5) {\Large \textcolor{red}{C}};
+
+  \nextgroupplot
+  \pgfmathsetmacro{\wn}{4}
+  \pgfmathsetmacro{\zz}{0.5}
+  \addplot[solid,  blue!70!black, const plot] coordinates { (-0.5, 0) (0,1) (12,1) };
+  \addplot[solid,thick, orange!70!black, domain=-1:12, samples=200] {(x>0)*(underdampedresponse(\zz,\wn,x))};
+  \node at (axis cs: 4, 0.5) {\Large \textcolor{red}{D}};
+\end{groupplot}
+  
+\end{tikzpicture}
+\end{document}

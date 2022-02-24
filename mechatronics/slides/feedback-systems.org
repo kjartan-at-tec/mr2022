@@ -11,9 +11,9 @@
 
 #+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
 
-#+title: Actividad 1 - Retroalimentación ... y algo más
+#+title: Mechatronic systems, block diagram, sensors
 #+author: Kjartan Halvorsen
-#+date: 2021-02-15
+# #+date: 2021-02-15
 
 * What do I want the students to understand?			   :noexport:
   - Variables, parameters
@@ -25,12 +25,10 @@
 
 * Resumen
 
-** Las instrucciones
+** The instructions
 
-   3. [@3]   Identificar los *componentes clave* del proceso
-   4. Identificar que *variables físicas* se requiere conocer y/o monitorear para poder controlar el proceso.
-   5. Deducir componentes o *acciones de control* requeridas
-   6. Elaborar el *diagrama de bloques* de acuerdo a las funciones identificadas
+   5. [@5]   Identify *subsystems*, illustrate interaction with a *block-diagram*.
+   6. Identify *physical variables* that will be necessary to measure in order to monitor and control the process.
 
 *** Notes                                                          :noexport:
 
@@ -58,14 +56,14 @@
     
     
 * Ejemplo
-** Sistema mecatrónico
+** A mechatronic system
    
    \begin{center}
    \includegraphics[height=0.7\textheight]{../../figures/ac75.jpeg}\\
    {\footnotesize  From SailingWorld}
    \end{center}
 
-   [[https://www.sailingscuttlebutt.com/wp-content/uploads/2018/03/AC75_Class_Rule.pdf][AC75 Class rule]]
+   [[https://www.sailingscuttlebutt.com/wp-content/uploads/2018/03/AC75_Class_Rule.pdf][AC75 Class]]
 
 *** Notes                                                          :noexport:
 
@@ -74,7 +72,7 @@
     Voy otra vez a usar el sistema mecatronico de las hidroalas para ejemplifiar que es control en lazo abierto y control en lazo cerrado, y que son bloques de diagrama.
 
     
-** sistema de hidroalas
+** Hydrofoil system
 
     #+begin_export latex
     \begin{center}
@@ -95,19 +93,45 @@
     
 * Análisis
 
-** 3. Componentes claves
+** 5. Key components
 
    #+begin_center
    \includegraphics[width=.8\textwidth]{../../figures/ac75-control-block-feedback-units}
    #+end_center
 
-   - *Proceso* Aquí es un *sistema mecanico* o *mecanismo*
-   - *Actuador* Conversión de una señal de información a fuerza/torque/flujo/energía
-   - *Sensores*  Conversión de una variable física a una señal de información
-   - *Controlador* Computadora o microcontrolador o PLC, recibe señales, ejecuta el algoritmo de control, manda acción de control (señales) a los actuadores.
+   - *Process* or *plant.*  Here it is a *mechanical system* or *mechanism*
+  #+BEAMER: \pause
+   - *Actuator.* Converts information to force/torque/flow/energy that affect the plant.
+  #+BEAMER: \pause
+   - *Sensors.*  Convert physical variables into signals carrying information.
+  #+BEAMER: \pause
+   - *Controller.* Computer or micro-controller or PLC. Receives signals, executes the control algorithm and sends control action to the actuators.
 
      
-** 4. Variables físicas
+** 6. Physical variables?
+
+*** graphics
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[height=0.8\textheight]{../../figures/ac75-class-foil.png}
+   \end{center}
+
+   #+begin_export latex
+   {\footnotesize from the ac75 class rule}
+   #+end_export
+*** text
+    :properties:
+    :beamer_col: 0.5
+    :end:
+
+   \begin{center}
+   \includegraphics[width=0.8\textwidth]{../../figures/parameters}
+   \end{center}
+     
+** 6. Physical variables? No, parameters
 
 *** graphics
     :properties:
@@ -130,7 +154,7 @@
    \includegraphics[width=0.8\textwidth]{../../figures/parameters-not-variables}
    \end{center}
      
-** 4. Variables físicas
+** 6. Physical variables
 *** graphics
     :properties:
     :beamer_col: 0.5
@@ -148,41 +172,79 @@
     :beamer_col: 0.5
     :end:
 
-   - Posición continua de los pistones (implicando posición del ala)
-   - Presión hydraulica
-   - Estado de cargo de las pilas
+   - Position of the pistons (implies the position of the wing)
+   - Hydraulic pressure
+   - State-of-charge of the batteries
 
 
-** 4. Variables físicas
+** 6. Physical variables
 
-***  Pressure
+** Hydraulic pressure
+
+*Activity* Find three different commercial sensors using three different measurement principles for measuring hydraulic pressure. 
+
+** Hydraulic pressure 
+
+***  Principles
     :properties:
     :beamer_col: 0.3
     :end:
     #+begin_export latex
-    \textbf{Presión}
+
     \begin{center}
-    \includegraphics[width=0.67\linewidth]{../../figures/pressure-sensor.png}\\
-    {\footnotesize Fuente: Hydraulics \& Pneumatics}
+    \includegraphics[width=0.64\linewidth]{../../figures/pressure-sensor.png}\\
+    {\tiny Source:  Hydraulics \& Pneumatics}
     \end{center}
     #+end_export
 
-***  Posición de los pistones
+***  Products
+    :properties:
+    :beamer_col: 0.7
+    :end:
+   #+BEAMER: \pause
+    #+begin_export latex
+    \begin{center}
+    \includegraphics[width=0.3\linewidth]{../../figures/gauge.png}
+    \includegraphics[width=0.3\linewidth]{../../figures/gauge-principle.png}
+    \includegraphics[width=0.7\linewidth]{../../figures/pressure-transducer.png}\\
+    \includegraphics[width=0.45\linewidth]{../../figures/hydac.png}\\
+    {\tiny Sources: Tameson, TE Connectivity, Hydac}
+    \end{center}
+    #+end_export
+
+** Displacement 
+
+*Activity* Find three different commercial sensors using three different measurement principles for measuring the displacement of a hydraulic cylinder. 
+
+** Displacement 
+***  Principles
+    :properties:
+    :beamer_col: 0.3
+    :end:
+
+    - Draw wire
+    - Induction
+    - Magnetostriction
+    - Flow (volume change)
+
+***  Products
     :properties:
     :beamer_col: 0.7
     :end:
     #+begin_export latex
-    \textbf{Posición}
+    \textbf{Position}
+    #+end_export
+   #+BEAMER: \pause
+    #+begin_export latex
     \begin{center}
-    \includegraphics[width=0.7\linewidth]{../../figures/PosSensor.png}\\
-    {\footnotesize Fuente: Fischer Christian SIKO GmbH}
+    \includegraphics[width=0.5\linewidth]{../../figures/PosSensor.png}\\
+    \includegraphics[width=0.45\linewidth]{../../figures/magnetostriction.png}
+    \includegraphics[width=0.45\linewidth]{../../figures/inductive.png}\\
+    {\tiny Source:  Fischer Christian SIKO GmbH, Linearmotion, MTWmag}
     \end{center}
     #+end_export
-** 5. Acciones de control
 
-   La señal de entrada principal al sistema es la posición deseada del brazo/ala. La questión es *¿como mover y mantener el brazo a la posición deseado?*
-
-** 5. Acciones de control - actuador
+** 5. Actuator
 
 ***  Pressure
     :properties:
@@ -194,9 +256,11 @@
    #+end_center
 
    #+begin_export latex
-   {\footnotesize Fuente: Festo}
+   {\footnotesize Source:  Festo}
    #+end_export   
    
+   #+BEAMER: \pause
+
 ***  Pressure
     :properties:
     :beamer_col: 0.5
@@ -207,7 +271,7 @@
    \includegraphics[width=0.99\textwidth]{../../figures/43-valve-current.png}\\
    #+end_center
    #+begin_export latex
-   {\footnotesize Fuente: Bosch Rexroth}
+   {\footnotesize Sources:  Bosch Rexroth}
    #+end_export   
 
 *** Notes                                                          :noexport:
@@ -224,20 +288,20 @@ Lo que no es dado explicitamente en esta diapositiva es que el actuador tiene ci
 * Block diagram
 
   
-** 6. Diagrama de bloque - básico
+** 5. Block-diagram - basic
 
    #+begin_center
    \includegraphics[width=1.0\textwidth]{../../figures/ac75-control-block-feedback-units}
    #+end_center
 
   
-** ... y más elaborada
+** ... and more elaborate
 
    #+begin_center
    \includegraphics[width=.99\textwidth]{../../figures/ac75-control-block-details}
    #+end_center
 
-* Control
+* Control                                                          :noexport:
 
 ** Sistema de control
    

@@ -1,0 +1,37 @@
+\documentclass[]{standalone}
+\usepackage[utf8]{inputenc}
+\usepackage[american]{circuitikz}
+\usetikzlibrary{arrows,shapes,calc,positioning}
+
+\usepackage{graphicx}
+
+
+\begin{document}
+ 
+  \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, minimum height=10mm}, sumnode/.style={circle, draw, inner sep=2pt}]
+    
+    \node[coordinate] (input) {};
+    \node[sumnode, right of=input, node distance=16mm] (sum2) {\tiny $\Sigma$};
+    \node[block, right of=sum2, node distance=20mm] (controller2)  {$F_2(s)$};
+    \node[sumnode, right of=controller2, node distance=26mm] (sum) {\tiny $\Sigma$};
+    \node[block, right of=sum, node distance=20mm] (controller1)  {$F_1(s)$};
+    \node[block, right of=controller1, node distance=30mm] (plant1)  {Tank 1};
+    \node[block, right of=plant1, node distance=30mm] (plant2)  {Tank 2};
+    \node[coordinate, right of=plant2, node distance=25mm] (output) {};
+
+    \draw[->] (input) -- node[above, pos=0.3] {$h_{ref}(t)$} (sum2);
+    \draw[->] (sum2) -- node[above] {$e_2(t)$} (controller2);
+    \draw[->] (sum) -- node[above] {$e_1(t)$} (controller1);
+    \draw[->] (controller2) -- node[above] {$h_{d,1}(t)$} (sum);
+    \draw[->] (controller1) -- node[above] {$u_1(t)$} (plant1);
+    \draw[->] (plant1) -- node[above] {$h_1(t)$} node[coordinate] (m1) {} (plant2);
+    \draw[->] (m1) -- ++(0,-15mm) -| node[right, pos=0.95] {-} (sum);
+    \draw[->] (plant2) -- node[coordinate,] (m2) {} node[above, near end] {$h_2(t)$} (output);
+    \draw[->] (m2) -- ++(0,-25mm) -| node[right, pos=0.95] {-} (sum2);
+
+    \draw[red] (sum) ++(-4mm,-20mm) rectangle ++(95mm, 30mm);
+    \node[red] at (140mm,-15mm) {\large $G_2(s)$};
+  \end{tikzpicture}
+
+  
+\end{document}

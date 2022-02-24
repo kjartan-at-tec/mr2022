@@ -12,9 +12,9 @@
 
 #+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
 
-#+title: Sensores, Encoder incremental
+#+title: Incremental encoder
 #+author: Kjartan Halvorsen
-#+date: 2021-02-15
+# #+date: 2021-02-15
 
 * What do I want the students to understand?			   :noexport:
   - How the incremental encoder works
@@ -22,108 +22,122 @@
 * Which activities will the students do?			   :noexport:
   - Excercises on speed, angle, number of rotations
 
-* Sensores en general
-** Sensores
+* Sensors in general
+** Sensors
   #+begin_export latex
     \begin{center}
-    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=8pt}, sumnode/.style={circle, draw, inner sep=2pt}]
 
       \node[coordinate] (input) {};
       \node[sumnode, right of=input, node distance=20mm] (sumerr) {\tiny $\Sigma$};
-      \node[block, right of=sumerr, node distance=30mm] (fb)  {Controlador};
-      \node[block, right of=fb, node distance=40mm] (plant)  {Proceso};
+      \node[block, right of=sumerr, node distance=30mm] (fb)  {Controller};
+      \node[block, right of=fb, node distance=40mm] (plant)  {Plant};
       \node[block, orange!80!black, thick, below of=plant, node distance=16mm] (sensor)  {Sensor};
 
       \node[coordinate, above of=plant, node distance=14mm] (disturbance) {};
       \node[coordinate, right of=plant, node distance=40mm] (output) {};
 
-      \draw[->] (input) -- node[above, pos=0.3] {referencia} (sumerr);
+      \draw[->] (input) -- node[above, pos=0.3] {reference} (sumerr);
       \draw[->] (sumerr) -- node[above] {error} (fb);
-      \draw[->] (fb) -- node[above, align=left,] {acción \\de control} (plant);
-      \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {salida del proceso} (output);
-      \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+      \draw[->] (fb) -- node[above, align=left,] {control\\action} (plant);
+      \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {output} (output);
+      \draw[->] (disturbance) -- node[right, pos=0.2] {disturbance} (plant);
       \draw[->] (meas) |- (sensor) -| node[right, pos=0.9] {-} (sumerr);
-      \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {error, ruido} (sensor);
+      \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {error, noise} (sensor);
       \end{tikzpicture}
     \end{center}
     #+end_export
 
-    Es *inevitable* que el uso de sensores introduzca *ruido* en el sistema.
+    #+BEAMER: \pause
+    It is *inevitable* that sensors introduce *noise* into the system.
     
-** Sensores
+** Sensors
   #+begin_export latex
     \begin{center}
-    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=4pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+    \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=8pt}, sumnode/.style={circle, draw, inner sep=2pt}]
 
       \node[coordinate] (input) {};
       \node[sumnode, right of=input, node distance=20mm] (sumerr) {\tiny $\Sigma$};
-      \node[block, right of=sumerr, node distance=30mm] (fb)  {Controlador};
-      \node[block, right of=fb, node distance=40mm] (plant)  {Proceso};
+      \node[block, right of=sumerr, node distance=30mm] (fb)  {Controller};
+      \node[block, right of=fb, node distance=40mm] (plant)  {Plant};
       \node[sumnode, orange!80!black, thick, below of=plant, node distance=16mm] (sensor)  {\tiny $\Sigma$};
 
 
       \node[coordinate, above of=plant, node distance=14mm] (disturbance) {};
       \node[coordinate, right of=plant, node distance=40mm] (output) {};
 
-      \draw[->] (input) -- node[above, pos=0.3] {referencia} (sumerr);
+      \draw[->] (input) -- node[above, pos=0.3] {reference} (sumerr);
       \draw[->] (sumerr) -- node[above] {error} (fb);
-      \draw[->] (fb) -- node[above, align=left,] {acción \\de control} (plant);
+      \draw[->] (fb) -- node[above, align=left,] {control \\action} (plant);
       \draw[->] (plant) -- node[coordinate] (meas) {} node[above, orange!80!black] {$y$} (output);
-      \draw[->] (disturbance) -- node[right, pos=0.2] {perturbación} (plant);
+      \draw[->] (disturbance) -- node[right, pos=0.2] {disturbance} (plant);
       \draw[->] (meas) |- (sensor) -| node[pos = 0.2, below] {$y_m(t) = \textcolor{orange!80!black}{y(t)} + \textcolor{red!80!black}{n(t)}$} node[right, pos=0.9] {-} (sumerr);
-      \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {error, ruido} (sensor);
+      \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {noise} (sensor);
       \end{tikzpicture}
     \end{center}
     #+end_export
 
-    Es *importante* conocer las caracteristicas (estadisticas) del error de medida!
+    It is important to know the (statistical) characteristics of the measurement error!
 
     #+begin_export latex
     \begin{center}
     \begin{tikzpicture}
-      \begin{axis}[clip=false,width=4.5cm, height=3.5cm, xticklabel=\empty, yticklabel=\empty,
+      \begin{axis}[clip=false,width=6.5cm, height=3.5cm, xticklabel=\empty, yticklabel=\empty,
       axis lines=middle,
       ylabel={$f_n$}, xlabel={$n$}]
       \addplot[red!70!black, no marks, smooth, domain=-2:2, samples=30] {exp(-pow(x,2))};
-      \node at (axis cs: 2,0.8) {fàcil};
+      \node at (axis cs: 2,0.8) {easy};
       \end{axis}
-      \begin{axis}[clip=false, xshift=5cm, width=4.5cm, height=3.5cm, xticklabel=\empty, yticklabel=\empty,
-      axis lines=middle,
-      ylabel={$f_n$}, xlabel={$n$}]
-      \addplot[red!70!black, no marks, smooth, domain=-4:6, samples=60] {exp(-pow((x-2)*2,2)) + exp(-pow((x+2)*2,2)) };
-      \node at (axis cs: 4,0.8) {dificil};
-      \end{axis}
-      \begin{axis}[clip=false, xshift=10cm, width=4.5cm, height=3.5cm, xticklabel=\empty, yticklabel=\empty,
+   %   \begin{axis}[clip=false, xshift=5cm, width=4.5cm, height=3.5cm, xticklabel=\empty, yticklabel=\empty,
+   %   axis lines=middle,
+   %   ylabel={$f_n$}, xlabel={$n$}]
+   %   \addplot[red!70!black, no marks, smooth, domain=-4:6, samples=60] {exp(-pow((x-2)*2,2)) + exp(-pow((x+0.5)*2,2)) };
+   %   \node at (axis cs: 4,0.8) {difficult};
+   %   \end{axis}
+      \begin{axis}[clip=false, xshift=8cm, width=6.5cm, height=3.5cm, xticklabel=\empty, yticklabel=\empty,
       axis lines=middle,
       ylabel={$f_n$}, xlabel={$n$}]
       \addplot[red!70!black, no marks, smooth, domain=-2:4, samples=60] {(x<0)*exp(-pow((x)*2,2)) + (x>=0)/(1+x) };
-      \node at (axis cs: 4,0.8) {dificil};
+      \node at (axis cs: 4,0.8) {difficult};
       \end{axis}
     \end{tikzpicture}
     \end{center}
     #+end_export
 
 
-** Sensores - características
+** Sensors - characteristics
+*** Graphics
+:PROPERTIES:
+:BEAMER_col: 0.4
+:END:
 
-   - *Exactitud* Que tán correcto es en promedio.  *Precisón* Desviación del error.
-   - *Sensibildad o resolución* El cambio más pequeño en la señal que se puede detectar.
-   - *Retraso* \(y_m(t) = y(t-\tau) + n(t)\)
-   - *Muestreo y digitalización*
+   - *Accuracy* How correct is the measurement on average
+   - *Precision* How much do the errors vary (standard deviation)
+   - *Sensitivity/resolution* The smallest change in the measured variable that can be detected
+   - *Delay* \(y_m(t) = y(t-\tau) + n(t)\)
+   - *Sampling and digitalization*
+
+*** Text
+:PROPERTIES:
+:BEAMER_col: 0.6
+:END:
+
+#+BEAMER: \pause
+
      #+begin_center
-     \includegraphics[width=0.8\textwidth]{../../figures/sampling-digitalization}
+     \includegraphics[width=0.96\textwidth]{../../figures/sampling-digitalization}
      #+end_center
 
 * Encoder
-** Encoder incremental
+** Incremental encoder
    #+begin_export latex
    \begin{center}
    \includegraphics[width=0.7\textwidth]{../../figures/encoder-im.jpg}
-   {\footnotesize Fuente: \url{https://www.sciencedirect.com/topics/engineering/incremental-encoder}}
+   {\tiny Source: \url{https://www.sciencedirect.com/topics/engineering/incremental-encoder}}
    \end{center}
    #+end_export
 
-** Encoder incremental
+** Incremental encoder
    #+begin_export latex
    \begin{center}
    \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
@@ -131,9 +145,9 @@
    \end{center}
    #+end_export
 
-   /Pulses Per Revolution (PPR)/ es igual a 4 en el ejemplo. Cada apertura tiene un sector de \(\frac{360\degrees}{2 \times PPR} = 45\degree\).
+   /Pulses Per Revolution (PPR)/ is 4 en the example. Each aperture covers a sector of \(\frac{360\degree}{2 \times PPR} = 45\degree\).
 
-** Encoder incremental
+** Incremental encoder
    #+begin_export latex
    \begin{center}
    \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
@@ -141,10 +155,11 @@
    \end{center}
    #+end_export
 
-   *Actividad individual* Si detectamos los flancos positivos *y* los flancos negativos de las dos señales \textcolor{blue!80!black}{A} y \textcolor{red!80!black}{B}. Cual sería el giro minimo que podemos detectar (la sensitivad del sensor)?
+   *Activity* If both rising *and* falling edges of both signals \textcolor{blue!80!black}{A} and \textcolor{red!80!black}{B}, what is the smallest change in angle that can be detected (/sensitivity/ of the sensor)?
 
    
-** Encoder incremental
+** Incremental encoder
+
    #+begin_export latex
    \begin{center}
    \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
@@ -152,10 +167,10 @@
    \end{center}
    #+end_export
 
-   *Actividad individual* En el ejemplo arriba, el encoder gira en sentido del reloj (CW) o en sentido contrario al reloj (CCW)?
+   *Activity* In the above example, does the encoder turn clockwise (CW) or counter-clockwise (CCW)?
 
 
-** Encoder incremental - Velocidad
+** Incremental encoder - velocity
 *** Graphics
     :PROPERTIES:
     :BEAMER_col: 0.5
@@ -169,9 +184,9 @@
     :BEAMER_col: 0.5
     :END:
 
-    Se requiere la velocidad angular del eje en el instante $t=\unit{6.5}{\milli\second}$. El número de pulsos por revolución es PPR=8, y contamos cada flanco (ascendente y descendente) de cada señal A y B, que resulte en 32 conteos por revolución.
+    We want to find the angular velocity at the time-instant $t=\unit{6.5}{\milli\second}$. For the encoder we have PPR=8, and both rising and falling edges of both signals A and B are counted, resulting in 32 counts per revolution.
 
-    *Actividad individual* Computa la velocidad angular en rad/s en los casos *(a)* usando un tiempo de rastreo de $\Delta t=\unit{0.5}{\milli\second}$, *(b)* usando un tiempo de rastreo $\Delta t=\unit{5}{\milli\second}$.
+    *Activity* Calculate the angular velocity in rad/s for case *(a)* using a sampling period of $\Delta t=\unit{0.5}{\milli\second}$, and for case *(b)* using a sampling period of $\Delta t=\unit{5}{\milli\second}$.
     
 *** Calculations                                                   :noexport:
 
@@ -193,7 +208,7 @@
    
 
 
-** Encoder incremental - Velocidad por frequencia
+** Incremental encoder - Velocity from frequency of the counts
 *** Graphics
     :PROPERTIES:
     :BEAMER_col: 0.5
@@ -207,9 +222,9 @@
     :BEAMER_col: 0.5
     :END:
 
-    La velocidad tambien se puede medir usando el tiempo entre pulsos. En el ejemplo hubo un intervalo de \unit{1}{\milli\second} entre los dos pulsos. Este da la velocidad
+    The velocity can be measured by the inverse of the time between subsequent pulses. In the example there is an interval of \unit{1}{\milli\second} between the two pulses. The velocity becomes
     \begin{align*}
-     v &= 1 \, \text{pulsos/ms} = \frac{1/32 \, \text{revoluciones}}{\unit{10^{-3}}{\second}}\\
+     v &= 1 \, \text{pulses/ms} = \frac{1/32 \, \text{revolutions}}{\unit{10^{-3}}{\second}}\\
      &= \unit{\frac{2\pi}{32}\times 1000}{\rad\per\second} = \unit{196.3}{\rad\per\second}
      \end{align*}
     
@@ -233,7 +248,7 @@
    
 
 
-** Encoder incremental - Velocidad por frequencia
+** Incremental encoder - Velocity from frequency of the counts
 *** Graphics
     :PROPERTIES:
     :BEAMER_col: 0.5
@@ -247,7 +262,7 @@
     :BEAMER_col: 0.5
     :END:
 
-    *Actividad individual* Calcula la velocidad!
+    *Activity* Calculate the velocity at \(t=\unit{11}{\second}\)!
     
 *** Calculations                                                   :noexport:
 
@@ -269,7 +284,8 @@
    
 
 
-** Encoder incremental - Velocidad por frequencia
+** Incremental encoder - Velocity from frequency of the counts     :noexport:
+
 *** Graphics
     :PROPERTIES:
     :BEAMER_col: 0.7
@@ -284,4 +300,12 @@
     :BEAMER_col: 0.3
     :END:
 
-    La velocidad solo se calcula cuando viene un pulso.
+    The velocity is calculated when new counts arrive.
+
+** Simulink exercise - decoder
+
+Complete the simulink diagram so that the angular velocity is correctly estimated.
+
+    #+begin_center
+    \includegraphics[width=0.8\textwidth]{../../figures/simulink-encoder-decoder-exc.png}
+    #+end_center

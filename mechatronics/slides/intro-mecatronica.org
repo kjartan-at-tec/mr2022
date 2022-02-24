@@ -13,7 +13,7 @@
 
 #+title: Análisis de elementos de la mecatrónica
 #+author: Kjartan Halvorsen
-#+date: 2021-02-08
+# #+date: 2021-02-08
 
 * What do I want the students to understand?			   :noexport:
   - The course structure
@@ -87,7 +87,7 @@
 \end{tikzpicture}
 \end{center}
 
-Un coche va a velocidad constante en una autopista horizontal. En la instante $t=t_1$, el conductor empuje el clutch, desconectando el motor y las ruedas. Cuál de las siguientes graficas describe mejor la velocidad $v(t)=\dot{x}(t)$ del coche?
+Un coche va a velocidad constante en una autopista horizontal. En la instante $t=t_1$, el conductor pone la transmisión en 'N', desconectando el motor y las ruedas. Cuál de las siguientes graficas describe mejor la velocidad $v(t)=\dot{x}(t)$ del coche?
 
 \begin{center}
    \begin{tikzpicture}
@@ -281,7 +281,20 @@ Un coche va a velocidad constante en una autopista horizontal. En la instante $t
     Son los yates que usan en La Americás cup este año. Se realiza en Nueva Zeeland en marzo.
     Son  basicamentes aviones. Tecnologicamente muy avanzados. Cada equipo cuenta con uno o dos ingenieros de mecatronica que tienen la responsibilidad de la funcionamiento de los sistemas mecatrónicos.
 
-** Videos
+** sistema de hidroalas
+
+    #+begin_export latex
+    \begin{center}
+   \includegraphics[height=0.6\textheight]{../../figures/ac75-lines.png}
+   \includegraphics[height=0.7\textheight]{../../figures/ac75-class-foil.png}\\
+   {\footnotesize  by françois chevalier \hfill from the ac75 class rule}
+   \end{center}
+   #+end_export
+
+
+
+
+** Videos                                                          :noexport:
 
    https://youtu.be/VQUl_hf6yo8
 
@@ -301,7 +314,8 @@ Un coche va a velocidad constante en una autopista horizontal. En la instante $t
 
 *** notes                                                          :noexport:
     en la actividad que he planeado para hoy les pido analizar un sistema mecatronico. quiero que buscan requisitos (que tambien se puede llamar criterios de diseño). y que indifican y describen los elemtos importantes del sistema. 
-    
+
+
 ** requisitos o criterios de diseño
 
     #+begin_export latex
@@ -318,7 +332,9 @@ Un coche va a velocidad constante en una autopista horizontal. En la instante $t
     muchas veces se necesia rediseño, y el circulo sique.
 
     esto para que entienden la importancia de tener un conjunto de requistos formulados en el trabajo de diseño. 
-    
+
+
+* Sistema de hidroalas    
 ** sistema de hidroalas
 
     #+begin_export latex

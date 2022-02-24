@@ -1,0 +1,396 @@
+#+OPTIONS: toc:nil
+# #+LaTeX_CLASS: koma-article 
+
+#+LATEX_CLASS: beamer
+#+LATEX_CLASS_OPTIONS: [presentation,aspectratio=169, usenames, dvipsnames]
+#+OPTIONS: H:2
+
+#+LaTex_HEADER: \usepackage{khpreamble}
+#+LaTex_HEADER: \usepackage{amssymb}
+#+LaTex_HEADER: \usepgfplotslibrary{groupplots}
+
+#+LaTex_HEADER: \newcommand*{\shift}{\operatorname{q}}
+#+LaTex_HEADER:   \definecolor{ppc}{rgb}{0.1,0.1,0.6}
+#+LaTex_HEADER:   \definecolor{iic}{rgb}{0.6,0.1,0.1}
+#+LaTex_HEADER:   \definecolor{ddc}{rgb}{0.1,0.6,0.1}
+#+LaTex_HEADER: \DeclareMathSymbol{\Omega}{\mathalpha}{letters}{"0A}% italics
+#+LaTex_HEADER: \DeclareMathSymbol{\varOmega}{\mathalpha}{operators}{"0A}% upright
+#+LaTex_HEADER: \providecommand*{\upOmega}{\varOmega}% for siunitx
+#+LaTex_HEADER: \usepackage[binary-units=true]{siunitx}
+
+
+#+title: Control PID
+#+date: 2021-03-08
+#+author: Kjartan Halvorsen
+
+* What do I want the students to understand?			   :noexport:
+  - Deviation variables
+  - First and second order system modeling
+
+* Which activities will the students do?			   :noexport:
+  - Intuition about heat echange
+  - Work with deviation variables
+  - Assignment
+
+
+
+
+* PID parameter intuition
+
+** Control en lazo cerrado
+   #+begin_export latex
+   \begin{center}
+   \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=6pt}, sumnode/.style={circle, draw, inner sep=2pt}]
+  { 
+  \node[coordinate] (input) {};
+  \node[sumnode, right of=input] (sum) {\tiny $\sum$};
+  \node[block, right of=sum, node distance=3.6cm] (reg) {Controlador};
+  \node[block, right of=reg, node distance=3.6cm] (plant) {Proceso};
+  \node[coordinate, right of=plant, node distance=2cm] (output) {};
+  \node[coordinate, below of=plant, node distance=12mm] (feedback) {};
+ 
+  \draw[->] (plant) -- node[coordinate, inner sep=0pt] (meas) {} node[near end, above] {$y(t)$} (output);
+  \draw[->] (meas) |- (feedback) -| node[very near end, left] {$-$} (sum);
+  \draw[->] (input) -- node[very near start, above] {$r(t)$} (sum);
+  \draw[->] (sum) -- node[above] {$e(t)$} (reg);
+  \draw[->] (reg) -- node[above] {$u(t)$}(plant);
+}
+\end{tikzpicture}
+\end{center}
+   #+end_export
+
+   
+** Control en cascada
+   #+begin_center
+   \includegraphics[width=\linewidth]{../../figures/block-diagram-cascade-control.pdf}
+   #+end_center
+
+   *Idea clave* Mejorar el control utilizando más información 
+
+** El controlador PID
+   #+begin_export latex
+   \begin{center}
+     \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm}, sumnode/.style={circle, draw, inner sep=2pt},scale=0.8, every node/.style={scale=0.8}]
+    
+       \node[coordinate] (input) {};
+       \node[sumnode, right of=input, node distance=16mm] (sum) {\tiny $\Sigma$};
+       \node[block, right of=sum, node distance=20mm] (pid)  {\textcolor{ppc}{P}\textcolor{iic}{I}\textcolor{ddc}{D}};
+       \node[coordinate, below of=sum, node distance=12mm] (feedback) {};
+       \node[coordinate, right of=pid, node distance=20mm] (output) {};
+
+       \draw[->] (input) -- node[above, pos=0.3] {$r(t)$} (sum);
+       \draw[->] (sum) -- node[above] {$e(t)$} (pid);
+       \draw[->] (pid) -- node[above, near end] {$u(t)$} (output);
+       \draw[->] (feedback) -- node[left, near start] {$y(t)$} node[right, pos=0.95] {-} (sum);
+
+       \begin{scope}[yshift=-3cm]
+       \foreach \pos/\clr/\nme in {0/ppc/P, 2/iic/I, 4/ddc/D} {
+       \node (knob) at (\pos,0) {\includegraphics[width=12mm]{../../figures/knob.png}};
+       \node[above of=knob, node distance=10mm] {\large \textcolor{\clr}{\nme}};
+       }
+       \end{scope}
+
+       \end{tikzpicture}
+   \end{center}
+
+   #+end_export
+
+   #+begin_export latex
+   \begin{tabular}{lll}
+   \textbf{\textcolor{ppc}{P}} & Proporcional: & Controla rapidez de la respuesta\\
+   \textbf{\textcolor{iic}{I}} & Integral: & Elimina el error $e(t)$ en estado estable\\
+   \textbf{\textcolor{ddc}{D}} & Derivada: & Da amortiguación
+   \end{tabular}
+   #+end_export
+
+** El controlador PID
+*** Graphics
+    :PROPERTIES:
+    :BEAMER_col: 0.6
+    :END:
+    #+begin_center
+    \includegraphics[width=0.99\linewidth]{../../figures/stepresponse-secondorder-exercise}
+    #+end_center
+
+*** Text
+    :PROPERTIES:
+    :BEAMER_col: 0.4
+    :END:
+    
+   *Actividad* Cómo ajustar las ganancias P, I y D para obtener la respuesta deseada?
+
+   | Caso | \textcolor{ppc}{P}  | \textcolor{iic}{I} | \textcolor{ddc}{D} |
+   |------+---------------------+--------------------+--------------------|
+   | A    |                     |                    |                    |
+   | B    |                     |                    |                    |
+   | C    |                     |                    |                    |
+   | D    |                     |                    |                    |
+   |------+---------------------+--------------------+--------------------|
+   
+** El controlador PID en forma paralela
+
+   
+   #+begin_export latex
+   \begin{center}
+     \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=12mm}, sumnode/.style={circle, draw, inner sep=2pt},
+     amp/.style = {regular polygon, regular polygon sides=3,
+              draw, fill=white, text width=1em,
+              inner sep=1pt, outer sep=0mm,
+              shape border rotate=-90},
+	]
+    
+       \node[coordinate] (input) {};
+       \node[sumnode, right of=input, node distance=16mm] (sum) {\tiny $\Sigma$};
+       \node[color=iic, amp, right of=sum, node distance=28mm, inner sep=0pt] (ig)  {$\frac{1}{\tau_i}$};
+       \node[color=iic,block, right of=ig, node distance=18mm] (ii)  {$\int$};
+       \node[color=ppc, coordinate, above of=ii, node distance=10mm] (pp)  {};
+       \draw[->, color=iic] (ig)  -- node[coordinate,] (mp) {} (ii);
+       \node[color=ddc, amp, below of=mp, node distance=14mm] (dg)  {$\tau_d$};
+       \node[color=ddc,block, right of=dg, node distance=18mm] (dd)  {$\frac{d}{dt}$};
+       \node[sumnode, right of=ii, node distance=20mm] (sum2) {\tiny $\Sigma$};
+       \node[amp, right of=sum2, node distance=20mm] (gain)  {$k_c$};
+       \node[coordinate, below of=sum, node distance=12mm] (feedback) {};
+       \node[coordinate, right of=gain, node distance=20mm] (output) {};
+
+       \draw[->] (input) -- node[above, pos=0.3] {$r(t)$} (sum);
+       \draw[->] (sum) -- node[above, pos=0.2] {$e(t)$} node[coordinate] (mm) {}  (ig);
+       \draw[->] (gain) -- node[above, near end] {$u(t)$} (output);
+       \draw[->] (feedback) -- node[left, near start] {$y(t)$} node[right, pos=0.95] {-} (sum);
+       \draw[->, color=ppc] (mm) |- (pp) -| node[right,] {$u_P(t)$} (sum2);
+       \draw[->, color=ddc] (mm) |- (dg) ;
+       \draw[->, color=ddc] (dg) -- (dd) -| node[right,] {$u_D(t)$} (sum2);
+       \draw[->, color=iic] (ii)  -- node[above,] {$u_I(t)$} (sum2);
+       \draw[->] (sum2) -- node[above, near end] {} (gain);
+
+     \end{tikzpicture}
+   \end{center}
+   #+end_export
+
+   \begin{align*}
+   u(t) &= k_c\Big( \textcolor{ppc}{e(t)} + \textcolor{iic}{\frac{1}{\tau_i} \int_0^{t} e(\xi) d\xi} + \textcolor{ddc}{\tau_d \frac{d}{dt} e(t)} \Big)
+   \end{align*}
+
+   \[ U(s) = F(s) E(s), \qquad   F(s) = k_c\left( 1 + \frac{1}{\tau_i s} + \tau_d s\right) \]
+
+** El controlador PID en forma paralela
+
+   
+   #+begin_export latex
+   \begin{center}
+     \begin{tikzpicture}
+     \pgfmathdeclarefunction{overdampedresponse}{3}{%
+     \pgfmathparse{1+#1/(#2-#1)*exp(-#3/#1)-#2/(#2-#1)*exp(-#3/#2)}%
+     }
+     \pgfmathdeclarefunction{overdampedderiv}{3}{%
+     \pgfmathparse{-1/(#2-#1)*exp(-#3/#1)+1/(#2-#1)*exp(-#3/#2)}%
+     }
+     \pgfmathsetmacro{\tone}{2}
+     \pgfmathsetmacro{\ttwo}{4}
+     \pgfmathsetmacro{\xnull}{8}
+     
+     \pgfmathsetmacro{\enull}{1-overdampedresponse(\tone, \ttwo, \xnull)}
+     \pgfmathsetmacro{\eslope}{-overdampedderiv(\tone, \ttwo, \xnull)}
+     
+     \begin{axis} [
+     width= 10cm,
+     height = 5cm,
+     axis lines=middle,
+     axis line style={->},
+     xtick={0, \xnull},
+     xticklabels={0, $t_1$},
+     % ytick={0, 1},
+     ytick=\empty,
+     % yticklabels={0, $r_f$},
+     y axis line style={draw opacity=0},
+     xmin=-1,
+     xmax=15,
+     ymin=0,
+     ymax=1.2,
+     xlabel=$t$,
+     clip = false,
+     ]
+
+     \addplot[solid, thin,  blue!70!black, const plot] coordinates { (-0.5, 0) (0,1) (15,1) } node[pos=0.99, pin=0:{$r(t)$},] {};
+     \addplot[solid,thin, orange!70!black, domain=-1:15, samples=200] {(x>0)*(overdampedresponse(\tone,\ttwo,x))} node[pos=0.9, pin=-20:{$y(t)$},] {};
+     \addplot[solid,thick, magenta!60!black, domain=-1:15, samples=400] {(x>0)*(1-overdampedresponse(\tone,\ttwo,x))} node[pos=0.99, pin=20:{$e(t)$},] {};
+     \addplot[solid, ddc, domain=2:14, samples=10] {\enull + \eslope*(x - \xnull)} node[pos=0.35, pin=-160:{$e(t_1) + \tau_d\frac{d}{dt}e(t_1)$},] {};
+\end{axis}  
+     \end{tikzpicture}
+   \end{center}
+   #+end_export
+
+   \begin{align*}
+   u(t) &= k_c\Big( \underbrace{\textcolor{ppc}{e(t)} + \textcolor{ddc}{\tau_d \frac{d}{dt} e(t)}}_{\text{error predicho}} + \underbrace{\textcolor{iic}{\frac{1}{\tau_i} \int_0^{t} e(\xi) d\xi}}_{\text{error acumulado}} \Big)
+   \end{align*}
+
+** El controlador PID en forma serial
+
+   #+begin_export latex
+   \begin{center}
+     \begin{tikzpicture}[yscale=0.8,node distance=22mm, block/.style={rectangle, draw, minimum width=12mm}, sumnode/.style={circle, draw, inner sep=2pt},
+     amp/.style = {regular polygon, regular polygon sides=3,
+              draw, fill=white, text width=1em,
+              inner sep=1pt, outer sep=0mm,
+              shape border rotate=-90},
+	]
+    
+       \node[coordinate] (input) {};
+       \node[sumnode, right of=input, node distance=16mm] (sum) {\tiny $\Sigma$};
+       \node[color=iic, block, right of=sum, node distance=20mm, inner sep=3pt] (ii)  {$\frac{\tau_Is + 1}{\tau_i s}$};
+       \node[color=ddc,block, right of=ii, node distance=20mm] (dd)  {$\tau_Ds + 1$};
+       \node[amp, right of=dd, node distance=20mm] (gain)  {$K_c$};
+       \node[coordinate, below of=sum, node distance=12mm] (feedback) {};
+       \node[coordinate, right of=gain, node distance=20mm] (output) {};
+
+       \draw[->] (input) -- node[above, pos=0.3] {$r(t)$} (sum);
+       \draw[->] (sum) -- node[above, pos=0.2] {$e(t)$} node[coordinate] (mm) {}  (ii);
+       \draw[->] (gain) -- node[above, near end] {$u(t)$} (output);
+       \draw[->] (feedback) -- node[left, near start] {$y(t)$} node[right, pos=0.95] {-} (sum);
+       \draw[->] (ii)  -- node[above,] {} (dd);
+       \draw[->] (dd) -- node[above, near end] {} (gain);
+
+     \end{tikzpicture}
+   \end{center}
+   #+end_export
+
+\[F(s) = K_c \left( \frac{ \tau_I s + 1}{\tau_I s} \right) (\tau_D s + 1) 
+= \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \left(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \right) \]
+
+
+*Actividad* Un controlador PID en forma serial tiene los parámetros $K_c=2$, $\tau_I=0.5$, $\tau_D=0.5$, determine los parámetros correspondientes para un controlador PID en forma paralela, $k_c$, $tau_d$, $\tau_i$.
+
+* SIMC
+** Sintonización de un PID
+
+      #+begin_export latex
+   \begin{center}
+   \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm}, sumnode/.style={circle, draw, inner sep=2pt}]
+  { 
+  \node[coordinate] (input) {};
+  \node[sumnode, right of=input] (sum) {\tiny $\sum$};
+  \node[block, right of=sum, node distance=3cm] (reg) {$F(s)$};
+  \node[block, right of=reg, node distance=3cm] (plant) {$G(s)$};
+  \node[coordinate, right of=plant, node distance=3cm] (output) {};
+  \node[coordinate, below of=plant, node distance=12mm] (feedback) {};
+ 
+  \draw[->] (plant) -- node[coordinate, inner sep=0pt] (meas) {} node[near end, above] {$y(t)$} (output);
+  \draw[->] (meas) |- (feedback) -| node[very near end, left] {$-$} (sum);
+  \draw[->] (input) -- node[very near start, above] {$r(t)$} (sum);
+  \draw[->] (sum) -- node[above] {$e(t)$} (reg);
+  \draw[->] (reg) -- node[above] {$u(t)$}(plant);
+}
+\end{tikzpicture}
+\end{center}
+   #+end_export
+
+** El método de sintonización SIMC
+
+   #+begin_center
+   \includegraphics[width=0.5\linewidth]{../../figures/jpc-skogestad.png}
+   #+end_center
+
+   a.k.a. [[https://www.researchgate.net/profile/Ali_Arshad3/post/Tuning_PID_without_process_transfer_function/attachment/59d61db679197b8077979869/AS:272443459997696@1441966990886/download/-InstellingenRegelaars_ExtraStof.pdf]["Probably the best simple PID tuning rules in the world"]]
+   
+** El método de sintonización SIMC - Sistema de primer orden
+
+   Dado modelo $G(s)$ del proceso y modelo $G_c(s)$ deseado del sistema en lazo cerrado
+   \[G(s) = K \frac{1}{\tau s + 1}, \qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
+
+   El controlador será un controlador PI
+
+   \[ F(s) = \underbrace{\frac{\tau}{K\tau_c}}_{k_c} \left( 1 + \frac{1}{\underbrace{\tau}_{\tau_i} s} \right).\]
+
+   con \(k_c = \frac{\tau}{K\tau_c}\) and \(\tau_i = \tau\).
+
+
+** El método de sintonización SIMC - Control de la corriente
+
+   #+begin_center
+   \includegraphics[width=0.7\linewidth]{../../figures/simulink-dc-motor.png}
+   #+end_center
+   \[ \text{Modelo:} \quad \(G(s) = \frac{K}{\tau s +1} = \frac{\frac{1}{R}}{\frac{L}{R}s + 1}, \qquad L=\unit{1}{\milli\henry}, \; R=\SI{0.5}{\ohm}\]
+
+   \[ F(s) = \underbrace{\frac{\tau}{K\tau_c}}_{k_c} \big( 1 + \frac{1}{\underbrace{\tau}_{\tau_i} s} \big).\]
+
+   *Actividad* Asumiendo que queremos una respuesta en lazo cerrado igual rápido que el sistema en lazo abierto: \(\tau_c = \tau\). Determine $k_c$ y $\tau_i$.
+   
+** El método de sintonización SIMC - Sistema de segundo orden
+
+   Dado modelo del proceso $G(s)$ y comportamiento deseado del sistema en lazo cerrado $G_c(s)$
+   \[G(s) = K \frac{1}{s^2},\qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
+
+   Se obtiene buena robustez con el controlador
+
+   \[F(s) = K_c \left( \frac{ \tau_I s + 1}{\tau_I s} \right) (\tau_D s + 1) 
+   = \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \left(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \right) \]
+   con 
+   \[ K_c = \frac{1}{4K(\tau_c)^2}, \qquad \tau_I = \tau_d = 4\tau_c \]
+   o
+   \[ k_c =  \frac{1}{2K(\tau_c)^2}, \qquad \tau_i = 8\tau_c, \qquad \tau_d = 2\tau_c\]
+   
+
+
+** El método de sintonización SIMC - Sistema de segundo orden
+
+   Dado modelo del proceso $G(s)$ y comportamiento deseado del sistema en lazo cerrado $G_c(s)$
+   \[G(s) = K \frac{1}{s^2},\qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
+
+   Se obtiene buena robustez con el controlador
+
+   \[F(s) = K_c \left( \frac{ \tau_I s + 1}{\tau_I s} \right) (\tau_D s + 1) 
+   = \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \Big(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \Big) \]
+   con 
+   \[ K_c = \frac{1}{4K(\tau_c)^2}, \qquad \tau_I = \tau_d = 4\tau_c \]
+
+   *Actividad* Asumiendo $K=4$ y $\tau_c = 0.5$. Determine los parámetros PID $k_c$, $\tau_i$ y $\tau_d$. 
+
+
+
+** El método de sintonización SIMC - Control de la posición
+
+   Dado  \[G(s) = K \frac{1}{s^2},\qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
+
+   *Cómo obtener el parámetro \(K\)?*
+
+   \[J \dot{\omega} = \sum T_i \quad \Rightarrow \quad J\dot{\omega} = T_m - T_g \]
+   Escribe el torque de motor como \(T_m(t) = T_g + ku(t)\)
+   \[\ddot{\theta}(s) = \dot{\omega}(t) = \frac{k}{J}u(t) = K u(t)\quad \Leftrightarrow \quad \Theta(s) = \frac{K}{s^2}U(s)\]
+
+   \[ \omega(t) = \omega(0) + K \int_0^t u(\tau)d\tau \] 
+   
+
+
+
+** El método de sintonización SIMC - Control de la posición
+
+   \[ \omega(t) = \omega(0) + K \int_0^t u(\tau)d\tau \] 
+   
+   #+begin_export latex
+   \begin{center}
+     \begin{tikzpicture}[]
+     \begin{axis} [
+     width= 10cm,
+     height = 3cm,
+     axis lines=middle,
+     axis line style={->},
+     xtick={0,0.2},
+     xticklabels={0, 0.2},
+     % ytick={0, 1},
+     ytick={0, 50},
+     %y axis line style={draw opacity=0},
+     xmin=-0.1,
+     xmax=0.6,
+     ymin=0,
+     ymax=55,
+     xlabel=$t$,
+     ylabel=$u(t)$,
+     clip = false,
+     ]
+
+     \addplot[solid, thick,  blue!70!black, const plot] coordinates { (-0.1, 0) (0,50) (0.2, 0) (0.6, 0)};
+\end{axis}  
+     \end{tikzpicture}
+   \end{center}
+   #+end_export
+
+   \[ K = \frac{\omega_f - \omega(0)}{\int_0^t u(\tau)d\tau} = \frac{\omega_f - \omega(0)}{10} = 36/10 = 3.6\]
