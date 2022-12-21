@@ -43,7 +43,7 @@
       \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {output} (output);
       \draw[->] (disturbance) -- node[right, pos=0.2] {disturbance} (plant);
       \draw[->] (meas) |- (sensor) -| node[right, pos=0.9] {-} (sumerr);
-      \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {error, noise} (sensor);
+      \draw[->, red!80!black, thick] (sensor) ++(0, -22mm) -- node[near start, right] {error, noise} (sensor);
       \end{tikzpicture}
     \end{center}
     #+end_export
@@ -72,7 +72,7 @@
       \draw[->] (plant) -- node[coordinate] (meas) {} node[above, orange!80!black] {$y$} (output);
       \draw[->] (disturbance) -- node[right, pos=0.2] {disturbance} (plant);
       \draw[->] (meas) |- (sensor) -| node[pos = 0.2, below] {$y_m(t) = \textcolor{orange!80!black}{y(t)} + \textcolor{red!80!black}{n(t)}$} node[right, pos=0.9] {-} (sumerr);
-      \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {noise} (sensor);
+      \draw[->, red!80!black, thick] (sensor) ++(0, -22mm) -- node[near start, right] {noise} (sensor);
       \end{tikzpicture}
     \end{center}
     #+end_export
@@ -262,7 +262,7 @@
     :BEAMER_col: 0.5
     :END:
 
-    *Activity* Calculate the velocity at \(t=\unit{11}{\second}\)!
+    *Activity* Calculate the velocity at \(t=\unit{11}{\milli\second}\)!
     
 *** Calculations                                                   :noexport:
 

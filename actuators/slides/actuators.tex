@@ -1,4 +1,4 @@
-% Created 2021-03-03 mié 21:21
+% Created 2022-02-28 Mon 16:10
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -25,72 +25,72 @@
 \usepackage{circuitikz}
 \usetheme{default}
 \author{Kjartan Halvorsen}
-\date{2021-03-01}
-\title{Actuadores}
+\date{\today}
+\title{Actuators}
 \hypersetup{
  pdfauthor={Kjartan Halvorsen},
- pdftitle={Actuadores},
+ pdftitle={Actuators},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.4.4)}, 
+ pdfcreator={Emacs 26.3 (Org mode 9.4.6)}, 
  pdflang={English}}
 \begin{document}
 
 \maketitle
 
-\section{Requerimientos mecanicos}
-\label{sec:org464a193}
+\section{Mechanical requirements}
+\label{sec:orgaf21477}
 
-\begin{frame}[label={sec:org3c3041c}]{Requerimientos mecanicos}
+\begin{frame}[label={sec:org30366de}]{Mechanical requirements}
 \end{frame}
-\begin{frame}[label={sec:org96f87b0}]{Energía mecánica}
+\begin{frame}[label={sec:orgc9667c5}]{Mechanical energy}
 From Encyclopaedia Britannica
 \begin{quote}
-\alert{Energía mecánica} La suma de energía cinética (energía de movimiento) y la energía potencial (energía almacenada en una sistema por la posición de sus partes).
+\alert{Mechanical energy} The sum of kinetic energy (the energy in movement) and the potential energy (energy stored in a system due to the position of its parts).
 \end{quote}
 
-\[ E_M = \underbrace{K}_{\text{Energía cinética}} + \underbrace{U}_{\text{Energía potencial}}\]
+\[ E_M = \underbrace{K}_{\text{Kinetic energy}} + \underbrace{U}_{\text{Potential energy}}\]
 
-Una masa \(m\) con velocidad \(v\) a una altura \(h\) sobre un nivel de referéncia, tiene la energía mecánica \(E_M = \frac{1}{2}mv^2 + mgh\).
+\pause
+A point mass \(m\) with velocity \(v\) at a height \(h\) above the reference level, has mechanical energy \(E_M = \frac{1}{2}mv^2 + mgh\).
 
 \begin{center}
 \includegraphics[height=0.3\textheight]{../../figures/pendulum.png}
-{\footnotesize Fuente: Hubert Christiaen, wikipedia}
+{\footnotesize Source: Hubert Christiaen, wikipedia}
 \end{center}
-
-
-\#+end\textsubscript{center}
 \end{frame}
-\begin{frame}[label={sec:org55e5e47}]{Trabajo}
+
+
+\begin{frame}[label={sec:org2fde100}]{Work}
 From Encyclopaedia Britannica
 \begin{quote}
-\alert{Trabajo} En la físisca, la medida de \alert{transferencia de energía} que ocurre cuando un objeto está desplazado \alert{una distancia} por una \alert{fuerza externa} cuya tiene un componente en la dirección del desplazamiento.
+\alert{Work} In physics, the measure of \alert{transfer of energy} when an object is diplaced \alert{a certain distance} by an \alert{external force} which has a component in the direction of the displacement..
 \end{quote}
 \end{frame}
 
-\begin{frame}[label={sec:org6572bb4}]{Trabajo}
+\begin{frame}[label={sec:orgcf01b17}]{Work}
 \begin{center}
 \includegraphics[height=0.6\textheight]{../../figures/pulley-block-50kg.png}
 \end{center}
 
-\alert{Actividad individual 1} Se sube un cuerpo de \unit{50}{\kilogram} una distancia de \unit{10}{\meter}. Calcula el trabajo realizado. Manda tu respuesta en el chat.
+\alert{Activity} A mass of \unit{50}{\kilogram} is lifted a distance of \unit{10}{\meter}. What is the work done?
 \end{frame}
 
 
 
-\begin{frame}[label={sec:org585b1c9}]{Potencia}
-\alert{Definición} La derivada del tiempo del trabajo.
+\begin{frame}[label={sec:org4e6340d}]{Power}
+\alert{Definition} The time-derivative of work.
 \end{frame}
 
-\begin{frame}[label={sec:org21f0b99}]{Potencia}
+\begin{frame}[label={sec:orgb29c678}]{Power}
 \begin{center}
 \includegraphics[height=0.6\textheight]{../../figures/pulley-block-50kg.png}
 \end{center}
 
-\alert{Actividad individual 2} Se subió un cuerpo de masa \unit{50}{\kilogram}  a una distancia de \unit{10}{\meter} en \unit{5}{\second}. Determine la potencia promedia. Se ignora la fricción.
+\alert{Activity} A mass of \unit{50}{\kilogram} is lifted a distance of \unit{10}{\meter} in 5 seocnds. What is the average power required?
 \end{frame}
 
-\begin{frame}[label={sec:orgd3dc50b}]{Potencia y fuerza para accelerar}
+\begin{frame}[label={sec:org85fe442}]{Power and acceleration}
    \begin{center}
 \begin{tikzpicture}
 
@@ -105,36 +105,40 @@ From Encyclopaedia Britannica
 \end{center}
 
 
-\alert{Actividad individual 3} El nuevo Hummer EV tiene una masa de \(m=\unit{5000}{\kilogram}\), y puede accelerarar de \unit{0 - 100}{\kilo\meter\per\hour} en tres segundos. Cual es la potencia promedio necesario para lograr esto (ignorando la resistencia del aire y ra resistencia a la rodura)?
+\alert{Activity} The new Hummer EV has a mass of \(m=\unit{5000}{\kilogram}\), and can accelerate from \unit{0 - 100}{\kilo\meter\per\hour} in three seconds. What is the average power required to achieve this (ignoring wind- and rolling resistance)?
 \end{frame}
 
-\begin{frame}[label={sec:orgde875e1}]{Potencia en rotación}
-\alert{Torque} por \alert{velocidad angular}
+\begin{frame}[label={sec:orgaa9bffa}]{Power in rotating systems}
+\alert{Torque} multiplied with \alert{angular velocity}
 
 \[ P = T\omega\]
 \end{frame}
 
-\begin{frame}[label={sec:org89ac5b6}]{Momento de inercia}
+\begin{frame}[label={sec:org3ef0d64}]{Moment of inertia}
 \begin{columns}
 \begin{column}{0.38\columnwidth}
 \begin{center}
 \includegraphics[height=0.6\textheight]{../../figures/moment-of-inertia-cylinder.png}
-{\footnotesize Fuente: Georgia State University}
+{\footnotesize Source: Georgia State University}
 \end{center}
 \end{column}
 
 \begin{column}{0.72\columnwidth}
-El factor que determine la tendencia de un cuerpo de resistir aceleración angular:
+Moment of inertia is a parameter in Newton's law that determines
+
+\begin{itemize}
+\item the tendency of a body to resist angular acceleration:
 \[ \textcolor{red!80!black}{J} \dot{\omega} = \sum T_i \]
-Y la magnitúd de la energía cinética a cierta velocidad angular:
+\item the kinetic energy of a body rotating at a certain angular velocity:
 \[ K = \frac{1}{2}\textcolor{red!80!black}{J}\omega^2.\]
+\end{itemize}
 \end{column}
 \end{columns}
 \end{frame}
 
 
 
-\begin{frame}[label={sec:org0ac4a5b}]{Requerimientos de potencia y torque para un elevador}
+\begin{frame}[label={sec:org07221cf}]{Power and torque requirements for an elevator}
 \begin{columns}
 \begin{column}{0.38\columnwidth}
 \begin{center}
@@ -143,33 +147,33 @@ Y la magnitúd de la energía cinética a cierta velocidad angular:
 \end{column}
 
 \begin{column}{0.72\columnwidth}
-Dado un elevador de masa \(M=\unit{1000}{\kilogram}\), contrapeso con masa \(m=\unit{800}{\kilogram}\) y poleo con radius of \(r=\unit{0.4}{\meter}\). Un motor eléctrico está conectado al poleo con un reductor de velocidad con relación de transmisión de 12:1 (12 revoluciones del motor para cada revolución del poleo). El rotor tiene un momento de inercia de \(J_m = \unit{0.3}{\kilogram\meter\squared}\). La inercia del poleo se puede ignorar.
+An elevator with mass \(M=\unit{1000}{\kilogram}\), and a counterweight with mass \(m=\unit{800}{\kilogram}\) are connected by a wire which runs over a pulley with radius of \(r=\unit{0.4}{\meter}\). An electric  motor is connected to the pulley via a transmission with gear ratio of 12:1 (12 revolutions of the motor for each revolution of the pulley). The motor has a moment of inertia of \(J_m = \unit{0.3}{\kilogram\meter\squared}\). The inertia of the pulley can be ignored.
 
- \alert{Actividad en grupo} 
-\alert{(a)} ¿A que velocidad angular gira el motor cuando el elevador sube a \unit{4}{\meter\per\second}? \alert{(b)} Determine la potencia y el torque del motor necesario para subir el elevador a \unit{4}{\meter\per\second}. \alert{(c)} El elevador usa dos segundos para llegar a la velocidad \unit{4}{\meter\per\second} desde cero. En este tiempo se ha movido \unit{4}{\meter} hacia arriba. Determine la potencia promedia y el torque promedio durante el arranque.
+ \alert{Activity} 
+\alert{(a)} At what angular velocity is the motor rotating when the elevator is ascending at \unit{4}{\meter\per\second}? \alert{(b)} Determine the power and the motor torque necessary to lift the elevator at \unit{4}{\meter\per\second} (assuming no friction). \alert{(c)} The elevator takes two seconds to reach the velocity \unit{4}{\meter\per\second} from zero. During this time, the elevator has moved up \unit{4}{\meter}. Determine the average power and torque during the start.
 \end{column}
 \end{columns}
 \end{frame}
 
-\section{El motor electrico de corriente continua}
-\label{sec:orgd8a4f70}
-\begin{frame}[label={sec:org0b45881}]{El motor eléctrico de corriente continua}
+\section{The DC motor}
+\label{sec:org10af172}
+\begin{frame}[label={sec:org9cc0a64}]{The DC motor}
 \begin{center}
 \includegraphics[height=0.6\textheight]{../../figures/wiki-small-dc-motor.jpg}
 \includegraphics[width=0.6\textheight]{../../figures/Siemens-DC-prop.png}\\
-{\footnotesize Fuente: Wikipedia \hspace*{3cm} Fuente: Siemens AG}
+{\footnotesize Source: Wikipedia \hspace*{3cm} Source: Siemens AG}
 \end{center}
 \end{frame}
 
 
-\begin{frame}[label={sec:org7c40f0d}]{Fuerza en un conductor eléctrico en un campo magnético}
+\begin{frame}[label={sec:org75da967}]{Force on an electrical conductor in a magnetic field}
 \begin{center}
 \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
 \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
 \end{center}
 
 
-\begin{block}{Fuente}
+\begin{block}{Source}
 \begin{center}
 \includegraphics[width=0.2\linewidth]{../../figures/textbook.png}
 \end{center}
@@ -177,84 +181,70 @@ Dado un elevador de masa \(M=\unit{1000}{\kilogram}\), contrapeso con masa \(m=\
 \end{frame}
 
 
-\begin{frame}[label={sec:orgce9e7b6}]{Fuerza en un conductor eléctrico en un campo magnético}
+\begin{frame}[label={sec:org9e38f71}]{Force on an electrical conductor in a magnetic field}
 \begin{center}
 \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
 \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
 \end{center}
 
-La fuerza electromagnética en el conductor es \alert{proporcional a la corriente}:
-\[F=k_mI=(Bl_m)I,\] donde \(B\) es la densidad del flujo magnético en el entrehierro, \(I\) es la corriente, y \(l_m\) es la longitud del cable. En vez de construir un motor muy larga, se agreaga varias cables juntos para aumentar la fuerza.
+The electromagnetic force  in a conductor is \alert{proportional to the current} and \alert{the strength of the magnetic field}:
+\[F=k_mI=(Bl_m)I,\] where \(B\) is the magnetic flux density in the gap, \(I\) is the current, an \(l_m\) is the length of the conductor. 
 
-\alert{Actividad individual 4} En un motor grande de \unit{4}{\mega\watt} con longitud axial de \(l_m=\unit{2}{\meter}\), la densidad del flujo es \(B=\unit{0.8}{\tesla}\) y la corriente es \(I=\unit{3}{\kilo\ampere}\). ¿Cuantas cables en paralelo se necesita para alcanzar una fuerza de \(F=\unit{259.2}{\kilo\newton}\)?
+\alert{Activity} In a large motor of \unit{4}{\mega\watt} with an axial length of \(l_m=\unit{2}{\meter}\), the magnetic flux density is \(B=\unit{0.8}{\tesla}\) and the current is \(I=\unit{3}{\kilo\ampere}\). How many parallel conductors are needed to achieve a force of \(F=\unit{259.2}{\kilo\newton}\)?
 \end{frame}
 
-\begin{frame}[label={sec:org2f27d94}]{Las dos ecuaciónes del motor eléctrica CC}
-\begin{block}{Fuerza generado en el conductor por la corriente en el campo magnético}
+\begin{frame}[label={sec:org30e5cc4}]{The two equations of the DC motor}
+\begin{block}{The force on the electrical conductor in the magnetic field}
 \[ F(t) = k_m i(t) \quad\Leftrightarrow\quad T(t) = k_m r i(t),\]
-dónde \(r\) es el radie del motor.
+where \(r\) is the radius of the motor.
 \end{block}
 
-\begin{block}{Voltaje generado por el movimiento del conductor en el campo magnético}
+\begin{block}{Voltage generated in a conductor that moves in a magnetic field}
 \[ e(t) = k_v v(t) \quad\Leftrightarrow\quad e(t) = k_v r \omega(t)\]
-\(e(t)\) se llama \emph{Fuerza contraelectromotriz} o \emph{Back electro-motive force (Back e.m.f.)} en inglés.
+\(e(t)\) is called  \emph{Back electro-motive force (Back e.m.f.)}.
 \end{block}
 \end{frame}
-\begin{frame}[label={sec:org9a1ab45}]{Potencia eléctrica y mecánica}
+
+\begin{frame}[label={sec:org41407f8}]{Electrical and mechanical power}
 \begin{center}
 \includegraphics[width=0.4\linewidth]{../../figures/HD-fig1_14.png}
 \includegraphics[width=0.53\linewidth]{../../figures/HD-fig1_15.png}
 \end{center}
 
-Con velocidad \(v\) constante y ignorando fricción y resistencia eléctrica: 
+With constant velocity \(v\) and ignoring friction and electrical resistance: 
 
-\[ \text{Fuerza electromagnética} = \text{Fuerza mecánica} \quad\Leftrightarrow\quad F=k_mI =Bl_mI = mg\]
-\[ \text{Potencia eléctrica} = \text{Potencia mecánica} \quad \Leftrightarrow\quad \underbrace{V_1I}_{P_e} = \underbrace{Fv = Bl_mI v}_{P_m} \] 
-Se necesita aplicar un voltaje \(V_1\) sobre el cable para mantener la corriente \(I\). \alert{Ese voltaje es igual al back e.m.f.} 
+\[ \text{Electromagnetic force} = \text{Mechanical force} \quad\Leftrightarrow\quad F=k_mI =Bl_mI = mg\]
+\[ \text{Electric power} = \text{Mechanical power} \quad \Leftrightarrow\quad \underbrace{V_1I}_{P_e} = \underbrace{Fv = Bl_mI v}_{P_m} \] 
+It is necessary to apply a voltaje \(V_1\) across the cable to maintain the current \(I\). \alert{This voltage is equal to the back e.m.f.} 
 \[ V_1I = Bl_mIv \quad \Rightarrow \quad V_1 = (Bl_m)v = k_v v = \tikz[baseline = 0.1ex]{\node[red, circle, draw, inner sep=3pt, pin={[red]0:{Back e.m.f.}}] at (0, 0.1 cm) {\textcolor{black}{E}}}\]
 
-\alert{Actividad individual 5} ¿Cuál es la relación entre los dos constantes, \(k_m\) y \(k_v\)?
+\alert{Actividad} What is the relationship between the two constants \(k_v\) and \(k_m\)?
 \end{frame}
 
-\begin{frame}[label={sec:org720bb2a}]{Potencia eléctrica y mecánica}
-En realidad se pierde parte de la energía por la resistencia en el circuito eléctrico.
+\begin{frame}[label={sec:org6bcdbea}]{Electrical and mechanical power}
+In practice some energy is lost due to the resistance in the electrical circuit.
 \begin{align*}
-\text{Potencia eléctrica aplicada} &= \text{Producción de calor} + \text{Potencia mecánica}\\
+\text{Electrical power drawn} &= \text{Heat production} + \text{Mechanical power}\\
 V_2 I &= RI^2 + EI
 \end{align*}
-Dónde \(V_2 > V_1 = (Bl_m)v = E\).
+Where \(V_2 > V_1 = (Bl_m)v = E\).
 
-La eficiencia del motor
+The efficiency of the motor
 
-\[ \text{eficiencia} = \frac{\text{Potencia mecánica}}{\text{Potencia eléctrica aplicada}} = \frac{EI}{V_2I} = \frac{E}{RI + E}\]
+\[ \text{efficiency} = \frac{\text{Mechanical power}}{\text{Electrical power drawn}} = \frac{EI}{V_2I} = \frac{E}{RI + E}\]
 
-\alert{Ejercicio} Un motor eléctrico tiene el constante \(k=\unit{0.05}{\kilo\newton\per\ampere}\) y una resistencia de \(R=\SI{2}{\milli\ohm}\). Está produciendo una potencia mecánica de \unit{4}{\mega\watt} a una velocidad de \(v=\unit{10}{\meter\per\second}\) Calcula el 'back e.m.f' \(E\), la corriente \(I\), el voltaje \(V_2\) y la eficiencia.
+\alert{Activity} An electri motor has a motor constant \(k=\unit{0.05}{\kilo\newton\per\ampere}\) and an armature resistance  of \(R=\SI{2}{\milli\ohm}\). It is producing a mechanical power of \unit{4}{\mega\watt} at a velocity of \(v=\unit{10}{\meter\per\second}\). Calculate the back e.m.f \(E\), the current \(I\), then voltage \(V_2\) and the efficiency.
 \end{frame}
 
-\begin{frame}[label={sec:org43f9ec3}]{Potencia eléctrica y mecánica}
-\begin{block}{Equilibrio de energía}
-\begin{align*}
-\text{Potencia eléctrica aplicada} &= \text{Producción de calor} + \text{Potencia mecánica}\\
-V_2 I &= RI^2 + EI
-\end{align*}
-\end{block}
-\begin{block}{Eficiencia}
-\[ \text{eficiencia} = \frac{\text{Potencia mecánica}}{\text{Potencia eléctrica aplicada}} = \frac{V_2}{RI + E}\]
-
-\alert{Actividad en pares} En el ejemplo anterior el motor tenía un constante de \(k=\unit{0.05}{\kilo\newton\per\ampere}\). Supone que otro motor con la misma resistancia \(R=\SI{2}{\milli\ohm}\) está haciendo el mismo trabajo (\unit{4}{\mega\watt} a \unit{10}{\meter\per\second}), pero tiene el konstante \(k=\unit{0.1}{\kilo\newton\per\ampere}\). ¿Cuál es su eficiencia?
-\end{block}
-\end{frame}
-
-
-\begin{frame}[label={sec:orgc4cb3eb}]{Rotación}
+\begin{frame}[label={sec:orgfedfd90}]{Rotation}
 \begin{center}
 \includegraphics[width=0.4\linewidth]{../../figures/HD-fig3_1.png}
 \includegraphics[width=0.53\linewidth]{../../figures/HD-fig3_2.png}
-{\footnotesize Funte: Hughes and Drury}
+{\footnotesize Source: Hughes and Drury}
 \end{center}
 \end{frame}
 
-\begin{frame}[label={sec:orge92d287}]{Circuito equivalente}
+\begin{frame}[label={sec:org75303af}]{Equivalent circuit}
 \begin{center}
   \begin{circuitikz}
     \draw (4,1) node[elmech](motor){M};
@@ -280,29 +270,29 @@ Newton: \(J\frac{d}{dt}\omega(t) = ki(t) - T_l(t)\)
 \end{frame}
 
 
-\begin{frame}[label={sec:orgd4ed1dc}]{Velocidad con carga constante}
+\begin{frame}[label={sec:org0c4bdbf}]{Velocity with constant load}
 \begin{align}
 L\frac{d}{dt}i(t) + Ri(t) + k\omega(t) &= V(t)\\
 J\frac{d}{dt}\omega(t) &= ki(t) - T_l(t)
 \end{align}
 
-En estado estable: \(i(t) = I\), \(\omega(t) = \omega\).
+In steady-state: \(i(t) = I\), \(\omega(t) = \omega\).
 
 \begin{align}
 RI + k\omega &= V\\
 0 &= kI - T_l
 \end{align}
 
-\alert{Actividad individual 6} Escribe la velocidad angular como función de la carga \(T_l\) y el voltaje \(V\)
+\alert{Activity} Write the angular velocity as function of the load \(T_l\) and the volage \(V\)
 \[\omega = f(V, T_l) = \frac{V}{k} - \frac{RT_l}{k^2}\]
 \end{frame}
 
-\begin{frame}[label={sec:org03e5f51}]{Velocidad con carga constante}
+\begin{frame}[label={sec:org867c932}]{Velocity with constant load}
 \[\omega = f(V, T_l) = \frac{V}{k} - \frac{RT_l}{k^2}\]
-Un motor especifico tiene el constante \(k=\unit{4}{\newton\meter\per\ampere}\) y resistencia \(R=\SI{1}{\ohm}\). Se aplica un voltaje de \(V=\unit{100}{\volt}\) sobre su armadura.
+A specific motor has a motor constant \(k=\unit{4}{\newton\meter\per\ampere}\) and armature resistence \(R=\SI{1}{\ohm}\). A voltage of \(V=\unit{100}{\volt}\) is applied over the armature circuit.
 
 
-\alert{Actividad en pares} Dibuje como la velocidad en estado estable depende de la carga \(T_l\). ¿Cuál es el par de parada?
+\alert{Activity} Sketch how the steady-state velocity depends on the load \(T_l\). What is the stall torque (the torque that will cause the motor to stand still)?
 
 \begin{center}
   \begin{tikzpicture}[xscale=0.8]
@@ -316,8 +306,8 @@ Un motor especifico tiene el constante \(k=\unit{4}{\newton\meter\per\ampere}\) 
 \end{center}
 \end{frame}
 
-\begin{frame}[label={sec:org8fee989}]{Arranque}
-Para un motor parada, la fuerza contraelectromotriz es cero, y solo la resistencia y la inductancia de la armadura limiten la corriente.
+\begin{frame}[label={sec:org6d77004}]{Start-up}
+For a motor that is not rotating, the back e.m.f is zero, and only the resistance and the inductance of the armature limits the current.
 
 \begin{center}
   \begin{circuitikz}
@@ -331,12 +321,12 @@ Para un motor parada, la fuerza contraelectromotriz es cero, y solo la resistenc
 \end{center}
 
 
-Hay que tener cuidado en el arranque para que la corriente no sube a niveles excedentes.
+It is necessary to be careful with applying too much voltage at start-up to avoid excessive current in the motor.
 \end{frame}
 
 \section{Modeling}
-\label{sec:orgb895451}
-\begin{frame}[label={sec:org5be9ad8}]{Modelo de bloques del circuito equivalente}
+\label{sec:org194e549}
+\begin{frame}[label={sec:org4bc2bbd}]{Block-diagram of the equivalent circuit}
 \begin{center}
   \begin{circuitikz}
     \draw (4,1) node[elmech](motor){M};
@@ -346,7 +336,7 @@ Hay que tener cuidado en el arranque para que la corriente no sube a niveles exc
 
     \node[] at (9, 2 cm) {\(L \frac{d}{dt}i(t) +  Ri(t) + k\omega(t) = V\)};
     \node[] at (9, 1 cm) {\(\frac{d}{dt}i(t) = \frac{1}{L} \Big(-Ri(t) - k\omega(t) + V\Big)\)};
-  \begin{scope}[yshift=-15mm, xshift=6cm,
+  \begin{scope}[yshift=-15mm, xshift=8cm,
   block/.style={rectangle, draw, minimum width=12mm, minimum height=10mm},
   amp/.style = {regular polygon, regular polygon sides=3,
         draw, fill=white, text width=1em,
@@ -354,9 +344,12 @@ Hay que tener cuidado en el arranque para que la corriente no sube a niveles exc
         shape border rotate=-90},
 	summ/.style = {circle, draw, inner sep = 1pt},]
    \node[block,] (int) at (0,0) {$\int$};
-   \node[amp, left of=int, node distance=40mm] (oneoverL) {$\frac{1}{L}$}; 
+   \node[amp, left of=int, node distance=30mm] (oneoverL) {$\frac{1}{L}$}; 
    \draw[->] (oneoverL) -- node[above] {$\frac{d}{dt}i(t)$} (int);
-   \node[summ, left of=oneoverL] (sum) {\small $\Sigma$};
+   \node[summ, left of=oneoverL, node distance=20mm] (sum) {\small $\Sigma$};
+   \node[coordinate, left of=sum, node distance=30mm] (Vin) {};
+   \draw[->] (Vin) -- node[above, near start] {$V$} node[coordinate, pos=0.6] (mp) {} (sum);
+   \node[amp, above of=mp, node distance=15mm] (mkonst) {$-k$};
    \end{scope}
   \end{circuitikz}
   \end{center}

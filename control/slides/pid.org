@@ -223,6 +223,12 @@
    u(t) &= k_c\Big( \underbrace{\textcolor{ppc}{e(t)} + \textcolor{ddc}{\tau_d \frac{d}{dt} e(t)}}_{\text{error predicho}} + \underbrace{\textcolor{iic}{\frac{1}{\tau_i} \int_0^{t} e(\xi) d\xi}}_{\text{error acumulado}} \Big)
    \end{align*}
 
+   
+*** Notes                                                          :noexport:
+d/dt e | t1 \approx (e(t2)-e(t1))/(t2-t1)
+e(t2) \approx e(t1) + d/dt e|t1 (t2-t1),  t2 = t1 + \tau_d
+e(t1 + \tau_d) \approx e(t1) + tau_d d/dt e
+
 ** El controlador PID en forma serial
 
    #+begin_export latex
@@ -257,9 +263,10 @@
 = \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \left(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \right) \]
 
 
+*** Noexport                                                       :noexport:
 *Actividad* Un controlador PID en forma serial tiene los parámetros $K_c=2$, $\tau_I=0.5$, $\tau_D=0.5$, determine los parámetros correspondientes para un controlador PID en forma paralela, $k_c$, $tau_d$, $\tau_i$.
 
-* SIMC
+* SIMC                                                             :noexport:
 ** Sintonización de un PID
 
       #+begin_export latex

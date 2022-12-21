@@ -1,4 +1,4 @@
-% Created 2022-02-24 Thu 08:00
+% Created 2022-02-24 Thu 16:31
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169]{beamer}
 \usepackage[utf8]{inputenc}
@@ -35,8 +35,8 @@
 \maketitle
 
 \section{Sensors in general}
-\label{sec:orgfbe3441}
-\begin{frame}[label={sec:orgdc68ec9}]{Sensors}
+\label{sec:org866658d}
+\begin{frame}[label={sec:org37f31d2}]{Sensors}
 \begin{center}
 \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=8pt}, sumnode/.style={circle, draw, inner sep=2pt}]
 
@@ -55,7 +55,7 @@
   \draw[->] (plant) -- node[coordinate] (meas) {} node[above,] {output} (output);
   \draw[->] (disturbance) -- node[right, pos=0.2] {disturbance} (plant);
   \draw[->] (meas) |- (sensor) -| node[right, pos=0.9] {-} (sumerr);
-  \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {error, noise} (sensor);
+  \draw[->, red!80!black, thick] (sensor) ++(0, -22mm) -- node[near start, right] {error, noise} (sensor);
   \end{tikzpicture}
 \end{center}
 
@@ -63,7 +63,7 @@
 It is \alert{inevitable} that sensors introduce \alert{noise} into the system.
 \end{frame}
 
-\begin{frame}[label={sec:orgb627ee2}]{Sensors}
+\begin{frame}[label={sec:orgd172ac5}]{Sensors}
 \begin{center}
 \begin{tikzpicture}[scale=0.6, node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=8pt}, sumnode/.style={circle, draw, inner sep=2pt}]
 
@@ -83,7 +83,7 @@ It is \alert{inevitable} that sensors introduce \alert{noise} into the system.
   \draw[->] (plant) -- node[coordinate] (meas) {} node[above, orange!80!black] {$y$} (output);
   \draw[->] (disturbance) -- node[right, pos=0.2] {disturbance} (plant);
   \draw[->] (meas) |- (sensor) -| node[pos = 0.2, below] {$y_m(t) = \textcolor{orange!80!black}{y(t)} + \textcolor{red!80!black}{n(t)}$} node[right, pos=0.9] {-} (sumerr);
-  \draw[->, red!80!black, thick] (sensor) ++(0, -12mm) -- node[near start, right] {noise} (sensor);
+  \draw[->, red!80!black, thick] (sensor) ++(0, -22mm) -- node[near start, right] {noise} (sensor);
   \end{tikzpicture}
 \end{center}
 
@@ -114,7 +114,7 @@ It is important to know the (statistical) characteristics of the measurement err
 \end{frame}
 
 
-\begin{frame}[label={sec:org193c061}]{Sensors - characteristics}
+\begin{frame}[label={sec:org4f846db}]{Sensors - characteristics}
 \begin{columns}
 \begin{column}{0.4\columnwidth}
 \begin{itemize}
@@ -137,15 +137,15 @@ It is important to know the (statistical) characteristics of the measurement err
 \end{frame}
 
 \section{Encoder}
-\label{sec:org2dadea7}
-\begin{frame}[label={sec:orgabf93e3}]{Incremental encoder}
+\label{sec:org00031cc}
+\begin{frame}[label={sec:org2ea4e7b}]{Incremental encoder}
 \begin{center}
 \includegraphics[width=0.7\textwidth]{../../figures/encoder-im.jpg}
 {\tiny Source: \url{https://www.sciencedirect.com/topics/engineering/incremental-encoder}}
 \end{center}
 \end{frame}
 
-\begin{frame}[label={sec:org5eeffed}]{Incremental encoder}
+\begin{frame}[label={sec:org67bb0a1}]{Incremental encoder}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
 \includegraphics[width=0.5\textwidth]{../../figures/encoder-signals}
@@ -154,7 +154,7 @@ It is important to know the (statistical) characteristics of the measurement err
 \emph{Pulses Per Revolution (PPR)} is 4 en the example. Each aperture covers a sector of \(\frac{360\degree}{2 \times PPR} = 45\degree\).
 \end{frame}
 
-\begin{frame}[label={sec:org3f531f4}]{Incremental encoder}
+\begin{frame}[label={sec:orgbc08758}]{Incremental encoder}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
 \includegraphics[width=0.5\textwidth]{../../figures/encoder-signals}
@@ -164,7 +164,7 @@ It is important to know the (statistical) characteristics of the measurement err
 \end{frame}
 
 
-\begin{frame}[label={sec:org6511fde}]{Incremental encoder}
+\begin{frame}[label={sec:org0f28803}]{Incremental encoder}
 \begin{center}
 \includegraphics[width=0.4\textwidth]{../../figures/encoder-disc}
 \includegraphics[width=0.5\textwidth]{../../figures/encoder-signals}
@@ -174,7 +174,7 @@ It is important to know the (statistical) characteristics of the measurement err
 \end{frame}
 
 
-\begin{frame}[label={sec:org3daab96}]{Incremental encoder - velocity}
+\begin{frame}[label={sec:org671af85}]{Incremental encoder - velocity}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -194,7 +194,7 @@ We want to find the angular velocity at the time-instant \(t=\unit{6.5}{\milli\s
 
 
 
-\begin{frame}[label={sec:org6bd94a1}]{Incremental encoder - Velocity from frequency of the counts}
+\begin{frame}[label={sec:orgb5f6bf1}]{Incremental encoder - Velocity from frequency of the counts}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -216,7 +216,7 @@ The velocity can be measured by the inverse of the time between subsequent pulse
 
 
 
-\begin{frame}[label={sec:org7d3f8ed}]{Incremental encoder - Velocity from frequency of the counts}
+\begin{frame}[label={sec:org1d4434c}]{Incremental encoder - Velocity from frequency of the counts}
 \begin{columns}
 \begin{column}{0.5\columnwidth}
 \begin{center}
@@ -224,7 +224,7 @@ The velocity can be measured by the inverse of the time between subsequent pulse
 \end{center}
 \end{column}
 \begin{column}{0.5\columnwidth}
-\alert{Activity} Calculate the velocity!
+\alert{Activity} Calculate the velocity at \(t=\unit{11}{\milli\second}\)!
 \end{column}
 \end{columns}
 \end{frame}
@@ -234,7 +234,7 @@ The velocity can be measured by the inverse of the time between subsequent pulse
 
 
 
-\begin{frame}[label={sec:orgd750b5c}]{Simulink exercise - decoder}
+\begin{frame}[label={sec:orgd607c34}]{Simulink exercise - decoder}
 Complete the simulink diagram so that the angular velocity is correctly estimated.
 
 \begin{center}

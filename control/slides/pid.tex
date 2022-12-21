@@ -1,4 +1,4 @@
-% Created 2021-03-08 lun 10:27
+% Created 2022-03-10 Thu 14:35
 % Intended LaTeX compiler: pdflatex
 \documentclass[presentation,aspectratio=169, usenames, dvipsnames]{beamer}
 \usepackage[utf8]{inputenc}
@@ -34,16 +34,16 @@
  pdftitle={Control PID},
  pdfkeywords={},
  pdfsubject={},
- pdfcreator={Emacs 26.3 (Org mode 9.4.4)}, 
+ pdfcreator={Emacs 26.3 (Org mode 9.4.6)}, 
  pdflang={English}}
 \begin{document}
 
 \maketitle
 
 \section{PID parameter intuition}
-\label{sec:org5e18586}
+\label{sec:org72574f0}
 
-\begin{frame}[label={sec:org65d623d}]{Control en lazo cerrado}
+\begin{frame}[label={sec:org244dff4}]{Control en lazo cerrado}
    \begin{center}
    \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm, inner sep=6pt}, sumnode/.style={circle, draw, inner sep=2pt}]
   { 
@@ -65,7 +65,7 @@
 \end{frame}
 
 
-\begin{frame}[label={sec:org0f7f4a8}]{Control en cascada}
+\begin{frame}[label={sec:orgd812958}]{Control en cascada}
 \begin{center}
 \includegraphics[width=\linewidth]{../../figures/block-diagram-cascade-control.pdf}
 \end{center}
@@ -73,7 +73,7 @@
 \alert{Idea clave} Mejorar el control utilizando más información 
 \end{frame}
 
-\begin{frame}[label={sec:org02c09d0}]{El controlador PID}
+\begin{frame}[label={sec:orge3d7eb0}]{El controlador PID}
 \begin{center}
   \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm}, sumnode/.style={circle, draw, inner sep=2pt},scale=0.8, every node/.style={scale=0.8}]
 
@@ -105,7 +105,7 @@
 \end{tabular}
 \end{frame}
 
-\begin{frame}[label={sec:org0b4160a}]{El controlador PID}
+\begin{frame}[label={sec:org730c919}]{El controlador PID}
 \begin{columns}
 \begin{column}{0.6\columnwidth}
 \begin{center}
@@ -131,7 +131,7 @@ D &  &  & \\
 \end{columns}
 \end{frame}
 
-\begin{frame}[label={sec:org1a9b733}]{El controlador PID en forma paralela}
+\begin{frame}[label={sec:org6fd989f}]{El controlador PID en forma paralela}
 \begin{center}
   \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=12mm}, sumnode/.style={circle, draw, inner sep=2pt},
   amp/.style = {regular polygon, regular polygon sides=3,
@@ -173,7 +173,7 @@ u(t) &= k_c\Big( \textcolor{ppc}{e(t)} + \textcolor{iic}{\frac{1}{\tau_i} \int_0
 \[ U(s) = F(s) E(s), \qquad   F(s) = k_c\left( 1 + \frac{1}{\tau_i s} + \tau_d s\right) \]
 \end{frame}
 
-\begin{frame}[label={sec:orgb357067}]{El controlador PID en forma paralela}
+\begin{frame}[label={sec:org4963ccb}]{El controlador PID en forma paralela}
    \begin{center}
      \begin{tikzpicture}
      \pgfmathdeclarefunction{overdampedresponse}{3}{%
@@ -221,7 +221,7 @@ u(t) &= k_c\Big( \underbrace{\textcolor{ppc}{e(t)} + \textcolor{ddc}{\tau_d \fra
 \end{align*}
 \end{frame}
 
-\begin{frame}[label={sec:org573ffc9}]{El controlador PID en forma serial}
+\begin{frame}[label={sec:org8b18309}]{El controlador PID en forma serial}
 \begin{center}
   \begin{tikzpicture}[yscale=0.8,node distance=22mm, block/.style={rectangle, draw, minimum width=12mm}, sumnode/.style={circle, draw, inner sep=2pt},
   amp/.style = {regular polygon, regular polygon sides=3,
@@ -250,141 +250,5 @@ u(t) &= k_c\Big( \underbrace{\textcolor{ppc}{e(t)} + \textcolor{ddc}{\tau_d \fra
 
 \[F(s) = K_c \left( \frac{ \tau_I s + 1}{\tau_I s} \right) (\tau_D s + 1) 
 = \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \left(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \right) \]
-
-
-\alert{Actividad} Un controlador PID en forma serial tiene los parámetros \(K_c=2\), \(\tau_I=0.5\), \(\tau_D=0.5\), determine los parámetros correspondientes para un controlador PID en forma paralela, \(k_c\), \(tau_d\), \(\tau_i\).
-\end{frame}
-
-\section{SIMC}
-\label{sec:org1298e23}
-\begin{frame}[label={sec:org58fdc75}]{Sintonización de un PID}
-   \begin{center}
-   \begin{tikzpicture}[node distance=22mm, block/.style={rectangle, draw, minimum width=15mm}, sumnode/.style={circle, draw, inner sep=2pt}]
-  { 
-  \node[coordinate] (input) {};
-  \node[sumnode, right of=input] (sum) {\tiny $\sum$};
-  \node[block, right of=sum, node distance=3cm] (reg) {$F(s)$};
-  \node[block, right of=reg, node distance=3cm] (plant) {$G(s)$};
-  \node[coordinate, right of=plant, node distance=3cm] (output) {};
-  \node[coordinate, below of=plant, node distance=12mm] (feedback) {};
- 
-  \draw[->] (plant) -- node[coordinate, inner sep=0pt] (meas) {} node[near end, above] {$y(t)$} (output);
-  \draw[->] (meas) |- (feedback) -| node[very near end, left] {$-$} (sum);
-  \draw[->] (input) -- node[very near start, above] {$r(t)$} (sum);
-  \draw[->] (sum) -- node[above] {$e(t)$} (reg);
-  \draw[->] (reg) -- node[above] {$u(t)$}(plant);
-}
-\end{tikzpicture}
-\end{center}
-\end{frame}
-
-\begin{frame}[label={sec:org6a84440}]{El método de sintonización SIMC}
-\begin{center}
-\includegraphics[width=0.5\linewidth]{../../figures/jpc-skogestad.png}
-\end{center}
-
-a.k.a. \href{https://www.researchgate.net/profile/Ali\_Arshad3/post/Tuning\_PID\_without\_process\_transfer\_function/attachment/59d61db679197b8077979869/AS:272443459997696@1441966990886/download/-InstellingenRegelaars\_ExtraStof.pdf}{"Probably the best simple PID tuning rules in the world"}
-\end{frame}
-
-\begin{frame}[label={sec:orgd99971b}]{El método de sintonización SIMC - Sistema de primer orden}
-Dado modelo \(G(s)\) del proceso y modelo \(G_c(s)\) deseado del sistema en lazo cerrado
-\[G(s) = K \frac{1}{\tau s + 1}, \qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
-
-El controlador será un controlador PI
-
-\[ F(s) = \underbrace{\frac{\tau}{K\tau_c}}_{k_c} \left( 1 + \frac{1}{\underbrace{\tau}_{\tau_i} s} \right).\]
-
-con \(k_c = \frac{\tau}{K\tau_c}\) and \(\tau_i = \tau\).
-\end{frame}
-
-
-\begin{frame}[label={sec:orgc6d5d7e}]{El método de sintonización SIMC - Control de la corriente}
-\begin{center}
-\includegraphics[width=0.7\linewidth]{../../figures/simulink-dc-motor.png}
-\end{center}
-\[ \text{Modelo:} \quad \(G(s) = \frac{K}{\tau s +1} = \frac{\frac{1}{R}}{\frac{L}{R}s + 1}, \qquad L=\unit{1}{\milli\henry}, \; R=\SI{0.5}{\ohm}\]
-
-\[ F(s) = \underbrace{\frac{\tau}{K\tau_c}}_{k_c} \big( 1 + \frac{1}{\underbrace{\tau}_{\tau_i} s} \big).\]
-
-\alert{Actividad} Asumiendo que queremos una respuesta en lazo cerrado igual rápido que el sistema en lazo abierto: \(\tau_c = \tau\). Determine \(k_c\) y \(\tau_i\).
-\end{frame}
-
-\begin{frame}[label={sec:orgea994d5}]{El método de sintonización SIMC - Sistema de segundo orden}
-Dado modelo del proceso \(G(s)\) y comportamiento deseado del sistema en lazo cerrado \(G_c(s)\)
-\[G(s) = K \frac{1}{s^2},\qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
-
-Se obtiene buena robustez con el controlador
-
-\[F(s) = K_c \left( \frac{ \tau_I s + 1}{\tau_I s} \right) (\tau_D s + 1) 
-   = \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \left(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \right) \]
-con 
-\[ K_c = \frac{1}{4K(\tau_c)^2}, \qquad \tau_I = \tau_d = 4\tau_c \]
-o
-\[ k_c =  \frac{1}{2K(\tau_c)^2}, \qquad \tau_i = 8\tau_c, \qquad \tau_d = 2\tau_c\]
-\end{frame}
-
-
-
-\begin{frame}[label={sec:orga51dca5}]{El método de sintonización SIMC - Sistema de segundo orden}
-Dado modelo del proceso \(G(s)\) y comportamiento deseado del sistema en lazo cerrado \(G_c(s)\)
-\[G(s) = K \frac{1}{s^2},\qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
-
-Se obtiene buena robustez con el controlador
-
-\[F(s) = K_c \left( \frac{ \tau_I s + 1}{\tau_I s} \right) (\tau_D s + 1) 
-   = \underbrace{\frac{K_c(\tau_I + \tau_D)}{\tau_I}}_{k_c} \Big(1 + \frac{1}{\underbrace{(\tau_I + \tau_D)}_{\tau_i} s} + \underbrace{\frac{\tau_I\tau_D}{\tau_I + \tau_D}}_{\tau_d}s \Big) \]
-con 
-\[ K_c = \frac{1}{4K(\tau_c)^2}, \qquad \tau_I = \tau_d = 4\tau_c \]
-
-\alert{Actividad} Asumiendo \(K=4\) y \(\tau_c = 0.5\). Determine los parámetros PID \(k_c\), \(\tau_i\) y \(\tau_d\). 
-\end{frame}
-
-
-
-\begin{frame}[label={sec:orgfb4d02a}]{El método de sintonización SIMC - Control de la posición}
-Dado  \[G(s) = K \frac{1}{s^2},\qquad G_c(s) = \frac{1}{\tau_c s + 1} \]
-
-\alert{Cómo obtener el parámetro \(K\)?}
-
-\[J \dot{\omega} = \sum T_i \quad \Rightarrow \quad J\dot{\omega} = T_m - T_g \]
-Escribe el torque de motor como \(T_m(t) = T_g + ku(t)\)
-\[\ddot{\theta}(s) = \dot{\omega}(t) = \frac{k}{J}u(t) = K u(t)\quad \Leftrightarrow \quad \Theta(s) = \frac{K}{s^2}U(s)\]
-
-\[ \omega(t) = \omega(0) + K \int_0^t u(\tau)d\tau \] 
-\end{frame}
-
-
-
-
-\begin{frame}[label={sec:org5b6bfee}]{El método de sintonización SIMC - Control de la posición}
-\[ \omega(t) = \omega(0) + K \int_0^t u(\tau)d\tau \] 
-
-   \begin{center}
-     \begin{tikzpicture}[]
-     \begin{axis} [
-     width= 10cm,
-     height = 3cm,
-     axis lines=middle,
-     axis line style={->},
-     xtick={0,0.2},
-     xticklabels={0, 0.2},
-     % ytick={0, 1},
-     ytick={0, 50},
-     %y axis line style={draw opacity=0},
-     xmin=-0.1,
-     xmax=0.6,
-     ymin=0,
-     ymax=55,
-     xlabel=$t$,
-     ylabel=$u(t)$,
-     clip = false,
-     ]
-
-     \addplot[solid, thick,  blue!70!black, const plot] coordinates { (-0.1, 0) (0,50) (0.2, 0) (0.6, 0)};
-\end{axis}  
-     \end{tikzpicture}
-   \end{center}
-
-\[ K = \frac{\omega_f - \omega(0)}{\int_0^t u(\tau)d\tau} = \frac{\omega_f - \omega(0)}{10} = 36/10 = 3.6\]
 \end{frame}
 \end{document}
